@@ -1,0 +1,40 @@
+name: Build smooth-scroll experiment
+
+on:
+  push:
+    branches:
+      - experimental/smoothscroll-avalonia
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build unsigned Windows x64
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+
+      - name: Install repository .NET SDK
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - name: Build portable x64 package
+        shell: pwsh
+        run: |
+          ./scripts/build.ps1 `
+            -Configuration Release `
+            -Platform x64 `
+            -OutputPath "$PWD/output" `
+            -SkipInstaller
+
+      - name: Upload portable build
+        uses: actions/upload-artifact@v7
+        with:
+          name: UniGetUI-smoothscroll-${{ github.sha }}-win-x64
+          path: output/UniGetUI.x64.zip
+          if-no-files-found: error
+          retention-days: 30
