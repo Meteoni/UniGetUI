@@ -30,7 +30,6 @@ public partial class App : Application
         AvaloniaXamlLoader.Load(this);
 
         ButtonActivationGuard.Install();
-        SmoothScrollManager.Install();
 
         // Windows 11 Mica look is opt-in per environment: only merge the translucent
         // surface overrides when Mica is actually usable (Win11 + transparency on).
