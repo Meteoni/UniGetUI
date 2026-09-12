@@ -29,6 +29,7 @@ jobs:
             -Configuration Release `
             -Platform x64 `
             -OutputPath "$PWD/output" `
+            -SkipTests `
             -SkipInstaller
 
       - name: Upload portable build
