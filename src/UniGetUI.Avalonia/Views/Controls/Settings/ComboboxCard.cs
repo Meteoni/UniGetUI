@@ -45,6 +45,7 @@ public sealed partial class ComboboxCard : SettingsCard
     public ComboboxCard()
     {
         _combobox.MinWidth = 200;
+        _combobox.Classes.Add("settings-combo");
         _combobox.ItemsSource = _elements;
         Content = _combobox;
         ApplyAutomationMetadata(_combobox);

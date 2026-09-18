@@ -73,6 +73,18 @@
                     <StaticResource x:Key="AccentButtonForegroundPointerOver" ResourceKey="TextOnAccentFillColorPrimaryBrush"/>
                     <StaticResource x:Key="AccentButtonForegroundPressed" ResourceKey="TextOnAccentFillColorSecondaryBrush"/>
                     <StaticResource x:Key="AccentButtonForegroundDisabled" ResourceKey="TextOnAccentFillColorDisabledBrush"/>
+                    <!-- WinUI v2 control/surface primitives. Keep these as the canonical
+                         light/dark pairs for ordinary controls rather than inventing per-page colors. -->
+                    <SolidColorBrush x:Key="ControlFillColorDefaultBrush"   Color="#B3FFFFFF"/>
+                    <SolidColorBrush x:Key="ControlFillColorSecondaryBrush" Color="#80F9F9F9"/>
+                    <SolidColorBrush x:Key="ControlFillColorTertiaryBrush"  Color="#4DF9F9F9"/>
+                    <SolidColorBrush x:Key="ControlFillColorDisabledBrush"  Color="#4DF9F9F9"/>
+                    <SolidColorBrush x:Key="ControlStrokeColorDefaultBrush" Color="#0F000000"/>
+                    <SolidColorBrush x:Key="ControlStrokeColorSecondaryBrush" Color="#29000000"/>
+                    <SolidColorBrush x:Key="SolidBackgroundFillColorBaseBrush"        Color="#F3F3F3"/>
+                    <SolidColorBrush x:Key="SolidBackgroundFillColorSecondaryBrush"   Color="#EEEEEE"/>
+                    <SolidColorBrush x:Key="SolidBackgroundFillColorTertiaryBrush"    Color="#F9F9F9"/>
+                    <SolidColorBrush x:Key="SolidBackgroundFillColorQuarternaryBrush" Color="#FFFFFF"/>
                     <!-- Settings cards -->
                     <SolidColorBrush x:Key="SettingsCardBackground"      Color="#B3FFFFFF"/>
                     <SolidColorBrush x:Key="SettingsCardBorderBrush"     Color="#ECECEC"/>
@@ -80,10 +92,10 @@
                     <StaticResource x:Key="SecondaryActionBorderBrush" ResourceKey="ControlElevationBorderBrush"/>
                     <Thickness x:Key="SecondaryActionBorderThickness">1</Thickness>
                     <!-- WinUI dropdown controls use the same control/card fill as settings actions. -->
-                    <StaticResource x:Key="ComboBoxBackground" ResourceKey="SettingsCardBackground"/>
-                    <StaticResource x:Key="ComboBoxBackgroundUnfocused" ResourceKey="SettingsCardBackground"/>
-                    <StaticResource x:Key="ComboBoxBackgroundPointerOver" ResourceKey="SettingsCardHoverBackground"/>
-                    <StaticResource x:Key="ComboBoxBackgroundPressed" ResourceKey="SettingsCardHoverBackground"/>
+                    <StaticResource x:Key="ComboBoxBackground" ResourceKey="ControlFillColorDefaultBrush"/>
+                    <StaticResource x:Key="ComboBoxBackgroundUnfocused" ResourceKey="ControlFillColorDefaultBrush"/>
+                    <StaticResource x:Key="ComboBoxBackgroundPointerOver" ResourceKey="ControlFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="ComboBoxBackgroundPressed" ResourceKey="ControlFillColorTertiaryBrush"/>
                     <StaticResource x:Key="ComboBoxBorderBrush" ResourceKey="ControlElevationBorderBrush"/>
                     <StaticResource x:Key="ComboBoxBackgroundBorderBrushUnfocused" ResourceKey="ControlElevationBorderBrush"/>
                     <StaticResource x:Key="ComboBoxBorderBrushPointerOver" ResourceKey="ControlElevationBorderBrush"/>
@@ -234,6 +246,17 @@
                     <StaticResource x:Key="AccentButtonForegroundPointerOver" ResourceKey="TextOnAccentFillColorPrimaryBrush"/>
                     <StaticResource x:Key="AccentButtonForegroundPressed" ResourceKey="TextOnAccentFillColorSecondaryBrush"/>
                     <StaticResource x:Key="AccentButtonForegroundDisabled" ResourceKey="TextOnAccentFillColorDisabledBrush"/>
+                    <!-- WinUI v2 control/surface primitives. -->
+                    <SolidColorBrush x:Key="ControlFillColorDefaultBrush"   Color="#0FFFFFFF"/>
+                    <SolidColorBrush x:Key="ControlFillColorSecondaryBrush" Color="#15FFFFFF"/>
+                    <SolidColorBrush x:Key="ControlFillColorTertiaryBrush"  Color="#08FFFFFF"/>
+                    <SolidColorBrush x:Key="ControlFillColorDisabledBrush"  Color="#0BFFFFFF"/>
+                    <SolidColorBrush x:Key="ControlStrokeColorDefaultBrush" Color="#12FFFFFF"/>
+                    <SolidColorBrush x:Key="ControlStrokeColorSecondaryBrush" Color="#18FFFFFF"/>
+                    <SolidColorBrush x:Key="SolidBackgroundFillColorBaseBrush"        Color="#202020"/>
+                    <SolidColorBrush x:Key="SolidBackgroundFillColorSecondaryBrush"   Color="#1C1C1C"/>
+                    <SolidColorBrush x:Key="SolidBackgroundFillColorTertiaryBrush"    Color="#282828"/>
+                    <SolidColorBrush x:Key="SolidBackgroundFillColorQuarternaryBrush" Color="#2C2C2C"/>
                     <!-- Settings cards -->
                     <SolidColorBrush x:Key="SettingsCardBackground"      Color="#0DFFFFFF"/>
                     <SolidColorBrush x:Key="SettingsCardBorderBrush"     Color="#19000000"/>
@@ -241,10 +264,10 @@
                     <SolidColorBrush x:Key="SecondaryActionBorderBrush"  Color="Transparent"/>
                     <Thickness x:Key="SecondaryActionBorderThickness">0</Thickness>
                     <!-- WinUI dropdown controls use the same control/card fill as settings actions. -->
-                    <StaticResource x:Key="ComboBoxBackground" ResourceKey="SettingsCardBackground"/>
-                    <StaticResource x:Key="ComboBoxBackgroundUnfocused" ResourceKey="SettingsCardBackground"/>
-                    <StaticResource x:Key="ComboBoxBackgroundPointerOver" ResourceKey="SettingsCardHoverBackground"/>
-                    <StaticResource x:Key="ComboBoxBackgroundPressed" ResourceKey="SettingsCardHoverBackground"/>
+                    <StaticResource x:Key="ComboBoxBackground" ResourceKey="ControlFillColorDefaultBrush"/>
+                    <StaticResource x:Key="ComboBoxBackgroundUnfocused" ResourceKey="ControlFillColorDefaultBrush"/>
+                    <StaticResource x:Key="ComboBoxBackgroundPointerOver" ResourceKey="ControlFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="ComboBoxBackgroundPressed" ResourceKey="ControlFillColorTertiaryBrush"/>
                     <SolidColorBrush x:Key="ComboBoxBorderBrush" Color="Transparent"/>
                     <SolidColorBrush x:Key="ComboBoxBackgroundBorderBrushUnfocused" Color="Transparent"/>
                     <SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver" Color="Transparent"/>
@@ -338,7 +361,7 @@
          automatically, making future settings actions consistent by default. -->
     <Style Selector="Button.secondary-action">
         <Setter Property="CornerRadius" Value="4"/>
-        <Setter Property="Background" Value="{DynamicResource SettingsCardBackground}"/>
+        <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource SecondaryActionBorderBrush}"/>
         <Setter Property="BorderThickness" Value="{DynamicResource SecondaryActionBorderThickness}"/>
         <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}"/>
@@ -346,18 +369,31 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
     <Style Selector="Button.secondary-action:pointerover">
-        <Setter Property="Background" Value="{DynamicResource SettingsCardHoverBackground}"/>
+        <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}"/>
     </Style>
     <Style Selector="Button.secondary-action:pressed">
-        <Setter Property="Background" Value="{DynamicResource SubtleFillColorTertiaryBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource ControlFillColorTertiaryBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorDefaultBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}"/>
+    </Style>
+    <Style Selector="Button.secondary-action:disabled">
+        <Setter Property="Background" Value="{DynamicResource ControlFillColorDisabledBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextFillColorDisabledBrush}"/>
     </Style>
 
     <Style Selector="SplitButton.secondary-action">
         <Setter Property="CornerRadius" Value="4"/>
-        <Setter Property="Background" Value="{DynamicResource SettingsCardBackground}"/>
+        <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource SecondaryActionBorderBrush}"/>
         <Setter Property="BorderThickness" Value="{DynamicResource SecondaryActionBorderThickness}"/>
         <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}"/>
+    </Style>
+    <Style Selector="SplitButton.secondary-action:pointerover">
+        <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}"/>
+    </Style>
+    <Style Selector="SplitButton.secondary-action:pressed">
+        <Setter Property="Background" Value="{DynamicResource ControlFillColorTertiaryBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}"/>
     </Style>
 
     <!-- Compact icon-only command used inside settings cards. -->
@@ -380,10 +416,26 @@
     <Style Selector="Button.dropdown-trigger">
         <Setter Property="Padding" Value="10,6"/>
         <Setter Property="CornerRadius" Value="4"/>
-        <Setter Property="Background" Value="{DynamicResource SettingsCardBackground}"/>
-        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource SecondaryActionBorderBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="Button.dropdown-trigger:pointerover">
+        <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}"/>
+    </Style>
+    <Style Selector="Button.dropdown-trigger:pressed">
+        <Setter Property="Background" Value="{DynamicResource ControlFillColorTertiaryBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}"/>
+    </Style>
+    <!-- A flyout-open trigger is no longer a pressed control. Return it to its rest fill even
+         if the pointer is still over the button while the menu is open. -->
+    <Style Selector="Button.dropdown-trigger.flyout-open,
+                     Button.dropdown-trigger.flyout-open:pointerover,
+                     Button.dropdown-trigger.flyout-open:pressed">
+        <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}"/>
     </Style>
     <Style Selector="Button.dropdown-trigger.wide">
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -551,6 +603,13 @@
         <Setter Property="BorderThickness" Value="{DynamicResource ComboBoxOutlineThickness}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
+    <Style Selector="ComboBox.settings-combo">
+        <Setter Property="MinHeight" Value="32"/>
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="Padding" Value="10,4,8,5"/>
+        <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource SecondaryActionBorderBrush}"/>
+    </Style>
     <Style Selector="ComboBoxItem">
         <Setter Property="Margin" Value="4,0"/>
         <Setter Property="Padding" Value="8,4,8,5"/>
@@ -663,6 +722,8 @@
     <!-- View-mode segmented selector (List / Grid / Icons): WinUI Segmented-style selection — subtle
          fill plus an accent underline under the selected segment, not Fluent's full-accent fill. -->
     <Style Selector="ListBoxItem.segment-item">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}"/>
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel>
@@ -693,11 +754,17 @@
     <Style Selector="ListBoxItem.segment-item:pointerover /template/ ContentPresenter#ContentHost">
         <Setter Property="Background" Value="{DynamicResource SubtleFillColorSecondaryBrush}"/>
     </Style>
+    <Style Selector="ListBoxItem.segment-item:pressed /template/ ContentPresenter#ContentHost">
+        <Setter Property="Background" Value="{DynamicResource SubtleFillColorTertiaryBrush}"/>
+    </Style>
     <Style Selector="ListBoxItem.segment-item:selected /template/ ContentPresenter#ContentHost">
-        <Setter Property="Background" Value="{DynamicResource SubtleFillColorSecondaryBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}"/>
     </Style>
     <Style Selector="ListBoxItem.segment-item:selected:pointerover /template/ ContentPresenter#ContentHost">
-        <Setter Property="Background" Value="{DynamicResource SubtleFillColorTertiaryBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}"/>
+    </Style>
+    <Style Selector="ListBoxItem.segment-item:selected:pressed /template/ ContentPresenter#ContentHost">
+        <Setter Property="Background" Value="{DynamicResource ControlFillColorTertiaryBrush}"/>
     </Style>
     <Style Selector="ListBoxItem.segment-item:selected /template/ Border#SelectionPill">
         <Setter Property="Opacity" Value="1"/>
@@ -720,6 +787,9 @@
     <!-- Setting warning subtext (amber, both themes) -->
     <Style Selector="TextBlock.setting-warning-text">
         <Setter Property="Foreground" Value="{DynamicResource SettingWarningTextForeground}"/>
+    </Style>
+    <Style Selector="TextBlock.setting-error-text">
+        <Setter Property="Foreground" Value="{DynamicResource StatusErrorForeground}"/>
     </Style>
 
     <!-- Warning banner (InfoBar-style amber/golden) -->

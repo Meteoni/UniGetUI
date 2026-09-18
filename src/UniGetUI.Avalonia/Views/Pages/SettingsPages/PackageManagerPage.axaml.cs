@@ -88,7 +88,11 @@ public sealed partial class PackageManagerPage : UserControl, ISettingsPage
         Grid.SetColumnSpan(execHint, 2);
         execGrid.Children.Add(execHint);
 
-        var execCombo = new ComboBox { HorizontalAlignment = HorizontalAlignment.Stretch };
+        var execCombo = new ComboBox
+        {
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            Classes = { "settings-combo" },
+        };
         AutomationProperties.SetName(execCombo, CoreTools.Translate("Select the executable to be used. The following list shows the executables found by UniGetUI"));
         foreach (var path in manager.FindCandidateExecutableFiles())
             AddExecutablePathItem(execCombo, path);
@@ -259,7 +263,11 @@ public sealed partial class PackageManagerPage : UserControl, ISettingsPage
             (CoreTools.Translate("Custom..."), "custom"),
         ];
 
-        var ageCombo = new ComboBox { MinWidth = 200 };
+        var ageCombo = new ComboBox
+        {
+            MinWidth = 200,
+            Classes = { "settings-combo" },
+        };
         AutomationProperties.SetName(ageCombo, CoreTools.Translate("Minimum age for updates"));
         foreach (var (label, _) in ageItems)
             ageCombo.Items.Add(label);
@@ -304,7 +312,7 @@ public sealed partial class PackageManagerPage : UserControl, ISettingsPage
             {
                 Text = CoreTools.Translate("{pm} does not provide release dates for its packages, so this setting will have no effect")
                                .Replace("{pm}", manager.DisplayName),
-                Foreground = new SolidColorBrush(Color.Parse("#e05252")),
+                Classes = { "setting-error-text" },
                 TextWrapping = TextWrapping.Wrap,
                 FontSize = 12,
             },
@@ -312,7 +320,7 @@ public sealed partial class PackageManagerPage : UserControl, ISettingsPage
             {
                 Text = CoreTools.Translate("{pm} only provides release dates for some of its packages, so this setting will only apply to those packages")
                                .Replace("{pm}", manager.DisplayName),
-                Foreground = new SolidColorBrush(Color.FromRgb(224, 168, 0)),
+                Classes = { "setting-warning-text" },
                 TextWrapping = TextWrapping.Wrap,
                 FontSize = 12,
             },

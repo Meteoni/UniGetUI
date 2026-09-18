@@ -636,7 +636,7 @@
                                                                   IsVisible="{Binding !InstalledVersionIsUnverified}"/>
                                                 <controls:SvgIcon Grid.Column="0" Path="avares://UniGetUI/Assets/Symbols/warning_filled.svg"
                                                                   Width="22" Height="22" VerticalAlignment="Center"
-                                                                  Foreground="#F59E0B"
+                                                                  Foreground="{DynamicResource StatusWarningForeground}"
                                                                   IsVisible="{Binding InstalledVersionIsUnverified}"
                                                                   ToolTip.Tip="{Binding InstalledVersionTooltip}"/>
                                                 <TextBlock Grid.Column="1" Text="{Binding VersionComboString}" VerticalAlignment="Center"
@@ -658,7 +658,7 @@
                                                                   IsVisible="{Binding !InstallerHostChanged}"/>
                                                 <controls:SvgIcon Grid.Column="0" Path="avares://UniGetUI/Assets/Symbols/warning_filled.svg"
                                                                   Width="22" Height="22" VerticalAlignment="Center"
-                                                                  Foreground="#F59E0B"
+                                                                  Foreground="{DynamicResource StatusWarningForeground}"
                                                                   IsVisible="{Binding InstallerHostChanged}"
                                                                   ToolTip.Tip="{Binding InstallerHostChangeTooltip}"/>
                                                 <TextBlock Grid.Column="1" Text="{Binding Package.NewVersionString}" VerticalAlignment="Center"
@@ -694,7 +694,7 @@
                                                                   IsVisible="{Binding !InstallerHostChanged}"/>
                                                 <controls:SvgIcon Grid.Column="0" Path="avares://UniGetUI/Assets/Symbols/warning_filled.svg"
                                                                   Width="22" Height="22" VerticalAlignment="Center"
-                                                                  Foreground="#F59E0B"
+                                                                  Foreground="{DynamicResource StatusWarningForeground}"
                                                                   IsVisible="{Binding InstallerHostChanged}"
                                                                   ToolTip.Tip="{Binding InstallerHostChangeTooltip}"/>
                                                 <TextBlock Grid.Column="1" Text="{Binding InstallerHostText}" VerticalAlignment="Center"
@@ -765,7 +765,7 @@
                                                                       VerticalAlignment="Bottom"/>
                                                     <controls:SvgIcon Path="avares://UniGetUI/Assets/Symbols/warning_filled.svg"
                                                                       Width="17" Height="17"
-                                                                      Foreground="#F59E0B"
+                                                                      Foreground="{DynamicResource StatusWarningForeground}"
                                                                       IsVisible="{Binding InstallerHostChanged}"
                                                                       ToolTip.Tip="{Binding InstallerHostChangeTooltip}"
                                                                       HorizontalAlignment="Right"
@@ -876,7 +876,7 @@
                                                                       VerticalAlignment="Bottom"/>
                                                     <controls:SvgIcon Path="avares://UniGetUI/Assets/Symbols/warning_filled.svg"
                                                                       Width="24" Height="24"
-                                                                      Foreground="#F59E0B"
+                                                                      Foreground="{DynamicResource StatusWarningForeground}"
                                                                       IsVisible="{Binding InstallerHostChanged}"
                                                                       ToolTip.Tip="{Binding InstallerHostChangeTooltip}"
                                                                       HorizontalAlignment="Right"

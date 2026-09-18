@@ -42,13 +42,8 @@
 
         <!-- Manager preferences are built largely in code-behind. Keep their form controls on
              the same compact WinUI geometry as the rest of the settings surface. -->
-        <Style Selector="ComboBox">
-            <Setter Property="MinHeight" Value="32"/>
-            <Setter Property="CornerRadius" Value="4"/>
-            <Setter Property="Padding" Value="10,4,8,5"/>
-            <Setter Property="Background" Value="{DynamicResource SettingsCardBackground}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource SecondaryActionBorderBrush}"/>
-            <Setter Property="BorderThickness" Value="{DynamicResource SecondaryActionBorderThickness}"/>
+        <Style Selector="ComboBox.settings-combo">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
         </Style>
         <Style Selector="TextBox.search-field-standalone">
             <Setter Property="MinHeight" Value="32"/>

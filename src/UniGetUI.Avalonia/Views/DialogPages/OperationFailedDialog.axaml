@@ -9,37 +9,15 @@
         MaxHeight="490"
         MinHeight="300"
         TitleMargin="24,0,0,0"
-        Background="{DynamicResource OperationDialogBodyBackground}">
+        Background="{DynamicResource SolidBackgroundFillColorQuarternaryBrush}">
 
-    <dialogs:ImmersiveDialog.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.ThemeDictionaries>
-                <ResourceDictionary x:Key="Light">
-                    <SolidColorBrush x:Key="OperationDialogBodyBackground" Color="#FFFFFF"/>
-                    <SolidColorBrush x:Key="OperationDialogRecessedBackground" Color="#F3F3F3"/>
-                    <SolidColorBrush x:Key="OperationDialogActionBackground" Color="#FFFFFF"/>
-                    <SolidColorBrush x:Key="OperationDialogActionHoverBackground" Color="#F6F6F6"/>
-                    <SolidColorBrush x:Key="OperationDialogActionPressedBackground" Color="#EDEDED"/>
-                </ResourceDictionary>
-                <ResourceDictionary x:Key="Dark">
-                    <!-- Sampled from the previous WinUI operation-failure dialog:
-                         body #2B2B2B, log/footer #202020, neutral buttons #2D2D2D. -->
-                    <SolidColorBrush x:Key="OperationDialogBodyBackground" Color="#2B2B2B"/>
-                    <SolidColorBrush x:Key="OperationDialogRecessedBackground" Color="#202020"/>
-                    <SolidColorBrush x:Key="OperationDialogActionBackground" Color="#2D2D2D"/>
-                    <SolidColorBrush x:Key="OperationDialogActionHoverBackground" Color="#323232"/>
-                    <SolidColorBrush x:Key="OperationDialogActionPressedBackground" Color="#3C3C3C"/>
-                </ResourceDictionary>
-            </ResourceDictionary.ThemeDictionaries>
-        </ResourceDictionary>
-    </dialogs:ImmersiveDialog.Resources>
 
     <dialogs:ImmersiveDialog.Styles>
         <Style Selector="Button.operation-dialog-action">
             <Setter Property="Height" Value="32"/>
             <Setter Property="MinWidth" Value="0"/>
             <Setter Property="CornerRadius" Value="4"/>
-            <Setter Property="Background" Value="{DynamicResource OperationDialogActionBackground}"/>
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="FontSize" Value="14"/>
@@ -47,24 +25,33 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
         <Style Selector="Button.operation-dialog-action:pointerover">
-            <Setter Property="Background" Value="{DynamicResource OperationDialogActionHoverBackground}"/>
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}"/>
         </Style>
         <Style Selector="Button.operation-dialog-action:pressed">
-            <Setter Property="Background" Value="{DynamicResource OperationDialogActionPressedBackground}"/>
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorTertiaryBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorDefaultBrush}"/>
         </Style>
         <Style Selector="SplitButton.operation-dialog-action">
             <Setter Property="Height" Value="32"/>
             <Setter Property="MinWidth" Value="0"/>
             <Setter Property="CornerRadius" Value="4"/>
-            <Setter Property="Background" Value="{DynamicResource OperationDialogActionBackground}"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource SecondaryActionBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="FontSize" Value="14"/>
+        </Style>
+        <Style Selector="SplitButton.operation-dialog-action:pointerover">
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}"/>
+        </Style>
+        <Style Selector="SplitButton.operation-dialog-action:pressed">
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorTertiaryBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}"/>
         </Style>
     </dialogs:ImmersiveDialog.Styles>
 
     <Grid RowDefinitions="Auto,*,Auto"
-          Background="{DynamicResource OperationDialogBodyBackground}">
+          Background="{DynamicResource SolidBackgroundFillColorQuarternaryBrush}">
 
         <!-- ── Header ── -->
         <Border Grid.Row="0" Padding="24,8,24,12">
@@ -78,14 +65,14 @@
                 Margin="24,0,24,24"
                 CornerRadius="6"
                 ClipToBounds="True"
-                Background="{DynamicResource OperationDialogRecessedBackground}">
+                Background="{DynamicResource SolidBackgroundFillColorBaseBrush}">
             <controls:LogTextEditor x:Name="OutputText"
                                     automation:AutomationProperties.AccessibilityView="Raw"/>
         </Border>
 
         <!-- ── Footer buttons ── -->
         <Border Grid.Row="2"
-                Background="{DynamicResource OperationDialogRecessedBackground}">
+                Background="{DynamicResource SolidBackgroundFillColorBaseBrush}">
             <Grid x:Name="ButtonsLayout"
                   Margin="24"
                   ColumnSpacing="8">

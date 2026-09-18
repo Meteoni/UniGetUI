@@ -87,6 +87,12 @@ public abstract partial class AbstractPackagesPage : UserControl,
         SyncFiltersButtonName();
         SyncOrderByButtonName();
 
+        if (OrderByButton.Flyout is { } orderByFlyout)
+        {
+            orderByFlyout.Opened += (_, _) => OrderByButton.Classes.Add("flyout-open");
+            orderByFlyout.Closed += (_, _) => OrderByButton.Classes.Remove("flyout-open");
+        }
+
         // Reload button added before subclass toolbar items (mirrors WinUI AbstractPackagesPage)
         if (!ViewModel.DisableReload)
         {
