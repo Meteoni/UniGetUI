@@ -1,0 +1,68 @@
+name: Dialog Settings UI Test Build
+
+on:
+  push:
+    branches:
+      - dialog-settings-ui-test
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install .NET SDK
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - name: Restore
+        working-directory: src
+        run: dotnet restore UniGetUI.Windows.slnx
+
+      - name: Publish portable x64 build
+        shell: pwsh
+        run: |
+          $Platform = "x64"
+          $TargetFramework = (
+            dotnet msbuild src/UniGetUI.Avalonia/UniGetUI.Avalonia.csproj `
+              /nologo `
+              -getProperty:TargetFramework `
+              /p:Configuration=Release `
+              /p:Platform=$Platform `
+              /p:RuntimeIdentifier=win-$Platform |
+              Select-Object -Last 1
+          ).Trim()
+
+          if ([string]::IsNullOrWhiteSpace($TargetFramework)) {
+            throw "Could not resolve the Avalonia target framework from MSBuild"
+          }
+
+          dotnet publish src/UniGetUI.Avalonia/UniGetUI.Avalonia.csproj `
+            /noLogo `
+            /p:Configuration=Release `
+            /p:Platform=$Platform `
+            /p:RuntimeIdentifier=win-$Platform `
+            /p:PublishProfile=Win-$Platform-NativeAot `
+            /p:UseSharedCompilation=false `
+            /p:BuildInParallel=false `
+            /m:1 `
+            -v m
+
+          if ($LASTEXITCODE -ne 0) { throw "dotnet publish failed" }
+
+          $PublishDir = "src/UniGetUI.Avalonia/bin/$Platform/Release/$TargetFramework/win-$Platform/publish"
+          if (-not (Test-Path "$PublishDir/UniGetUI.exe")) {
+            throw "UniGetUI.exe was not produced"
+          }
+
+          Copy-Item "InstallerExtras/ForceUniGetUIPortable" -Destination $PublishDir -Force
+          Compress-Archive -Path "$PublishDir/*" -DestinationPath "UniGetUI-dialog-settings-ui-test-x64.zip" -CompressionLevel Optimal
+
+      - name: Upload test build
+        uses: actions/upload-artifact@v7
+        with:
+          name: UniGetUI-dialog-settings-ui-test-x64
+          path: UniGetUI-dialog-settings-ui-test-x64.zip
+          retention-days: 3
