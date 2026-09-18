@@ -97,8 +97,6 @@
                                 Classes="subtle-action"
                                 Padding="6"
                                 VerticalAlignment="Center"
-                                Background="Transparent"
-                                BorderThickness="0"
                                 automation:AutomationProperties.Name="{t:Translate Delete source}"
                                 Command="{Binding #Root.((vm:SourceManagerCardViewModel)DataContext).DeleteSourceCommand}"
                                 CommandParameter="{Binding}">

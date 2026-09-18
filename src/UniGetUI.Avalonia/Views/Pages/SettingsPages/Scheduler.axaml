@@ -155,7 +155,7 @@
                                             <TextBlock Grid.Column="0"
                                                        Classes="schedule-row-label"
                                                        Text="{t:Translate Repeat}"/>
-                                            <ComboBox Grid.Column="1"
+                                            <ComboBox Classes="settings-combo" Grid.Column="1"
                                                       MinWidth="220"
                                                       ItemsSource="{Binding FrequencyOptions}"
                                                       SelectedIndex="{Binding FrequencyIndex, Mode=TwoWay}"
@@ -168,7 +168,7 @@
                                             <TextBlock Grid.Column="0"
                                                        Classes="schedule-row-label"
                                                        Text="{t:Translate Check every}"/>
-                                            <ComboBox Grid.Column="1"
+                                            <ComboBox Classes="settings-combo" Grid.Column="1"
                                                       MinWidth="220"
                                                       ItemsSource="{Binding IntervalOptions}"
                                                       SelectedIndex="{Binding IntervalIndex, Mode=TwoWay}"
@@ -207,7 +207,7 @@
                                             <StackPanel Grid.Column="1"
                                                         Orientation="Horizontal"
                                                         Spacing="6">
-                                                <ComboBox MinWidth="76"
+                                                <ComboBox Classes="settings-combo" MinWidth="76"
                                                           ItemsSource="{Binding HourOptions}"
                                                           SelectedIndex="{Binding HourIndex, Mode=TwoWay}"
                                                           automation:AutomationProperties.Name="{t:Translate Start time}"/>
@@ -215,11 +215,11 @@
                                                            VerticalAlignment="Center"
                                                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                                            automation:AutomationProperties.AccessibilityView="Raw"/>
-                                                <ComboBox MinWidth="76"
+                                                <ComboBox Classes="settings-combo" MinWidth="76"
                                                           ItemsSource="{Binding MinuteOptions}"
                                                           SelectedIndex="{Binding MinuteIndex, Mode=TwoWay}"
                                                           automation:AutomationProperties.Name="{t:Translate Start time}"/>
-                                                <ComboBox MinWidth="76"
+                                                <ComboBox Classes="settings-combo" MinWidth="76"
                                                           IsVisible="{Binding IsMeridiemVisible}"
                                                           ItemsSource="{Binding MeridiemOptions}"
                                                           SelectedIndex="{Binding MeridiemIndex, Mode=TwoWay}"
@@ -233,7 +233,7 @@
                                             <TextBlock Grid.Column="0"
                                                        Classes="schedule-row-label"
                                                        Text="{t:Translate If the scheduled time is missed}"/>
-                                            <ComboBox Grid.Column="1"
+                                            <ComboBox Classes="settings-combo" Grid.Column="1"
                                                       MinWidth="220"
                                                       ItemsSource="{Binding GraceOptions}"
                                                       SelectedIndex="{Binding GraceIndex, Mode=TwoWay}"
@@ -249,7 +249,7 @@
                                             <TextBlock Grid.Column="0"
                                                        Classes="schedule-row-label"
                                                        Text="{t:Translate Install}"/>
-                                            <ComboBox Grid.Column="1"
+                                            <ComboBox Classes="settings-combo" Grid.Column="1"
                                                       MinWidth="220"
                                                       ItemsSource="{Binding InstallTargetOptions}"
                                                       SelectedIndex="{Binding InstallTargetIndex, Mode=TwoWay}"

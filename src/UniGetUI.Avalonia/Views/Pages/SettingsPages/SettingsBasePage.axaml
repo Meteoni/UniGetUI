@@ -50,7 +50,7 @@
                            FontSize="14"
                            VerticalAlignment="Center"
                            Margin="0,0,16,0"/>
-                <Button Grid.Column="1" Content="{Binding RestartButtonText}"
+                <Button Grid.Column="1" Classes="secondary-action" Content="{Binding RestartButtonText}"
                         automation:AutomationProperties.Name="{Binding RestartButtonText}"
                         Command="{Binding RestartAppCommand}"
                         HorizontalAlignment="Right"/>
