@@ -294,7 +294,8 @@
                                 Spacing="8">
                         <Border CornerRadius="8" ClipToBounds="True"
                                 x:Name="ScreenshotsBorder"
-                                MinHeight="130">
+                                MinHeight="130"
+                                controls:SmoothScrollManager.HandlesPrecisionWheelInput="True">
                             <Panel>
                                 <!-- Neutral WinUI fallback only behind actual screenshots; the empty-state
                                      banner below composites over the themed window background instead. -->
