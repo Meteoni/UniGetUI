@@ -49,6 +49,13 @@ public sealed partial class PackageManagerPage : UserControl, ISettingsPage
 
         BuildPage();
         ApplyStatusBrushes();
+        SizeChanged += (_, _) => UpdateResponsiveClass();
+        UpdateResponsiveClass();
+    }
+
+    private void UpdateResponsiveClass()
+    {
+        Classes.Set("compact", Bounds.Width > 0 && Bounds.Width < 640);
     }
 
     // ── Dynamic UI construction ───────────────────────────────────────────────
@@ -244,12 +251,13 @@ public sealed partial class PackageManagerPage : UserControl, ISettingsPage
         BuildExtraControls(disableNotifsCard);
 
         // ── Per-manager minimum update age
-        ExtraControls.Children.Add(new TextBlock
+        var updateSecurityHeading = new TextBlock
         {
-            Margin = new Thickness(44, 24, 4, 8),
             FontWeight = FontWeight.SemiBold,
             Text = CoreTools.Translate("Update security"),
-        });
+        };
+        updateSecurityHeading.Classes.Add("manager-section-heading");
+        ExtraControls.Children.Add(updateSecurityHeading);
 
         (string Label, string Value)[] ageItems =
         [

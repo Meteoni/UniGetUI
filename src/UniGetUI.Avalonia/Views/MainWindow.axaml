@@ -371,7 +371,6 @@
                                                 VerticalAlignment="Center">
                                             <StackPanel Orientation="Horizontal" Height="30">
                                                 <Button Content="{Binding ButtonText}"
-                                                        Classes="secondary-action"
                                                         Command="{Binding ButtonCommand}"
                                                         automation:AutomationProperties.Name="{Binding ButtonText}"
                                                         Height="30"
@@ -387,7 +386,6 @@
                                                         Opacity="0.3"/>
                                                 <Button Width="32"
                                                         Height="30"
-                                                        Classes="secondary-action"
                                                         Padding="0"
                                                         CornerRadius="0"
                                                         VerticalContentAlignment="Center"

@@ -25,6 +25,8 @@ public class SettingsCard : UserControl
     private readonly ContentControl _contentPresenter;
     private readonly StackPanel _descriptionRow;
     private readonly SvgIcon _chevron;
+    private readonly Grid _layoutGrid;
+    private readonly StackPanel _leftRow;
 
     // ── Styled properties ──────────────────────────────────────────────────
     public static readonly StyledProperty<object?> HeaderProperty =
@@ -58,6 +60,7 @@ public class SettingsCard : UserControl
             _contentPresenter.Content = value is string s
                 ? new TextBlock { Text = s, FontSize = 14, VerticalAlignment = VerticalAlignment.Center }
                 : value;
+            UpdateResponsiveLayout();
         }
     }
 
@@ -184,13 +187,13 @@ public class SettingsCard : UserControl
         leftStack.Children.Add(_headerPresenter);
         leftStack.Children.Add(_descriptionRow);
 
-        var leftRow = new StackPanel
+        _leftRow = new StackPanel
         {
             Orientation = Orientation.Horizontal,
             VerticalAlignment = VerticalAlignment.Center,
         };
-        leftRow.Children.Add(_iconPresenter);
-        leftRow.Children.Add(leftStack);
+        _leftRow.Children.Add(_iconPresenter);
+        _leftRow.Children.Add(leftStack);
 
         _contentPresenter = new ContentControl
         {
@@ -212,24 +215,25 @@ public class SettingsCard : UserControl
         };
         AutomationProperties.SetAccessibilityView(_chevron, AccessibilityView.Raw);
 
-        var grid = new Grid
+        _layoutGrid = new Grid
         {
             ColumnDefinitions = new ColumnDefinitions("*,Auto,Auto"),
+            RowDefinitions = new RowDefinitions("Auto"),
             MinHeight = 60,
             Margin = new Thickness(16, 8, 16, 8),
         };
-        Grid.SetColumn(leftRow, 0);
+        Grid.SetColumn(_leftRow, 0);
         Grid.SetColumn(_contentPresenter, 1);
         Grid.SetColumn(_chevron, 2);
-        grid.Children.Add(leftRow);
-        grid.Children.Add(_contentPresenter);
-        grid.Children.Add(_chevron);
+        _layoutGrid.Children.Add(_leftRow);
+        _layoutGrid.Children.Add(_contentPresenter);
+        _layoutGrid.Children.Add(_chevron);
 
         _border = new Border
         {
             CornerRadius = new CornerRadius(8),
             BorderThickness = new Thickness(1),
-            Child = grid,
+            Child = _layoutGrid,
         };
         _border.Classes.Add("settings-card");
 
@@ -237,6 +241,7 @@ public class SettingsCard : UserControl
 
         PointerPressed += OnPointerPressed;
         KeyDown += OnKeyDown;
+        SizeChanged += (_, _) => UpdateResponsiveLayout();
         GotFocus += (_, e) =>
         {
             if (!_isClickEnabled || e.NavigationMethod == NavigationMethod.Pointer) return;
@@ -249,6 +254,47 @@ public class SettingsCard : UserControl
             _border.BorderThickness = _baseBorderThickness;
         };
         SyncAutomationProperties();
+    }
+
+    private void UpdateResponsiveLayout()
+    {
+        if (Bounds.Width <= 0) return;
+
+        bool compact = Bounds.Width < 560;
+        _border.Margin = compact
+            ? new Thickness(12, _border.Margin.Top, 12, _border.Margin.Bottom)
+            : new Thickness(40, _border.Margin.Top, 40, _border.Margin.Bottom);
+
+        if (compact && _rightContent is not null)
+        {
+            _layoutGrid.ColumnDefinitions = new ColumnDefinitions("*,Auto");
+            _layoutGrid.RowDefinitions = new RowDefinitions("Auto,Auto");
+            Grid.SetRow(_leftRow, 0);
+            Grid.SetColumn(_leftRow, 0);
+            Grid.SetColumnSpan(_leftRow, 1);
+            Grid.SetRow(_chevron, 0);
+            Grid.SetColumn(_chevron, 1);
+            Grid.SetRow(_contentPresenter, 1);
+            Grid.SetColumn(_contentPresenter, 0);
+            Grid.SetColumnSpan(_contentPresenter, 2);
+            _contentPresenter.HorizontalAlignment = HorizontalAlignment.Stretch;
+            _contentPresenter.Margin = new Thickness(0, 8, 0, 0);
+        }
+        else
+        {
+            _layoutGrid.ColumnDefinitions = new ColumnDefinitions("*,Auto,Auto");
+            _layoutGrid.RowDefinitions = new RowDefinitions("Auto");
+            Grid.SetRow(_leftRow, 0);
+            Grid.SetColumn(_leftRow, 0);
+            Grid.SetColumnSpan(_leftRow, 1);
+            Grid.SetRow(_contentPresenter, 0);
+            Grid.SetColumn(_contentPresenter, 1);
+            Grid.SetColumnSpan(_contentPresenter, 1);
+            Grid.SetRow(_chevron, 0);
+            Grid.SetColumn(_chevron, 2);
+            _contentPresenter.HorizontalAlignment = HorizontalAlignment.Right;
+            _contentPresenter.Margin = new Thickness(16, 0, 0, 0);
+        }
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

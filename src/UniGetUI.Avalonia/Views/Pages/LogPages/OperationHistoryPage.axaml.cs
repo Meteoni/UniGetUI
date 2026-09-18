@@ -139,6 +139,8 @@ public partial class OperationHistoryPage : UserControl, IEnterLeaveListener, IK
         };
 
         var flyout = new MenuFlyout { Placement = PlacementMode.TopEdgeAlignedRight };
+        flyout.Opened += (_, _) => button.Classes.Add("flyout-open");
+        flyout.Closed += (_, _) => button.Classes.Remove("flyout-open");
         foreach (HistoryFilterOption option in options)
         {
             var item = new MenuItem

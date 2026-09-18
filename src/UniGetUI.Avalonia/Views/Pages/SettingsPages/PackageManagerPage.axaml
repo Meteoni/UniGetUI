@@ -49,6 +49,18 @@
             <Setter Property="MinHeight" Value="32"/>
             <Setter Property="MinWidth" Value="160"/>
         </Style>
+        <Style Selector="TextBlock.manager-section-heading">
+            <Setter Property="Margin" Value="44,32,4,8"/>
+        </Style>
+        <Style Selector="UserControl.compact TextBlock.manager-section-heading">
+            <Setter Property="Margin" Value="16,24,12,8"/>
+        </Style>
+        <Style Selector="Border.manager-status">
+            <Setter Property="Margin" Value="40,0"/>
+        </Style>
+        <Style Selector="UserControl.compact Border.manager-status">
+            <Setter Property="Margin" Value="12,0"/>
+        </Style>
     </UserControl.Styles>
 
     <ScrollViewer HorizontalScrollBarVisibility="Disabled" Margin="0,10">
@@ -62,7 +74,7 @@
 
             <!-- Status section heading -->
             <TextBlock Text="{Binding StatusSectionTitle}"
-                       Margin="44,32,4,8"
+                       Classes="manager-section-heading"
                        FontSize="14"
                        FontWeight="SemiBold"/>
 
@@ -71,7 +83,7 @@
                     CornerRadius="8,8,0,0"
                     BorderThickness="1"
                     Padding="16,12"
-                    Margin="40,0,40,0">
+                    Classes="manager-status">
                 <StackPanel Orientation="Vertical" Spacing="2">
                     <TextBlock Text="{Binding StatusTitle}" FontWeight="SemiBold" TextWrapping="Wrap"/>
                     <TextBlock Text="{Binding StatusMessage}"
@@ -103,11 +115,11 @@
             <ContentControl x:Name="PathHolder"/>
 
             <!-- Install options heading and panel -->
-            <TextBlock Text="{Binding InstallSectionTitle}" Margin="44,32,4,8" FontSize="14" FontWeight="SemiBold"/>
+            <TextBlock Text="{Binding InstallSectionTitle}" Classes="manager-section-heading" FontSize="14" FontWeight="SemiBold"/>
             <ContentControl x:Name="InstallOptionsHolder"/>
 
             <!-- Manager-specific settings heading -->
-            <TextBlock Text="{Binding SettingsSectionTitle}" Margin="44,32,4,8" FontSize="14" FontWeight="SemiBold"/>
+            <TextBlock Text="{Binding SettingsSectionTitle}" Classes="manager-section-heading" FontSize="14" FontWeight="SemiBold"/>
 
             <!-- Manager-specific extra controls – built in code-behind -->
             <StackPanel x:Name="ExtraControls"
@@ -118,7 +130,7 @@
             <settings:TranslatedTextBlock Text="Related settings"
                                           FontSize="14"
                                           FontWeight="SemiBold"
-                                          Margin="44,32,4,8"
+                                          Classes="manager-section-heading"
                                           automation:AutomationProperties.HeadingLevel="2"/>
 
             <!-- Logs link card (standalone; Pip overrides to a top tile when the alias warning shows) -->

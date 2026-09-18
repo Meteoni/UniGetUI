@@ -15,6 +15,9 @@ public sealed partial class InstallOptionsPanel : UserControl
         DataContext = new InstallOptionsPanelViewModel(manager);
         InitializeComponent();
 
+        SizeChanged += (_, _) =>
+            Classes.Set("compact", Bounds.Width > 0 && Bounds.Width < 640);
+
         ViewModel.NavigateToAdministratorRequested += (s, e) =>
             NavigateToAdministratorRequested?.Invoke(s, e);
 
