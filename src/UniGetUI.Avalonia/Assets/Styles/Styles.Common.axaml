@@ -253,6 +253,11 @@
                     <SolidColorBrush x:Key="ControlFillColorDisabledBrush"  Color="#0BFFFFFF"/>
                     <SolidColorBrush x:Key="ControlStrokeColorDefaultBrush" Color="#12FFFFFF"/>
                     <SolidColorBrush x:Key="ControlStrokeColorSecondaryBrush" Color="#18FFFFFF"/>
+                    <LinearGradientBrush x:Key="ControlElevationBorderBrush"
+                                         StartPoint="0%,0%" EndPoint="0%,100%">
+                        <GradientStop Offset="0" Color="#18FFFFFF"/>
+                        <GradientStop Offset="1" Color="#12FFFFFF"/>
+                    </LinearGradientBrush>
                     <SolidColorBrush x:Key="SolidBackgroundFillColorBaseBrush"        Color="#202020"/>
                     <SolidColorBrush x:Key="SolidBackgroundFillColorSecondaryBrush"   Color="#1C1C1C"/>
                     <SolidColorBrush x:Key="SolidBackgroundFillColorTertiaryBrush"    Color="#282828"/>
@@ -261,18 +266,18 @@
                     <SolidColorBrush x:Key="SettingsCardBackground"      Color="#0DFFFFFF"/>
                     <SolidColorBrush x:Key="SettingsCardBorderBrush"     Color="#19000000"/>
                     <SolidColorBrush x:Key="SettingsCardHoverBackground" Color="#323232"/>
-                    <SolidColorBrush x:Key="SecondaryActionBorderBrush"  Color="Transparent"/>
-                    <Thickness x:Key="SecondaryActionBorderThickness">0</Thickness>
+                    <StaticResource x:Key="SecondaryActionBorderBrush" ResourceKey="ControlElevationBorderBrush"/>
+                    <Thickness x:Key="SecondaryActionBorderThickness">1</Thickness>
                     <!-- WinUI dropdown controls use the same control/card fill as settings actions. -->
                     <StaticResource x:Key="ComboBoxBackground" ResourceKey="ControlFillColorDefaultBrush"/>
                     <StaticResource x:Key="ComboBoxBackgroundUnfocused" ResourceKey="ControlFillColorDefaultBrush"/>
                     <StaticResource x:Key="ComboBoxBackgroundPointerOver" ResourceKey="ControlFillColorSecondaryBrush"/>
                     <StaticResource x:Key="ComboBoxBackgroundPressed" ResourceKey="ControlFillColorTertiaryBrush"/>
-                    <SolidColorBrush x:Key="ComboBoxBorderBrush" Color="Transparent"/>
-                    <SolidColorBrush x:Key="ComboBoxBackgroundBorderBrushUnfocused" Color="Transparent"/>
-                    <SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver" Color="Transparent"/>
-                    <SolidColorBrush x:Key="ComboBoxBorderBrushPressed" Color="Transparent"/>
-                    <Thickness x:Key="ComboBoxOutlineThickness">0</Thickness>
+                    <StaticResource x:Key="ComboBoxBorderBrush" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="ComboBoxBackgroundBorderBrushUnfocused" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="ComboBoxBorderBrushPointerOver" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="ComboBoxBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush"/>
+                    <Thickness x:Key="ComboBoxOutlineThickness">1</Thickness>
                     <!-- Shared WinUI dropdown surface and neutral item states. -->
                     <StaticResource x:Key="ComboBoxDropDownBackground" ResourceKey="MenuSurfaceBrush"/>
                     <StaticResource x:Key="ComboBoxDropDownBorderBrush" ResourceKey="MenuSurfaceBorderBrush"/>

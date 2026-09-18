@@ -21,9 +21,12 @@ internal static class OperationHistoryLogDialog
         if (MainWindow.Instance is not { } owner)
             return;
 
-        bool dark = ThemeHelper.IsDark;
-        var defaultBrush = new SolidColorBrush(dark ? Color.FromRgb(250, 250, 250) : Color.FromRgb(0, 0, 0));
-        var errorBrush = new SolidColorBrush(dark ? Color.FromRgb(255, 80, 80) : Color.FromRgb(205, 0, 0));
+        IBrush defaultBrush =
+            Application.Current?.FindResource("TextFillColorPrimaryBrush") as IBrush
+            ?? Brushes.White;
+        IBrush errorBrush =
+            Application.Current?.FindResource("StatusErrorForeground") as IBrush
+            ?? Brushes.Red;
 
         var lines = record.Output
             .Select(l => new LogLineItem(l.Text.Replace("\r", "").Replace("\n", ""),
