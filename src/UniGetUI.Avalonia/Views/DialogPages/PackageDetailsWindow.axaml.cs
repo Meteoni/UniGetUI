@@ -35,9 +35,16 @@ public partial class PackageDetailsWindow : UniGetUI.Avalonia.Views.DialogPages.
     private const double ScreenshotGestureSettleSeconds = 0.18;
     private const double ScreenshotEdgeOverpan = 48.0;
     private const double ScreenshotEdgeResistance = 0.4;
+    private const double ScreenshotIntentDeadZone = 6.0;
+    private const double ScreenshotIntentBias = 1.15;
+    private const double ScreenshotIntentFallback = 18.0;
+    private const double ScreenshotCommitDistanceRatio = 0.4;
+    private const double ScreenshotFlickDistanceRatio = 0.12;
+    private const double ScreenshotFlickVelocity = 1200.0;
     private const string ContributeUrl = "https://github.com/Devolutions/UniGetUI";
 
     private enum LayoutMode { Unset, Normal, Wide }
+    private enum GestureAxis { Undecided, Horizontal, Vertical }
     private LayoutMode _layoutMode = LayoutMode.Unset;
 
     /// <summary>True when the user confirmed the main action (install/update/uninstall) without extras.</summary>
@@ -52,9 +59,16 @@ public partial class PackageDetailsWindow : UniGetUI.Avalonia.Views.DialogPages.
     private readonly TranslateTransform _gestureCurrentTranslate = new();
     private readonly TranslateTransform _gestureAdjacentTranslate = new();
     private double _screenshotDragOffset;
+    private double _pendingScreenshotDragInput;
+    private double _screenshotPeakVelocity;
     private int _screenshotGestureStartIndex;
+    private int _screenshotVelocityDirection;
     private long _lastScreenshotGestureInputTimestamp;
+    private long _lastScreenshotHorizontalInputTimestamp;
+    private Vector _screenshotGestureIntent;
+    private GestureAxis _screenshotGestureAxis;
     private bool _screenshotGestureActive;
+    private bool _screenshotGestureFrameRequested;
     private bool _screenshotGestureSettling;
 
     public PackageDetailsWindow(
@@ -183,19 +197,134 @@ public partial class PackageDetailsWindow : UniGetUI.Avalonia.Views.DialogPages.
 
     private void OnScreenshotPointerWheelChanged(object? sender, PointerWheelEventArgs e)
     {
-        if (_vm.Screenshots.Count < 2 || e.KeyModifiers != KeyModifiers.None ||
-            Math.Abs(e.Delta.X) <= Math.Abs(e.Delta.Y))
+        if (e.Delta == default || e.KeyModifiers != KeyModifiers.None ||
+            e.Source is not Visual source || TopLevel.GetTopLevel(this) is not { } top ||
+            !SmoothScrollManager.IsPrecisionTouchpadScroll(top, e.Delta))
             return;
 
         e.Handled = true;
         if (_screenshotGestureSettling) return;
-        if (!_screenshotGestureActive) BeginScreenshotGesture();
 
         _screenshotGestureTimer.Stop();
-        _lastScreenshotGestureInputTimestamp = Stopwatch.GetTimestamp();
+        long now = Stopwatch.GetTimestamp();
+        _lastScreenshotGestureInputTimestamp = now;
         _screenshotGestureTimer.Interval = TimeSpan.FromSeconds(ScreenshotGestureRetention);
+
+        if (_screenshotGestureAxis == GestureAxis.Undecided)
+        {
+            _screenshotGestureIntent += e.Delta;
+            _screenshotGestureAxis = ResolveScreenshotGestureAxis(_screenshotGestureIntent);
+            if (_screenshotGestureAxis == GestureAxis.Undecided)
+            {
+                _screenshotGestureTimer.Start();
+                return;
+            }
+
+            if (_screenshotGestureAxis == GestureAxis.Horizontal && _vm.Screenshots.Count >= 2)
+            {
+                if (!_screenshotGestureActive) BeginScreenshotGesture();
+                QueueScreenshotDragInput(
+                    _screenshotGestureIntent.X * SmoothScrollPhysics.PrecisionTouchpadDistance,
+                    now);
+            }
+            else
+            {
+                SmoothScrollManager.RoutePrecisionInput(
+                    source,
+                    new Vector(0, _screenshotGestureIntent.Y));
+            }
+
+            _screenshotGestureIntent = default;
+        }
+        else if (_screenshotGestureAxis == GestureAxis.Horizontal && _vm.Screenshots.Count >= 2)
+        {
+            if (!_screenshotGestureActive) BeginScreenshotGesture();
+            QueueScreenshotDragInput(
+                e.Delta.X * SmoothScrollPhysics.PrecisionTouchpadDistance,
+                now);
+        }
+        else
+        {
+            SmoothScrollManager.RoutePrecisionInput(source, new Vector(0, e.Delta.Y));
+        }
+
+        _screenshotGestureTimer.Start();
+    }
+
+    private static GestureAxis ResolveScreenshotGestureAxis(Vector delta)
+    {
+        double x = Math.Abs(delta.X * SmoothScrollPhysics.PrecisionTouchpadDistance);
+        double y = Math.Abs(delta.Y * SmoothScrollPhysics.PrecisionTouchpadDistance);
+        double largest = Math.Max(x, y);
+        if (largest < ScreenshotIntentDeadZone)
+            return GestureAxis.Undecided;
+
+        if (x >= y * ScreenshotIntentBias)
+            return GestureAxis.Horizontal;
+        if (y >= x * ScreenshotIntentBias)
+            return GestureAxis.Vertical;
+
+        if (largest >= ScreenshotIntentFallback)
+            return x >= y ? GestureAxis.Horizontal : GestureAxis.Vertical;
+
+        return GestureAxis.Undecided;
+    }
+
+    private void QueueScreenshotDragInput(double input, long timestamp)
+    {
+        if (input == 0) return;
+
+        if (_lastScreenshotHorizontalInputTimestamp != 0)
+        {
+            double elapsed = Stopwatch.GetElapsedTime(
+                _lastScreenshotHorizontalInputTimestamp,
+                timestamp).TotalSeconds;
+            if (elapsed is > 0 and < 0.1)
+            {
+                int direction = Math.Sign(input);
+                if (Math.Abs(input) >= 0.25)
+                {
+                    if (_screenshotVelocityDirection != 0 &&
+                        direction != _screenshotVelocityDirection)
+                        _screenshotPeakVelocity = 0;
+
+                    _screenshotVelocityDirection = direction;
+                    _screenshotPeakVelocity = Math.Max(
+                        _screenshotPeakVelocity,
+                        Math.Abs(input / elapsed));
+                }
+            }
+        }
+
+        _lastScreenshotHorizontalInputTimestamp = timestamp;
+        _pendingScreenshotDragInput += input;
+        RequestScreenshotGestureFrame();
+    }
+
+    private void RequestScreenshotGestureFrame()
+    {
+        if (_screenshotGestureFrameRequested) return;
+        if (TopLevel.GetTopLevel(this) is not { } top)
+        {
+            ApplyPendingScreenshotDragInput();
+            return;
+        }
+
+        _screenshotGestureFrameRequested = true;
+        top.RequestAnimationFrame(_ =>
+        {
+            _screenshotGestureFrameRequested = false;
+            ApplyPendingScreenshotDragInput();
+        });
+    }
+
+    private void ApplyPendingScreenshotDragInput()
+    {
+        double input = _pendingScreenshotDragInput;
+        _pendingScreenshotDragInput = 0;
+        if (input == 0 || !_screenshotGestureActive) return;
+
         double width = Math.Max(1, ScreenshotsBorder.Bounds.Width);
-        double input = e.Delta.X * SmoothScrollPhysics.PrecisionTouchpadDistance;
         double candidate = _screenshotDragOffset + input;
         int adjacentIndex = GetAdjacentScreenshotIndex(candidate);
         if (adjacentIndex == _screenshotGestureStartIndex)
@@ -211,11 +340,11 @@ public partial class PackageDetailsWindow : UniGetUI.Avalonia.Views.DialogPages.
         else
         {
             _screenshotDragOffset = Math.Clamp(candidate, -width, width);
-            GestureAdjacentScreenshot.Source = _vm.Screenshots[adjacentIndex];
+            if (!ReferenceEquals(GestureAdjacentScreenshot.Source, _vm.Screenshots[adjacentIndex]))
+                GestureAdjacentScreenshot.Source = _vm.Screenshots[adjacentIndex];
         }
 
         UpdateScreenshotGestureTransforms(width);
-        _screenshotGestureTimer.Start();
     }
 
     private void BeginScreenshotGesture()
@@ -261,7 +390,7 @@ public partial class PackageDetailsWindow : UniGetUI.Avalonia.Views.DialogPages.
     private async void CompleteScreenshotGesture(object? sender, EventArgs e)
     {
         _screenshotGestureTimer.Stop();
-        if (!_screenshotGestureActive || _screenshotGestureSettling) return;
+        if (_screenshotGestureSettling) return;
 
         // A DispatcherTimer tick can already be queued when Stop() is called by a fresh wheel
         // event. Only settle after a full quiet period so a stale tick can't briefly snap the
@@ -275,11 +404,22 @@ public partial class PackageDetailsWindow : UniGetUI.Avalonia.Views.DialogPages.
             return;
         }
 
+        if (_screenshotGestureAxis != GestureAxis.Horizontal || !_screenshotGestureActive)
+        {
+            ResetScreenshotGestureRouting();
+            return;
+        }
+
+        ApplyPendingScreenshotDragInput();
         _screenshotGestureSettling = true;
         double width = Math.Max(1, ScreenshotsBorder.Bounds.Width);
         int adjacentIndex = GetAdjacentScreenshotIndex(_screenshotDragOffset);
+        double distance = Math.Abs(_screenshotDragOffset);
+        bool distanceCommit = distance >= width * ScreenshotCommitDistanceRatio;
+        bool flickCommit = distance >= width * ScreenshotFlickDistanceRatio &&
+                           _screenshotPeakVelocity >= ScreenshotFlickVelocity;
         bool commit = adjacentIndex != _screenshotGestureStartIndex &&
-                      Math.Abs(_screenshotDragOffset) >= width * 0.5;
+                      (distanceCommit || flickCommit);
         double targetOffset = commit ? Math.CopySign(width, _screenshotDragOffset) : 0;
 
         if (!MotionPreference.ReducedMotion)
@@ -316,6 +456,18 @@ public partial class PackageDetailsWindow : UniGetUI.Avalonia.Views.DialogPages.
         _screenshotDragOffset = 0;
         _screenshotGestureActive = false;
         _screenshotGestureSettling = false;
+        ResetScreenshotGestureRouting();
+    }
+
+    private void ResetScreenshotGestureRouting()
+    {
+        _screenshotGestureAxis = GestureAxis.Undecided;
+        _screenshotGestureIntent = default;
+        _pendingScreenshotDragInput = 0;
+        _screenshotPeakVelocity = 0;
+        _screenshotVelocityDirection = 0;
+        _lastScreenshotGestureInputTimestamp = 0;
+        _lastScreenshotHorizontalInputTimestamp = 0;
     }
 
     private Task AnimateScreenshotTranslate(
