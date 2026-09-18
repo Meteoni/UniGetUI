@@ -74,6 +74,7 @@ public sealed partial class TextboxCard : SettingsCard
         {
             IsVisible = false,
             Margin = new Thickness(0, 0, 8, 0),
+            Classes = { "secondary-action" },
         };
         _helpbutton.Click += (_, _) =>
         {
@@ -81,7 +82,12 @@ public sealed partial class TextboxCard : SettingsCard
                 Process.Start(new ProcessStartInfo(_helpUri.ToString()) { UseShellExecute = true });
         };
 
-        _textbox = new TextBox { MinWidth = 200, MaxWidth = 300 };
+        _textbox = new TextBox
+        {
+            MinWidth = 200,
+            MaxWidth = 300,
+            Classes = { "search-field-standalone" },
+        };
 
         var s = new StackPanel { Orientation = Orientation.Horizontal };
         s.Children.Add(_helpbutton);

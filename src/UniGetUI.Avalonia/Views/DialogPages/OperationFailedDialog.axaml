@@ -4,16 +4,70 @@
         xmlns:automation="clr-namespace:Avalonia.Automation;assembly=Avalonia.Controls"
         xmlns:controls="using:UniGetUI.Avalonia.Views.Controls"
         x:Class="UniGetUI.Avalonia.Views.DialogPages.OperationFailedDialog"
-        MaxWidth="800"
+        MaxWidth="850"
         MinWidth="500"
-        MaxHeight="550"
+        MaxHeight="490"
         MinHeight="300"
-        Background="{DynamicResource AppDialogBackground}">
+        TitleMargin="24,0,0,0"
+        Background="{DynamicResource OperationDialogBodyBackground}">
 
-    <Grid RowDefinitions="Auto,*,Auto">
+    <dialogs:ImmersiveDialog.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="OperationDialogBodyBackground" Color="#FFFFFF"/>
+                    <SolidColorBrush x:Key="OperationDialogRecessedBackground" Color="#F3F3F3"/>
+                    <SolidColorBrush x:Key="OperationDialogActionBackground" Color="#FFFFFF"/>
+                    <SolidColorBrush x:Key="OperationDialogActionHoverBackground" Color="#F6F6F6"/>
+                    <SolidColorBrush x:Key="OperationDialogActionPressedBackground" Color="#EDEDED"/>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <!-- Sampled from the previous WinUI operation-failure dialog:
+                         body #2B2B2B, log/footer #202020, neutral buttons #2D2D2D. -->
+                    <SolidColorBrush x:Key="OperationDialogBodyBackground" Color="#2B2B2B"/>
+                    <SolidColorBrush x:Key="OperationDialogRecessedBackground" Color="#202020"/>
+                    <SolidColorBrush x:Key="OperationDialogActionBackground" Color="#2D2D2D"/>
+                    <SolidColorBrush x:Key="OperationDialogActionHoverBackground" Color="#323232"/>
+                    <SolidColorBrush x:Key="OperationDialogActionPressedBackground" Color="#3C3C3C"/>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </dialogs:ImmersiveDialog.Resources>
+
+    <dialogs:ImmersiveDialog.Styles>
+        <Style Selector="Button.operation-dialog-action">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="MinWidth" Value="0"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Background" Value="{DynamicResource OperationDialogActionBackground}"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Button.operation-dialog-action:pointerover">
+            <Setter Property="Background" Value="{DynamicResource OperationDialogActionHoverBackground}"/>
+        </Style>
+        <Style Selector="Button.operation-dialog-action:pressed">
+            <Setter Property="Background" Value="{DynamicResource OperationDialogActionPressedBackground}"/>
+        </Style>
+        <Style Selector="SplitButton.operation-dialog-action">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="MinWidth" Value="0"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Background" Value="{DynamicResource OperationDialogActionBackground}"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+    </dialogs:ImmersiveDialog.Styles>
+
+    <Grid RowDefinitions="Auto,*,Auto"
+          Background="{DynamicResource OperationDialogBodyBackground}">
 
         <!-- ── Header ── -->
-        <Border Grid.Row="0" Padding="16,14,16,10">
+        <Border Grid.Row="0" Padding="24,8,24,12">
             <TextBlock x:Name="HeaderContent"
                        TextWrapping="WrapWithOverflow"
                        FontSize="14"/>
@@ -21,19 +75,19 @@
 
         <!-- ── Colored output log ── -->
         <Border Grid.Row="1"
-                Margin="8,0,8,8"
+                Margin="24,0,24,24"
                 CornerRadius="6"
                 ClipToBounds="True"
-                Background="{DynamicResource AppDialogDarkBackground}">
+                Background="{DynamicResource OperationDialogRecessedBackground}">
             <controls:LogTextEditor x:Name="OutputText"
                                     automation:AutomationProperties.AccessibilityView="Raw"/>
         </Border>
 
         <!-- ── Footer buttons ── -->
         <Border Grid.Row="2"
-                BorderThickness="0,1,0,0"
-                Padding="16,10">
+                Background="{DynamicResource OperationDialogRecessedBackground}">
             <Grid x:Name="ButtonsLayout"
+                  Margin="24"
                   ColumnSpacing="8">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>

@@ -122,6 +122,8 @@ public sealed partial class PackageManagerPage : UserControl, ISettingsPage
             Content = CoreTools.Translate("Browse..."),
             IsEnabled = customPathsAllowed,
             Margin = new Thickness(8, 0, 0, 0),
+            MinWidth = 96,
+            Classes = { "secondary-action" },
         };
         browseExecutableButton.Click += async (_, _) =>
         {
@@ -193,8 +195,7 @@ public sealed partial class PackageManagerPage : UserControl, ISettingsPage
             Content = copyIcon,
             Padding = new Thickness(8),
             VerticalAlignment = VerticalAlignment.Center,
-            Background = Brushes.Transparent,
-            BorderThickness = new Thickness(0),
+            Classes = { "subtle-action" },
         };
         AutomationProperties.SetName(copyBtn, CoreTools.Translate("Copy path"));
         var pathCard = new SettingsCard
@@ -271,6 +272,7 @@ public sealed partial class PackageManagerPage : UserControl, ISettingsPage
         var customAgeInput = new TextBox
         {
             MinWidth = 200,
+            Classes = { "search-field-standalone" },
             PlaceholderText = CoreTools.Translate("e.g. 10"),
             [AutomationProperties.NameProperty] = CoreTools.Translate("Custom minimum age (days)"),
             Text = CoreSettings.GetDictionaryItem<string, string>(
@@ -622,6 +624,7 @@ public sealed partial class PackageManagerPage : UserControl, ISettingsPage
             Content = CoreTools.Translate("Reset"),
             IsEnabled = ViewModel.IsCustomVcpkgRootSet,
             Margin = new Thickness(4, 0),
+            Classes = { "secondary-action" },
         };
         AutomationProperties.SetName(resetBtn, CoreTools.Translate("Reset vcpkg root location"));
         var openBtn = new Button
@@ -629,6 +632,7 @@ public sealed partial class PackageManagerPage : UserControl, ISettingsPage
             Content = CoreTools.Translate("Open"),
             IsEnabled = ViewModel.IsCustomVcpkgRootSet,
             Margin = new Thickness(4, 0),
+            Classes = { "secondary-action" },
         };
         AutomationProperties.SetName(openBtn, CoreTools.Translate("Open vcpkg root location"));
 

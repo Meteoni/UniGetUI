@@ -352,6 +352,29 @@
         <Setter Property="Background" Value="{DynamicResource SubtleFillColorTertiaryBrush}"/>
     </Style>
 
+    <Style Selector="SplitButton.secondary-action">
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="Background" Value="{DynamicResource SettingsCardBackground}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource SecondaryActionBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource SecondaryActionBorderThickness}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}"/>
+    </Style>
+
+    <!-- Compact icon-only command used inside settings cards. -->
+    <Style Selector="Button.subtle-action">
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}"/>
+    </Style>
+    <Style Selector="Button.subtle-action:pointerover">
+        <Setter Property="Background" Value="{DynamicResource SubtleFillColorSecondaryBrush}"/>
+    </Style>
+    <Style Selector="Button.subtle-action:pressed">
+        <Setter Property="Background" Value="{DynamicResource SubtleFillColorTertiaryBrush}"/>
+    </Style>
+
     <!-- Shared trigger used by button-hosted dropdowns. It intentionally does not target
          every Button: toolbar commands and ordinary flyouts retain their own semantics. -->
     <Style Selector="Button.dropdown-trigger">
