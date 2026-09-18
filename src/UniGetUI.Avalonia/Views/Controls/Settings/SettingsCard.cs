@@ -260,12 +260,13 @@ public class SettingsCard : UserControl
     {
         if (Bounds.Width <= 0) return;
 
-        bool compact = Bounds.Width < 560;
-        _border.Margin = compact
+        bool compactGutters = Bounds.Width < 640;
+        bool stackContent = Bounds.Width < 480;
+        _border.Margin = compactGutters
             ? new Thickness(12, _border.Margin.Top, 12, _border.Margin.Bottom)
             : new Thickness(40, _border.Margin.Top, 40, _border.Margin.Bottom);
 
-        if (compact && _rightContent is not null)
+        if (stackContent && _rightContent is not null)
         {
             _layoutGrid.ColumnDefinitions = new ColumnDefinitions("*,Auto");
             _layoutGrid.RowDefinitions = new RowDefinitions("Auto,Auto");
