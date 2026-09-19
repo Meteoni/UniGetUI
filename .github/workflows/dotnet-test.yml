@@ -1,7 +1,7 @@
 name: .NET Tests
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "dialog-settings-ui-upstream-main-ci" ]
     paths:
       - 'global.json'
       - '**.cs'
@@ -121,3 +121,17 @@ jobs:
         if (-not (Test-Path "${{ runner.temp }}\unigetui-nativeaot-publish\UniGetUI.exe")) {
           throw "NativeAOT publish did not produce UniGetUI.exe."
         }
+
+    - name: Package Windows x64 portable build
+      shell: pwsh
+      run: |
+        $PublishDir = "${{ runner.temp }}\unigetui-nativeaot-publish"
+        $Archive = "${{ runner.temp }}\UniGetUI.dialog-settings-ui-upstream-main.win-x64.zip"
+        Compress-Archive -Path "$PublishDir\*" -DestinationPath $Archive -CompressionLevel Optimal
+        Compress-Archive -Path "InstallerExtras\ForceUniGetUIPortable" -DestinationPath $Archive -Update
+
+    - name: Upload Windows x64 portable build
+      uses: actions/upload-artifact@v7
+      with:
+        name: UniGetUI-dialog-settings-ui-upstream-main-win-x64
+        path: ${{ runner.temp }}\UniGetUI.dialog-settings-ui-upstream-main.win-x64.zip
