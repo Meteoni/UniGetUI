@@ -135,6 +135,15 @@ public static class AvaloniaAppHost
         AppBuilder builder = AppBuilder.Configure<App>()
             .UsePlatformDetect();
 
+#if !WINDOWS
+        // Keep Linux and macOS typography stable across distributions and runtime defaults.
+        // Fluent already falls back to $Default for glyphs that Inter does not cover.
+        if (OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
+        {
+            builder = builder.WithInterFont();
+        }
+#endif
+
         if (UiFontPolicy.ResolveDefaultFamilyName() is { } fontFamily)
         {
             builder = builder.With(new FontManagerOptions { DefaultFamilyName = fontFamily });
