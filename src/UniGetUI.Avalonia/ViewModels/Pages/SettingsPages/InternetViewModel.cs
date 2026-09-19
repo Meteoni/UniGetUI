@@ -1,10 +1,10 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
-using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using UniGetUI.Avalonia.ViewModels;
+using UniGetUI.Avalonia.Views.Controls;
 using UniGetUI.Avalonia.Views.Controls.Settings;
 using UniGetUI.Core.Tools;
 using UniGetUI.PackageEngine;
@@ -114,14 +114,28 @@ public partial class InternetViewModel : ViewModelBase
             SetCell(name, row, 0);
 
             var proxyLevel = manager.Capabilities.SupportsProxy;
-            var proxyBadge = StatusBadge(
-                proxyLevel is ProxySupport.No ? noStr : (proxyLevel is ProxySupport.Partially ? partStr : yesStr),
-                proxyLevel is ProxySupport.Yes ? Colors.Green : (proxyLevel is ProxySupport.Partially ? Colors.Orange : Colors.Red));
+            var proxyBadge = new StatusBadge
+            {
+                Text = proxyLevel is ProxySupport.No
+                    ? noStr
+                    : proxyLevel is ProxySupport.Partially ? partStr : yesStr,
+                Severity = proxyLevel is ProxySupport.Yes
+                    ? StatusBadgeSeverity.Success
+                    : proxyLevel is ProxySupport.Partially
+                        ? StatusBadgeSeverity.Warning
+                        : StatusBadgeSeverity.Error,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+            };
             SetCell(proxyBadge, row, 1);
 
-            var authBadge = StatusBadge(
-                manager.Capabilities.SupportsProxyAuth ? yesStr : noStr,
-                manager.Capabilities.SupportsProxyAuth ? Colors.Green : Colors.Red);
+            var authBadge = new StatusBadge
+            {
+                Text = manager.Capabilities.SupportsProxyAuth ? yesStr : noStr,
+                Severity = manager.Capabilities.SupportsProxyAuth
+                    ? StatusBadgeSeverity.Success
+                    : StatusBadgeSeverity.Error,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+            };
             SetCell(authBadge, row, 2);
 
             table.Children.Add(name);
@@ -154,17 +168,6 @@ public partial class InternetViewModel : ViewModelBase
         border.Classes.Add("settings-card");
         return border;
     }
-
-    private static Border StatusBadge(string text, Color color) => new Border
-    {
-        CornerRadius = new CornerRadius(4),
-        Padding = new Thickness(4, 2),
-        BorderThickness = new Thickness(1),
-        HorizontalAlignment = HorizontalAlignment.Stretch,
-        Background = new SolidColorBrush(Color.FromArgb(60, color.R, color.G, color.B)),
-        BorderBrush = new SolidColorBrush(Color.FromArgb(120, color.R, color.G, color.B)),
-        Child = new TextBlock { Text = text, TextAlignment = TextAlignment.Center },
-    };
 
     private static void SetCell(Control c, int row, int col) { Grid.SetRow(c, row); Grid.SetColumn(c, col); }
 

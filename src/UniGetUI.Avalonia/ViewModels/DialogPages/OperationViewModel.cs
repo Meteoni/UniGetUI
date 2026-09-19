@@ -156,44 +156,54 @@ public sealed partial class OperationViewModel : ViewModelBase
             case OperationStatus.InQueue:
                 ProgressIndeterminate = false;
                 ProgressValue = 0;
-                ProgressBrush = new SolidColorBrush(Color.Parse("#888888"));
+                ProgressBrush = ThemeBrush("TextFillColorTertiaryBrush", Brushes.Gray);
                 BackgroundBrush = Brushes.Transparent;
                 ButtonText = CoreTools.Translate("Cancel");
                 break;
 
             case OperationStatus.Running:
                 ProgressIndeterminate = true;
-                ProgressBrush = new SolidColorBrush(Color.Parse("#F0A500"));
-                BackgroundBrush = new SolidColorBrush(Color.FromArgb(30, 240, 165, 0));
+                ProgressBrush = ThemeBrush("StatusWarningForeground", Brushes.Orange);
+                BackgroundBrush = ThemeBrush("WarningBannerBackground", Brushes.Transparent);
                 ButtonText = CoreTools.Translate("Cancel");
                 break;
 
             case OperationStatus.Succeeded:
                 ProgressIndeterminate = false;
                 ProgressValue = 100;
-                ProgressBrush = new SolidColorBrush(Color.Parse("#0F7B0F"));
-                BackgroundBrush = new SolidColorBrush(Color.FromArgb(30, 15, 123, 15));
+                ProgressBrush = ThemeBrush("StatusSuccessForeground", Brushes.Green);
+                BackgroundBrush = ThemeBrush("StatusSuccessBackground", Brushes.Transparent);
                 ButtonText = CoreTools.Translate("Close");
                 break;
 
             case OperationStatus.Failed:
                 ProgressIndeterminate = false;
                 ProgressValue = 100;
-                ProgressBrush = new SolidColorBrush(Color.Parse("#BC0000"));
-                BackgroundBrush = new SolidColorBrush(Color.FromArgb(40, 188, 0, 0));
+                ProgressBrush = ThemeBrush("StatusErrorForeground", Brushes.Red);
+                BackgroundBrush = ThemeBrush("StatusErrorBackground", Brushes.Transparent);
                 ButtonText = CoreTools.Translate("Close");
                 break;
 
             case OperationStatus.Canceled:
                 ProgressIndeterminate = false;
                 ProgressValue = 100;
-                ProgressBrush = new SolidColorBrush(Color.Parse("#9D5D00"));
+                ProgressBrush = ThemeBrush("StatusWarningForeground", Brushes.Orange);
                 BackgroundBrush = Brushes.Transparent;
                 ButtonText = CoreTools.Translate("Close");
                 break;
         }
 
         RebuildMenu(status);
+    }
+
+    private static IBrush ThemeBrush(string key, IBrush fallback)
+    {
+        if (Application.Current?.TryGetResource(
+                key,
+                Infrastructure.ThemeHelper.Variant,
+                out var resource) == true && resource is IBrush brush)
+            return brush;
+        return fallback;
     }
 
     // ── "…" menu ─────────────────────────────────────────────────────────────

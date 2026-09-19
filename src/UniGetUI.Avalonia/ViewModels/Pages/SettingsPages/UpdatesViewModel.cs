@@ -1,8 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Layout;
-using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using UniGetUI.Avalonia.Views.Controls;
 using UniGetUI.Avalonia.Views.Pages.SettingsPages;
 using UniGetUI.Core.Tools;
 using UniGetUI.Core.Tools.Scheduling;
@@ -72,13 +72,21 @@ public partial class UpdatesViewModel : ViewModelBase
             var name = new TextBlock { Text = manager.DisplayName, VerticalAlignment = VerticalAlignment.Center };
             Grid.SetRow(name, row); Grid.SetColumn(name, 0);
 
-            (string label, Color color) = manager.Capabilities.KnowsPackageReleaseDate switch
+            (string label, StatusBadgeSeverity severity) = manager.Capabilities.KnowsPackageReleaseDate switch
             {
-                PackageReleaseDateSupport.Yes => (CoreTools.Translate("Yes"), Colors.Green),
-                PackageReleaseDateSupport.Partial => (CoreTools.Translate("Partial"), Color.FromRgb(224, 168, 0)),
-                _ => (CoreTools.Translate("No"), Colors.Red),
+                PackageReleaseDateSupport.Yes =>
+                    (CoreTools.Translate("Yes"), StatusBadgeSeverity.Success),
+                PackageReleaseDateSupport.Partial =>
+                    (CoreTools.Translate("Partial"), StatusBadgeSeverity.Warning),
+                _ =>
+                    (CoreTools.Translate("No"), StatusBadgeSeverity.Error),
             };
-            var badge = _statusBadge(label, color);
+            var badge = new StatusBadge
+            {
+                Text = label,
+                Severity = severity,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+            };
             Grid.SetRow(badge, row); Grid.SetColumn(badge, 1);
 
             table.Children.Add(name);
@@ -110,17 +118,6 @@ public partial class UpdatesViewModel : ViewModelBase
         border.Classes.Add("settings-card");
         return border;
     }
-
-    private static Border _statusBadge(string text, Color color) => new Border
-    {
-        CornerRadius = new CornerRadius(4),
-        Padding = new Thickness(4, 2),
-        BorderThickness = new Thickness(1),
-        HorizontalAlignment = HorizontalAlignment.Stretch,
-        Background = new SolidColorBrush(Color.FromArgb(60, color.R, color.G, color.B)),
-        BorderBrush = new SolidColorBrush(Color.FromArgb(120, color.R, color.G, color.B)),
-        Child = new TextBlock { Text = text, TextAlignment = TextAlignment.Center },
-    };
 
     [RelayCommand]
     private void NavigateToScheduler() => NavigationRequested?.Invoke(this, typeof(Scheduler));

@@ -2,7 +2,6 @@ using System.Text;
 using Avalonia;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
-using Avalonia.Styling;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
@@ -99,12 +98,15 @@ public class LogTextEditor : TextEditor
     // True when the view is pinned to the last line; used to keep auto-scroll from fighting a manual scroll-up.
     public bool IsScrolledToBottom => ExtentHeight - ViewportHeight - VerticalOffset <= 1.0;
 
-    // AvaloniaEdit auto-links URLs; its default link brush is too dark to read on the dark theme.
+    // AvaloniaEdit auto-links URLs; use the app's theme-aware hyperlink brush instead of
+    // AvaloniaEdit's fixed default so links remain legible in both themes.
     private void UpdateLinkColor()
     {
-        bool isDark = Application.Current?.ActualThemeVariant == ThemeVariant.Dark;
-        TextArea.TextView.LinkTextForegroundBrush =
-            new SolidColorBrush(isDark ? Color.FromRgb(100, 170, 255) : Color.FromRgb(0, 0, 205));
+        if (Application.Current?.TryGetResource(
+                "HyperlinkForeground",
+                Infrastructure.ThemeHelper.Variant,
+                out var resource) == true && resource is IBrush brush)
+            TextArea.TextView.LinkTextForegroundBrush = brush;
     }
 
     private sealed class SeverityColorizer(List<IBrush> lineColors) : DocumentColorizingTransformer

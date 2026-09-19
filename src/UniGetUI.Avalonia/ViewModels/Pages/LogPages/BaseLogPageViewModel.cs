@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using Avalonia;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -42,16 +43,23 @@ public abstract partial class BaseLogPageViewModel : ViewModels.ViewModelBase
 
     protected static IBrush GetSeverityBrush(LogEntry.SeverityLevel severity, bool isDark)
     {
-        var color = severity switch
+        string key = severity switch
         {
-            LogEntry.SeverityLevel.Debug => isDark ? Color.FromRgb(130, 130, 130) : Color.FromRgb(125, 125, 225),
-            LogEntry.SeverityLevel.Info => isDark ? Color.FromRgb(190, 190, 190) : Color.FromRgb(50, 50, 150),
-            LogEntry.SeverityLevel.Success => isDark ? Color.FromRgb(250, 250, 250) : Color.FromRgb(0, 0, 0),
-            LogEntry.SeverityLevel.Warning => isDark ? Color.FromRgb(255, 255, 90) : Color.FromRgb(150, 150, 0),
-            LogEntry.SeverityLevel.Error => isDark ? Color.FromRgb(255, 80, 80) : Color.FromRgb(205, 0, 0),
-            _ => isDark ? Color.FromRgb(130, 130, 130) : Color.FromRgb(125, 125, 225),
+            LogEntry.SeverityLevel.Debug => "LogOutputVerboseForeground",
+            LogEntry.SeverityLevel.Info => "TextFillColorSecondaryBrush",
+            LogEntry.SeverityLevel.Success => "TextFillColorPrimaryBrush",
+            LogEntry.SeverityLevel.Warning => "StatusWarningForeground",
+            LogEntry.SeverityLevel.Error => "StatusErrorForeground",
+            _ => "LogOutputVerboseForeground",
         };
-        return new SolidColorBrush(color);
+
+        if (Application.Current?.TryGetResource(
+                key,
+                Infrastructure.ThemeHelper.Variant,
+                out var resource) == true && resource is IBrush brush)
+            return brush;
+
+        return new SolidColorBrush(isDark ? Colors.White : Colors.Black);
     }
 
     protected static IBrush GetManagerColorBrush(char colorCode, bool isDark)

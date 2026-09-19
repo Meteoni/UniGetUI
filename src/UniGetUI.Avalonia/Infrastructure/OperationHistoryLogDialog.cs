@@ -21,12 +21,9 @@ internal static class OperationHistoryLogDialog
         if (MainWindow.Instance is not { } owner)
             return;
 
-        IBrush defaultBrush =
-            Application.Current?.FindResource("TextFillColorPrimaryBrush") as IBrush
-            ?? Brushes.White;
-        IBrush errorBrush =
-            Application.Current?.FindResource("StatusErrorForeground") as IBrush
-            ?? Brushes.Red;
+        var theme = ThemeHelper.Variant;
+        IBrush defaultBrush = LookupBrush("TextFillColorPrimaryBrush", theme, Brushes.White);
+        IBrush errorBrush = LookupBrush("StatusErrorForeground", theme, Brushes.Red);
 
         var lines = record.Output
             .Select(l => new LogLineItem(l.Text.Replace("\r", "").Replace("\n", ""),
@@ -49,7 +46,7 @@ internal static class OperationHistoryLogDialog
             MinHeight = 300,
             Title = CoreTools.Translate("Operation log") + (target.Length > 0 ? $" — {target}" : ""),
             TitleMargin = new Thickness(24, 0, 0, 0),
-            Background = Application.Current?.FindResource("SolidBackgroundFillColorQuarternaryBrush") as IBrush,
+            Background = LookupBrush("SolidBackgroundFillColorQuarternaryBrush", theme, Brushes.Transparent),
         };
 
         var copyButton = CreateDialogButton(CoreTools.Translate("Copy to clipboard"));
@@ -89,7 +86,7 @@ internal static class OperationHistoryLogDialog
         {
             CornerRadius = new CornerRadius(8),
             ClipToBounds = true,
-            Background = Application.Current?.FindResource("SolidBackgroundFillColorBaseBrush") as IBrush,
+            Background = LookupBrush("SolidBackgroundFillColorBaseBrush", theme, Brushes.Transparent),
             Child = editor,
         };
         Grid.SetRow(editorBorder, 1);
@@ -114,7 +111,7 @@ internal static class OperationHistoryLogDialog
 
         var footerSurface = new Border
         {
-            Background = Application.Current?.FindResource("SolidBackgroundFillColorBaseBrush") as IBrush,
+            Background = LookupBrush("SolidBackgroundFillColorBaseBrush", theme, Brushes.Transparent),
             Padding = new Thickness(24),
             Child = footer,
         };
@@ -127,6 +124,14 @@ internal static class OperationHistoryLogDialog
         };
 
         await dialog.ShowDialog(owner);
+    }
+
+    private static IBrush LookupBrush(string key, Avalonia.Styling.ThemeVariant theme, IBrush fallback)
+    {
+        if (Application.Current?.TryGetResource(key, theme, out var resource) == true &&
+            resource is IBrush brush)
+            return brush;
+        return fallback;
     }
 
     private static Button CreateDialogButton(string content, double minWidth = 0) => new()

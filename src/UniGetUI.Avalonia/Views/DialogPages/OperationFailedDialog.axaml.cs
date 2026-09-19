@@ -54,9 +54,9 @@ public partial class OperationFailedDialog : UniGetUI.Avalonia.Views.DialogPages
         // Resolve against the actual theme variant; bare FindResource picks the light-theme
         // foreground (near-black) even in dark mode, making normal lines unreadable (#5032).
         var theme = Infrastructure.ThemeHelper.Variant;
-        var errorBrush = new SolidColorBrush(Color.Parse("#FF6B6B"));
-        var debugBrush = new SolidColorBrush(Color.Parse("#888888"));
-        var normalBrush = LookupBrush("SystemControlForegroundBaseHighBrush", theme, Brushes.White);
+        var errorBrush = LookupBrush("StatusErrorForeground", theme, Brushes.Red);
+        var debugBrush = LookupBrush("LogOutputVerboseForeground", theme, Brushes.Gray);
+        var normalBrush = LookupBrush("TextFillColorPrimaryBrush", theme, Brushes.White);
 
         var lines = new List<LogLineItem>();
         foreach (var (text, type) in _operation.GetOutput())

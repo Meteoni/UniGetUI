@@ -37,9 +37,9 @@ public partial class OperationOutputViewModel : ObservableObject
     public void Rebuild()
     {
         var theme = Infrastructure.ThemeHelper.Variant;
-        _errorBrush = LookupBrush("StatusErrorForeground", theme, new SolidColorBrush(Color.Parse("#c62828")));
-        _debugBrush = LookupBrush("LogOutputVerboseForeground", theme, new SolidColorBrush(Color.Parse("#767676")));
-        _normalBrush = LookupBrush("SystemControlForegroundBaseHighBrush", theme, Brushes.White);
+        _errorBrush = LookupBrush("StatusErrorForeground", theme, Brushes.Red);
+        _debugBrush = LookupBrush("LogOutputVerboseForeground", theme, Brushes.Gray);
+        _normalBrush = LookupBrush("TextFillColorPrimaryBrush", theme, Brushes.White);
 
         OutputLines.Clear();
         _collapser = new();
