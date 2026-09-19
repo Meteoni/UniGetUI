@@ -85,6 +85,34 @@
                     <SolidColorBrush x:Key="SolidBackgroundFillColorSecondaryBrush"   Color="#EEEEEE"/>
                     <SolidColorBrush x:Key="SolidBackgroundFillColorTertiaryBrush"    Color="#F9F9F9"/>
                     <SolidColorBrush x:Key="SolidBackgroundFillColorQuarternaryBrush" Color="#FFFFFF"/>
+
+                    <!-- WinUI Button/SplitButton state resources. Avalonia's Fluent theme still
+                         ships UWP-era fills; override the exact keys its templates consume. -->
+                    <StaticResource x:Key="ButtonBackground" ResourceKey="ControlFillColorDefaultBrush"/>
+                    <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="ControlFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="ControlFillColorTertiaryBrush"/>
+                    <StaticResource x:Key="ButtonBackgroundDisabled" ResourceKey="ControlFillColorDisabledBrush"/>
+                    <StaticResource x:Key="ButtonForeground" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="TextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="TextFillColorDisabledBrush"/>
+                    <StaticResource x:Key="ButtonBorderBrush" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="ButtonBorderBrushPointerOver" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="ButtonBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush"/>
+                    <StaticResource x:Key="ButtonBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush"/>
+
+                    <StaticResource x:Key="SplitButtonBackground" ResourceKey="ControlFillColorDefaultBrush"/>
+                    <StaticResource x:Key="SplitButtonBackgroundPointerOver" ResourceKey="ControlFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="SplitButtonBackgroundPressed" ResourceKey="ControlFillColorTertiaryBrush"/>
+                    <StaticResource x:Key="SplitButtonBackgroundDisabled" ResourceKey="ControlFillColorDisabledBrush"/>
+                    <StaticResource x:Key="SplitButtonForeground" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="SplitButtonForegroundPointerOver" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="SplitButtonForegroundPressed" ResourceKey="TextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="SplitButtonForegroundDisabled" ResourceKey="TextFillColorDisabledBrush"/>
+                    <StaticResource x:Key="SplitButtonBorderBrush" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="SplitButtonBorderBrushPointerOver" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="SplitButtonBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush"/>
+                    <StaticResource x:Key="SplitButtonBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush"/>
                     <!-- Settings cards -->
                     <SolidColorBrush x:Key="SettingsCardBackground"      Color="#B3FFFFFF"/>
                     <SolidColorBrush x:Key="SettingsCardBorderBrush"     Color="#ECECEC"/>
@@ -262,6 +290,33 @@
                     <SolidColorBrush x:Key="SolidBackgroundFillColorSecondaryBrush"   Color="#1C1C1C"/>
                     <SolidColorBrush x:Key="SolidBackgroundFillColorTertiaryBrush"    Color="#282828"/>
                     <SolidColorBrush x:Key="SolidBackgroundFillColorQuarternaryBrush" Color="#2C2C2C"/>
+
+                    <!-- WinUI Button/SplitButton state resources. -->
+                    <StaticResource x:Key="ButtonBackground" ResourceKey="ControlFillColorDefaultBrush"/>
+                    <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="ControlFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="ControlFillColorTertiaryBrush"/>
+                    <StaticResource x:Key="ButtonBackgroundDisabled" ResourceKey="ControlFillColorDisabledBrush"/>
+                    <StaticResource x:Key="ButtonForeground" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="TextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="TextFillColorDisabledBrush"/>
+                    <StaticResource x:Key="ButtonBorderBrush" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="ButtonBorderBrushPointerOver" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="ButtonBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush"/>
+                    <StaticResource x:Key="ButtonBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush"/>
+
+                    <StaticResource x:Key="SplitButtonBackground" ResourceKey="ControlFillColorDefaultBrush"/>
+                    <StaticResource x:Key="SplitButtonBackgroundPointerOver" ResourceKey="ControlFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="SplitButtonBackgroundPressed" ResourceKey="ControlFillColorTertiaryBrush"/>
+                    <StaticResource x:Key="SplitButtonBackgroundDisabled" ResourceKey="ControlFillColorDisabledBrush"/>
+                    <StaticResource x:Key="SplitButtonForeground" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="SplitButtonForegroundPointerOver" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="SplitButtonForegroundPressed" ResourceKey="TextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="SplitButtonForegroundDisabled" ResourceKey="TextFillColorDisabledBrush"/>
+                    <StaticResource x:Key="SplitButtonBorderBrush" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="SplitButtonBorderBrushPointerOver" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="SplitButtonBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush"/>
+                    <StaticResource x:Key="SplitButtonBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush"/>
                     <!-- Settings cards -->
                     <SolidColorBrush x:Key="SettingsCardBackground"      Color="#0DFFFFFF"/>
                     <SolidColorBrush x:Key="SettingsCardBorderBrush"     Color="#19000000"/>
@@ -344,6 +399,20 @@
 
     <Style Selector="TextBlock">
         <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    </Style>
+
+    <!-- WinUI changes fill/foreground on press without shrinking the control. Avalonia's Fluent
+         Button theme adds a 0.98 scale animation, so remove it globally for WinUI parity. -->
+    <Style Selector="Button:pressed">
+        <Setter Property="RenderTransform" Value="none"/>
+    </Style>
+
+    <!-- Avalonia intentionally keeps SplitButton's pressed state while its flyout is open.
+         WinUI returns the trigger to its rest fill once the menu is open. -->
+    <Style Selector="SplitButton:flyout-open /template/ Button /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource SplitButtonBackground}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource SplitButtonBorderBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource SplitButtonForeground}"/>
     </Style>
 
     <!-- Avalonia's Fluent controls still consume UWP-era accent resources, whose dark-theme
