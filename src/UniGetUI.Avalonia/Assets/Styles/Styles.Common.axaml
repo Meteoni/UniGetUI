@@ -19,7 +19,6 @@
                     <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="{DynamicResource SystemAccentColor}"/>
                     <SolidColorBrush x:Key="SystemControlHighlightAltAccentBrush" Color="{DynamicResource SystemAccentColor}"/>
                     <SolidColorBrush x:Key="SystemControlRevealFocusVisualBrush" Color="{DynamicResource SystemAccentColor}"/>
-                    <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="{DynamicResource SystemAccentColor}"/>
                     <SolidColorBrush x:Key="TabItemHeaderSelectedPipeFill" Color="{DynamicResource SystemAccentColor}"/>
                     <!-- Subtle fills (WinUI NavigationViewItem hover/selected backgrounds) -->
                     <SolidColorBrush x:Key="SubtleFillColorSecondaryBrush" Color="#09000000"/>
@@ -38,10 +37,9 @@
                     <SolidColorBrush x:Key="TextFillColorPrimaryBrush"   Color="#E4000000"/>
                     <SolidColorBrush x:Key="TextFillColorSecondaryBrush" Color="#9E000000"/>
                     <SolidColorBrush x:Key="TextFillColorTertiaryBrush"  Color="#72000000"/>
-                    <!-- Search-box placeholders. The big Discover field uses larger (thicker-stroked) text, so it
-                         gets a lighter light-theme value to read as the same weight as the compact title-bar field. -->
-                    <SolidColorBrush x:Key="SearchBoxPlaceholderForeground"   Color="#72000000"/>
-                    <SolidColorBrush x:Key="MegaQueryPlaceholderForeground"   Color="#52000000"/>
+                    <!-- WinUI text-entry placeholders use the secondary text fill in every state. -->
+                    <StaticResource x:Key="SearchBoxPlaceholderForeground" ResourceKey="TextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="MegaQueryPlaceholderForeground" ResourceKey="TextFillColorSecondaryBrush"/>
                     <SolidColorBrush x:Key="SearchBoxInactiveBackground"      Color="#B3FFFFFF"/>
                     <SolidColorBrush x:Key="SearchBoxFocusedBackground"       Color="#FFFFFFFF"/>
                     <SolidColorBrush x:Key="SearchBoxFocusedBorderBrush"      Color="#0F000000"/>
@@ -90,8 +88,32 @@
                     <SolidColorBrush x:Key="ControlFillColorSecondaryBrush" Color="#80F9F9F9"/>
                     <SolidColorBrush x:Key="ControlFillColorTertiaryBrush"  Color="#4DF9F9F9"/>
                     <SolidColorBrush x:Key="ControlFillColorDisabledBrush"  Color="#4DF9F9F9"/>
+                    <SolidColorBrush x:Key="ControlFillColorInputActiveBrush" Color="#FFFFFF"/>
                     <SolidColorBrush x:Key="ControlStrokeColorDefaultBrush" Color="#0F000000"/>
                     <SolidColorBrush x:Key="ControlStrokeColorSecondaryBrush" Color="#29000000"/>
+                    <SolidColorBrush x:Key="ControlStrongStrokeColorDefaultBrush" Color="#72000000"/>
+                    <StaticResource x:Key="TextControlBackground" ResourceKey="ControlFillColorDefaultBrush"/>
+                    <StaticResource x:Key="TextControlBackgroundPointerOver" ResourceKey="ControlFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="TextControlBackgroundFocused" ResourceKey="ControlFillColorInputActiveBrush"/>
+                    <StaticResource x:Key="TextControlBackgroundDisabled" ResourceKey="ControlFillColorDisabledBrush"/>
+                    <StaticResource x:Key="TextControlForeground" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="TextControlForegroundPointerOver" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="TextControlForegroundFocused" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="TextControlForegroundDisabled" ResourceKey="TextFillColorDisabledBrush"/>
+                    <StaticResource x:Key="TextControlPlaceholderForeground" ResourceKey="TextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="TextControlPlaceholderForegroundPointerOver" ResourceKey="TextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="TextControlPlaceholderForegroundFocused" ResourceKey="TextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="TextControlPlaceholderForegroundDisabled" ResourceKey="TextFillColorDisabledBrush"/>
+                    <StaticResource x:Key="TextControlSelectionHighlightColor" ResourceKey="AccentFillColorSelectedTextBackgroundBrush"/>
+                    <StaticResource x:Key="TextControlBorderBrush" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="TextControlBorderBrushPointerOver" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="TextControlBorderBrushFocused" ResourceKey="AccentFillColorDefaultBrush"/>
+                    <StaticResource x:Key="TextControlBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush"/>
+                    <StaticResource x:Key="TextControlButtonBackgroundPointerOver" ResourceKey="SubtleFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="TextControlButtonBackgroundPressed" ResourceKey="SubtleFillColorTertiaryBrush"/>
+                    <StaticResource x:Key="TextControlButtonForeground" ResourceKey="TextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="TextControlButtonForegroundPointerOver" ResourceKey="TextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="TextControlButtonForegroundPressed" ResourceKey="TextFillColorTertiaryBrush"/>
                     <SolidColorBrush x:Key="SolidBackgroundFillColorBaseBrush"        Color="#F3F3F3"/>
                     <SolidColorBrush x:Key="SolidBackgroundFillColorSecondaryBrush"   Color="#EEEEEE"/>
                     <SolidColorBrush x:Key="SolidBackgroundFillColorTertiaryBrush"    Color="#F9F9F9"/>
@@ -170,12 +192,22 @@
                     <!-- WinUI dropdown controls use the same control/card fill as settings actions. -->
                     <StaticResource x:Key="ComboBoxBackground" ResourceKey="ControlFillColorDefaultBrush"/>
                     <StaticResource x:Key="ComboBoxBackgroundUnfocused" ResourceKey="ControlFillColorDefaultBrush"/>
+                    <StaticResource x:Key="ComboBoxBackgroundFocused" ResourceKey="ControlFillColorDefaultBrush"/>
                     <StaticResource x:Key="ComboBoxBackgroundPointerOver" ResourceKey="ControlFillColorSecondaryBrush"/>
                     <StaticResource x:Key="ComboBoxBackgroundPressed" ResourceKey="ControlFillColorTertiaryBrush"/>
+                    <StaticResource x:Key="ComboBoxBackgroundDisabled" ResourceKey="ControlFillColorDisabledBrush"/>
+                    <StaticResource x:Key="ComboBoxForeground" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="ComboBoxForegroundPointerOver" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="ComboBoxForegroundPressed" ResourceKey="TextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="ComboBoxForegroundDisabled" ResourceKey="TextFillColorDisabledBrush"/>
+                    <StaticResource x:Key="ComboBoxForegroundFocused" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="ComboBoxForegroundFocusedPressed" ResourceKey="TextFillColorPrimaryBrush"/>
                     <StaticResource x:Key="ComboBoxBorderBrush" ResourceKey="ControlElevationBorderBrush"/>
-                    <StaticResource x:Key="ComboBoxBackgroundBorderBrushUnfocused" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="ComboBoxBackgroundBorderBrushUnfocused" ResourceKey="ControlStrokeColorDefaultBrush"/>
+                    <StaticResource x:Key="ComboBoxBackgroundBorderBrushFocused" ResourceKey="AccentFillColorDefaultBrush"/>
                     <StaticResource x:Key="ComboBoxBorderBrushPointerOver" ResourceKey="ControlElevationBorderBrush"/>
-                    <StaticResource x:Key="ComboBoxBorderBrushPressed" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="ComboBoxBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush"/>
+                    <StaticResource x:Key="ComboBoxBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush"/>
                     <Thickness x:Key="ComboBoxOutlineThickness">1</Thickness>
                     <!-- Shared WinUI dropdown surface and neutral item states. ComboBox popups
                          use the same visual language as MenuFlyout-based pickers. -->
@@ -266,7 +298,6 @@
                     <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="{DynamicResource SystemAccentColorLight2}"/>
                     <SolidColorBrush x:Key="SystemControlHighlightAltAccentBrush" Color="{DynamicResource SystemAccentColorLight2}"/>
                     <SolidColorBrush x:Key="SystemControlRevealFocusVisualBrush" Color="{DynamicResource SystemAccentColorLight2}"/>
-                    <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="{DynamicResource SystemAccentColorLight2}"/>
                     <SolidColorBrush x:Key="TabItemHeaderSelectedPipeFill" Color="{DynamicResource SystemAccentColorLight2}"/>
                     <!-- Subtle fills (WinUI NavigationViewItem hover/selected backgrounds) -->
                     <SolidColorBrush x:Key="SubtleFillColorSecondaryBrush" Color="#0FFFFFFF"/>
@@ -285,10 +316,8 @@
                     <SolidColorBrush x:Key="TextFillColorPrimaryBrush"   Color="#FFFFFFFF"/>
                     <SolidColorBrush x:Key="TextFillColorSecondaryBrush" Color="#C5FFFFFF"/>
                     <SolidColorBrush x:Key="TextFillColorTertiaryBrush"  Color="#87FFFFFF"/>
-                    <!-- Search-box placeholders. Dark theme keeps the brighter value that matched WinUI; both fields
-                         share it since thick-stroke heaviness only reads as darker on light backgrounds. -->
-                    <SolidColorBrush x:Key="SearchBoxPlaceholderForeground"   Color="#C5FFFFFF"/>
-                    <SolidColorBrush x:Key="MegaQueryPlaceholderForeground"   Color="#C5FFFFFF"/>
+                    <StaticResource x:Key="SearchBoxPlaceholderForeground" ResourceKey="TextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="MegaQueryPlaceholderForeground" ResourceKey="TextFillColorSecondaryBrush"/>
                     <SolidColorBrush x:Key="SearchBoxInactiveBackground"      Color="#0FFFFFFF"/>
                     <SolidColorBrush x:Key="SearchBoxFocusedBackground"       Color="#B31E1E1E"/>
                     <SolidColorBrush x:Key="SearchBoxFocusedBorderBrush"      Color="#12FFFFFF"/>
@@ -331,8 +360,32 @@
                     <SolidColorBrush x:Key="ControlFillColorSecondaryBrush" Color="#15FFFFFF"/>
                     <SolidColorBrush x:Key="ControlFillColorTertiaryBrush"  Color="#08FFFFFF"/>
                     <SolidColorBrush x:Key="ControlFillColorDisabledBrush"  Color="#0BFFFFFF"/>
+                    <SolidColorBrush x:Key="ControlFillColorInputActiveBrush" Color="#B31E1E1E"/>
                     <SolidColorBrush x:Key="ControlStrokeColorDefaultBrush" Color="#12FFFFFF"/>
                     <SolidColorBrush x:Key="ControlStrokeColorSecondaryBrush" Color="#18FFFFFF"/>
+                    <SolidColorBrush x:Key="ControlStrongStrokeColorDefaultBrush" Color="#8BFFFFFF"/>
+                    <StaticResource x:Key="TextControlBackground" ResourceKey="ControlFillColorDefaultBrush"/>
+                    <StaticResource x:Key="TextControlBackgroundPointerOver" ResourceKey="ControlFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="TextControlBackgroundFocused" ResourceKey="ControlFillColorInputActiveBrush"/>
+                    <StaticResource x:Key="TextControlBackgroundDisabled" ResourceKey="ControlFillColorDisabledBrush"/>
+                    <StaticResource x:Key="TextControlForeground" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="TextControlForegroundPointerOver" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="TextControlForegroundFocused" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="TextControlForegroundDisabled" ResourceKey="TextFillColorDisabledBrush"/>
+                    <StaticResource x:Key="TextControlPlaceholderForeground" ResourceKey="TextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="TextControlPlaceholderForegroundPointerOver" ResourceKey="TextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="TextControlPlaceholderForegroundFocused" ResourceKey="TextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="TextControlPlaceholderForegroundDisabled" ResourceKey="TextFillColorDisabledBrush"/>
+                    <StaticResource x:Key="TextControlSelectionHighlightColor" ResourceKey="AccentFillColorSelectedTextBackgroundBrush"/>
+                    <StaticResource x:Key="TextControlBorderBrush" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="TextControlBorderBrushPointerOver" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="TextControlBorderBrushFocused" ResourceKey="AccentFillColorDefaultBrush"/>
+                    <StaticResource x:Key="TextControlBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush"/>
+                    <StaticResource x:Key="TextControlButtonBackgroundPointerOver" ResourceKey="SubtleFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="TextControlButtonBackgroundPressed" ResourceKey="SubtleFillColorTertiaryBrush"/>
+                    <StaticResource x:Key="TextControlButtonForeground" ResourceKey="TextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="TextControlButtonForegroundPointerOver" ResourceKey="TextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="TextControlButtonForegroundPressed" ResourceKey="TextFillColorTertiaryBrush"/>
                     <LinearGradientBrush x:Key="ControlElevationBorderBrush"
                                          StartPoint="0%,0%" EndPoint="0%,100%">
                         <GradientStop Offset="0" Color="#18FFFFFF"/>
@@ -423,12 +476,22 @@
                     <!-- WinUI dropdown controls use the same control/card fill as settings actions. -->
                     <StaticResource x:Key="ComboBoxBackground" ResourceKey="ControlFillColorDefaultBrush"/>
                     <StaticResource x:Key="ComboBoxBackgroundUnfocused" ResourceKey="ControlFillColorDefaultBrush"/>
+                    <StaticResource x:Key="ComboBoxBackgroundFocused" ResourceKey="ControlFillColorDefaultBrush"/>
                     <StaticResource x:Key="ComboBoxBackgroundPointerOver" ResourceKey="ControlFillColorSecondaryBrush"/>
                     <StaticResource x:Key="ComboBoxBackgroundPressed" ResourceKey="ControlFillColorTertiaryBrush"/>
+                    <StaticResource x:Key="ComboBoxBackgroundDisabled" ResourceKey="ControlFillColorDisabledBrush"/>
+                    <StaticResource x:Key="ComboBoxForeground" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="ComboBoxForegroundPointerOver" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="ComboBoxForegroundPressed" ResourceKey="TextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="ComboBoxForegroundDisabled" ResourceKey="TextFillColorDisabledBrush"/>
+                    <StaticResource x:Key="ComboBoxForegroundFocused" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="ComboBoxForegroundFocusedPressed" ResourceKey="TextFillColorPrimaryBrush"/>
                     <StaticResource x:Key="ComboBoxBorderBrush" ResourceKey="ControlElevationBorderBrush"/>
-                    <StaticResource x:Key="ComboBoxBackgroundBorderBrushUnfocused" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="ComboBoxBackgroundBorderBrushUnfocused" ResourceKey="ControlStrokeColorDefaultBrush"/>
+                    <StaticResource x:Key="ComboBoxBackgroundBorderBrushFocused" ResourceKey="AccentFillColorDefaultBrush"/>
                     <StaticResource x:Key="ComboBoxBorderBrushPointerOver" ResourceKey="ControlElevationBorderBrush"/>
                     <StaticResource x:Key="ComboBoxBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush"/>
+                    <StaticResource x:Key="ComboBoxBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush"/>
                     <Thickness x:Key="ComboBoxOutlineThickness">1</Thickness>
                     <!-- Shared WinUI dropdown surface and neutral item states. -->
                     <StaticResource x:Key="ComboBoxDropDownBackground" ResourceKey="MenuSurfaceBrush"/>
