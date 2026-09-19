@@ -53,13 +53,19 @@ public abstract partial class BaseLogPageViewModel : ViewModels.ViewModelBase
             _ => "LogOutputVerboseForeground",
         };
 
+        return GetThemeBrush(
+            key,
+            new SolidColorBrush(isDark ? Colors.White : Colors.Black));
+    }
+
+    protected static IBrush GetThemeBrush(string key, IBrush fallback)
+    {
         if (Application.Current?.TryGetResource(
                 key,
                 Infrastructure.ThemeHelper.Variant,
                 out var resource) == true && resource is IBrush brush)
             return brush;
-
-        return new SolidColorBrush(isDark ? Colors.White : Colors.Black);
+        return fallback;
     }
 
     protected static IBrush GetManagerColorBrush(char colorCode, bool isDark)

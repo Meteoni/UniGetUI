@@ -367,9 +367,9 @@ public partial class PackagesPageViewModel : ViewModelBase
     public void AddToolbarSeparator()
     {
         object? borderResource = null;
-        Application.Current?.Resources.TryGetResource(
+        Application.Current?.TryGetResource(
             "AppBorderBrush",
-            Application.Current?.ActualThemeVariant,
+            Infrastructure.ThemeHelper.Variant,
             out borderResource);
 
         var sep = new Separator
@@ -377,8 +377,7 @@ public partial class PackagesPageViewModel : ViewModelBase
             Width = 1,
             Height = 32,
             Margin = new Thickness(4, 4),
-            Background = borderResource as IBrush
-                         ?? new SolidColorBrush(Color.FromArgb(80, 128, 128, 128)),
+            Background = borderResource as IBrush ?? Brushes.Gray,
         };
         AutomationProperties.SetAccessibilityView(sep, AccessibilityView.Raw);
         ToolbarEntries.Add(new ToolbarEntry(sep, "", "", null));

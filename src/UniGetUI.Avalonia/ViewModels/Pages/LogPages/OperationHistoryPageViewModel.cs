@@ -1,4 +1,4 @@
-using Avalonia.Media;
+using UniGetUI.Core.Logging;
 using UniGetUI.Core.Tools;
 using UniGetUI.PackageEngine.Operations.History;
 
@@ -24,8 +24,8 @@ public class OperationHistoryPageViewModel : BaseLogPageViewModel
     public override void LoadLog(bool isReload = false)
     {
         bool isDark = IsDark;
-        var defaultBrush = new SolidColorBrush(isDark ? Color.FromRgb(250, 250, 250) : Color.FromRgb(0, 0, 0));
-        var errorBrush = new SolidColorBrush(isDark ? Color.FromRgb(255, 80, 80) : Color.FromRgb(205, 0, 0));
+        var defaultBrush = GetSeverityBrush(LogEntry.SeverityLevel.Success, isDark);
+        var errorBrush = GetSeverityBrush(LogEntry.SeverityLevel.Error, isDark);
 
         LogLines.Clear();
 

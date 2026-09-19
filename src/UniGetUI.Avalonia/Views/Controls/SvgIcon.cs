@@ -9,7 +9,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Media;
 using Avalonia.Platform;
-using Avalonia.Styling;
+using UniGetUI.Avalonia.Infrastructure;
 
 namespace UniGetUI.Avalonia.Views.Controls;
 
@@ -179,13 +179,16 @@ public class SvgIcon : Control
         return new ParsedSvg(geometries, viewBoxWidth, viewBoxHeight);
     }
 
-    private static readonly IBrush _darkFg = new SolidColorBrush(Color.Parse("#E8E8E8"));
-    private static readonly IBrush _lightFg = new SolidColorBrush(Color.Parse("#1E1E1E"));
+    private static IBrush LookupThemeForeground()
+    {
+        if (Application.Current?.TryGetResource(
+                "TextFillColorPrimaryBrush",
+                ThemeHelper.Variant,
+                out var resource) == true && resource is IBrush brush)
+            return brush;
 
-    private static IBrush LookupThemeForeground() =>
-        Application.Current?.ActualThemeVariant == ThemeVariant.Dark
-            ? _darkFg
-            : _lightFg;
+        return ThemeHelper.IsDark ? Brushes.White : Brushes.Black;
+    }
 
     protected override Size MeasureOverride(Size availableSize)
     {
