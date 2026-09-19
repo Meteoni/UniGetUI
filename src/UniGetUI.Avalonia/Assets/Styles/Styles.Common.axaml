@@ -26,14 +26,14 @@
                     <SolidColorBrush x:Key="SubtleFillColorTertiaryBrush"  Color="#06000000"/>
                     <!-- Accent text (darker accents read better on light bg) -->
                     <SolidColorBrush x:Key="AccentTextFillColorPrimaryBrush"   Color="{DynamicResource SystemAccentColorDark2}"/>
-                    <!-- These overlay badges retain the legacy base accent in both themes. -->
-                    <SolidColorBrush x:Key="PackageTagBadgeBackgroundBrush" Color="{DynamicResource SystemAccentColor}"/>
-                    <SolidColorBrush x:Key="PackageTagBadgeForegroundBrush" Color="#E4000000"/>
+                    <StaticResource x:Key="PackageTagBadgeBackgroundBrush" ResourceKey="AccentFillColorDefaultBrush"/>
+                    <StaticResource x:Key="PackageTagBadgeForegroundBrush" ResourceKey="TextOnAccentFillColorPrimaryBrush"/>
                     <SolidColorBrush x:Key="AccentTextFillColorSecondaryBrush" Color="{DynamicResource SystemAccentColorDark3}"/>
                     <SolidColorBrush x:Key="AccentTextFillColorTertiaryBrush"  Color="{DynamicResource SystemAccentColorDark1}"/>
                     <SolidColorBrush x:Key="AccentTextFillColorDisabledBrush"  Color="#5C000000"/>
-                    <!-- Hyperlinks: fixed blue, decoupled from the accent so links stay readable over accent-tinted Mica -->
-                    <SolidColorBrush x:Key="HyperlinkForeground"               Color="#1C5FB8"/>
+                    <StaticResource x:Key="HyperlinkForeground" ResourceKey="AccentTextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="HyperlinkForegroundPointerOver" ResourceKey="AccentTextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="HyperlinkForegroundPressed" ResourceKey="AccentTextFillColorTertiaryBrush"/>
                     <!-- Text fill -->
                     <SolidColorBrush x:Key="TextFillColorPrimaryBrush"   Color="#E4000000"/>
                     <SolidColorBrush x:Key="TextFillColorSecondaryBrush" Color="#9E000000"/>
@@ -51,6 +51,14 @@
                                          StartPoint="0%,0%" EndPoint="0%,100%">
                         <GradientStop Offset="0" Color="#0F000000"/>
                         <GradientStop Offset="1" Color="#29000000"/>
+                    </LinearGradientBrush>
+                    <SolidColorBrush x:Key="ControlFillColorTransparentBrush" Color="#00FFFFFF"/>
+                    <SolidColorBrush x:Key="ControlStrokeColorOnAccentDefaultBrush" Color="#14FFFFFF"/>
+                    <SolidColorBrush x:Key="ControlStrokeColorOnAccentSecondaryBrush" Color="#66000000"/>
+                    <LinearGradientBrush x:Key="AccentControlElevationBorderBrush"
+                                         StartPoint="0%,0%" EndPoint="0%,100%">
+                        <GradientStop Offset="0" Color="#14FFFFFF"/>
+                        <GradientStop Offset="1" Color="#66000000"/>
                     </LinearGradientBrush>
                     <SolidColorBrush x:Key="TextFillColorDisabledBrush"  Color="#5C000000"/>
                     <SolidColorBrush x:Key="TextFillColorInverseBrush"   Color="#FFFFFFFF"/>
@@ -72,6 +80,10 @@
                     <StaticResource x:Key="AccentButtonForegroundPointerOver" ResourceKey="TextOnAccentFillColorPrimaryBrush"/>
                     <StaticResource x:Key="AccentButtonForegroundPressed" ResourceKey="TextOnAccentFillColorSecondaryBrush"/>
                     <StaticResource x:Key="AccentButtonForegroundDisabled" ResourceKey="TextOnAccentFillColorDisabledBrush"/>
+                    <StaticResource x:Key="AccentButtonBorderBrush" ResourceKey="AccentControlElevationBorderBrush"/>
+                    <StaticResource x:Key="AccentButtonBorderBrushPointerOver" ResourceKey="AccentControlElevationBorderBrush"/>
+                    <StaticResource x:Key="AccentButtonBorderBrushPressed" ResourceKey="ControlFillColorTransparentBrush"/>
+                    <StaticResource x:Key="AccentButtonBorderBrushDisabled" ResourceKey="ControlFillColorTransparentBrush"/>
                     <!-- WinUI v2 control/surface primitives. Keep these as the canonical
                          light/dark pairs for ordinary controls rather than inventing per-page colors. -->
                     <SolidColorBrush x:Key="ControlFillColorDefaultBrush"   Color="#B3FFFFFF"/>
@@ -133,12 +145,22 @@
                     <StaticResource x:Key="ToggleButtonBorderBrushPointerOver" ResourceKey="ControlElevationBorderBrush"/>
                     <StaticResource x:Key="ToggleButtonBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush"/>
                     <StaticResource x:Key="ToggleButtonBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush"/>
-                    <!-- Checked accent controls keep an elevation edge at rest/hover; pressed
-                         and disabled deliberately drop it, like current WinUI. -->
-                    <StaticResource x:Key="ToggleButtonBorderBrushChecked" ResourceKey="AccentFillColorDefaultBrush"/>
-                    <StaticResource x:Key="ToggleButtonBorderBrushCheckedPointerOver" ResourceKey="AccentFillColorSecondaryBrush"/>
-                    <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPressed" Color="Transparent"/>
-                    <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedDisabled" Color="Transparent"/>
+                    <StaticResource x:Key="ToggleButtonBackgroundIndeterminate" ResourceKey="ControlFillColorDefaultBrush"/>
+                    <StaticResource x:Key="ToggleButtonBackgroundIndeterminatePointerOver" ResourceKey="ControlFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonBackgroundIndeterminatePressed" ResourceKey="ControlFillColorTertiaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonBackgroundIndeterminateDisabled" ResourceKey="ControlFillColorDisabledBrush"/>
+                    <StaticResource x:Key="ToggleButtonForegroundIndeterminate" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonForegroundIndeterminatePointerOver" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonForegroundIndeterminatePressed" ResourceKey="TextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonForegroundIndeterminateDisabled" ResourceKey="TextFillColorDisabledBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushIndeterminate" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushIndeterminatePointerOver" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushIndeterminatePressed" ResourceKey="ControlStrokeColorDefaultBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushIndeterminateDisabled" ResourceKey="ControlStrokeColorDefaultBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushChecked" ResourceKey="AccentControlElevationBorderBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushCheckedPointerOver" ResourceKey="AccentControlElevationBorderBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushCheckedPressed" ResourceKey="ControlFillColorTransparentBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushCheckedDisabled" ResourceKey="ControlFillColorTransparentBrush"/>
                     <!-- Settings cards -->
                     <SolidColorBrush x:Key="SettingsCardBackground"      Color="#B3FFFFFF"/>
                     <SolidColorBrush x:Key="SettingsCardBorderBrush"     Color="#ECECEC"/>
@@ -251,13 +273,14 @@
                     <SolidColorBrush x:Key="SubtleFillColorTertiaryBrush"  Color="#0AFFFFFF"/>
                     <!-- Accent text -->
                     <SolidColorBrush x:Key="AccentTextFillColorPrimaryBrush"   Color="{DynamicResource SystemAccentColorLight3}"/>
-                    <!-- Match the original non-theme-adjusted badge accent. -->
-                    <SolidColorBrush x:Key="PackageTagBadgeBackgroundBrush" Color="{DynamicResource SystemAccentColor}"/>
-                    <SolidColorBrush x:Key="PackageTagBadgeForegroundBrush" Color="#FFFFFFFF"/>
+                    <StaticResource x:Key="PackageTagBadgeBackgroundBrush" ResourceKey="AccentFillColorDefaultBrush"/>
+                    <StaticResource x:Key="PackageTagBadgeForegroundBrush" ResourceKey="TextOnAccentFillColorPrimaryBrush"/>
                     <SolidColorBrush x:Key="AccentTextFillColorSecondaryBrush" Color="{DynamicResource SystemAccentColorLight3}"/>
                     <SolidColorBrush x:Key="AccentTextFillColorTertiaryBrush"  Color="{DynamicResource SystemAccentColorLight2}"/>
-                    <SolidColorBrush x:Key="AccentTextFillColorDisabledBrush"  Color="#5CFFFFFF"/>
-                    <SolidColorBrush x:Key="HyperlinkForeground"               Color="#A6D4FF"/>
+                    <SolidColorBrush x:Key="AccentTextFillColorDisabledBrush"  Color="#5DFFFFFF"/>
+                    <StaticResource x:Key="HyperlinkForeground" ResourceKey="AccentTextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="HyperlinkForegroundPointerOver" ResourceKey="AccentTextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="HyperlinkForegroundPressed" ResourceKey="AccentTextFillColorTertiaryBrush"/>
                     <!-- Text fill -->
                     <SolidColorBrush x:Key="TextFillColorPrimaryBrush"   Color="#FFFFFFFF"/>
                     <SolidColorBrush x:Key="TextFillColorSecondaryBrush" Color="#C5FFFFFF"/>
@@ -299,6 +322,10 @@
                     <StaticResource x:Key="AccentButtonForegroundPointerOver" ResourceKey="TextOnAccentFillColorPrimaryBrush"/>
                     <StaticResource x:Key="AccentButtonForegroundPressed" ResourceKey="TextOnAccentFillColorSecondaryBrush"/>
                     <StaticResource x:Key="AccentButtonForegroundDisabled" ResourceKey="TextOnAccentFillColorDisabledBrush"/>
+                    <StaticResource x:Key="AccentButtonBorderBrush" ResourceKey="AccentControlElevationBorderBrush"/>
+                    <StaticResource x:Key="AccentButtonBorderBrushPointerOver" ResourceKey="AccentControlElevationBorderBrush"/>
+                    <StaticResource x:Key="AccentButtonBorderBrushPressed" ResourceKey="ControlFillColorTransparentBrush"/>
+                    <StaticResource x:Key="AccentButtonBorderBrushDisabled" ResourceKey="ControlFillColorTransparentBrush"/>
                     <!-- WinUI v2 control/surface primitives. -->
                     <SolidColorBrush x:Key="ControlFillColorDefaultBrush"   Color="#0FFFFFFF"/>
                     <SolidColorBrush x:Key="ControlFillColorSecondaryBrush" Color="#15FFFFFF"/>
@@ -310,6 +337,14 @@
                                          StartPoint="0%,0%" EndPoint="0%,100%">
                         <GradientStop Offset="0" Color="#18FFFFFF"/>
                         <GradientStop Offset="1" Color="#12FFFFFF"/>
+                    </LinearGradientBrush>
+                    <SolidColorBrush x:Key="ControlFillColorTransparentBrush" Color="#00FFFFFF"/>
+                    <SolidColorBrush x:Key="ControlStrokeColorOnAccentDefaultBrush" Color="#14FFFFFF"/>
+                    <SolidColorBrush x:Key="ControlStrokeColorOnAccentSecondaryBrush" Color="#23000000"/>
+                    <LinearGradientBrush x:Key="AccentControlElevationBorderBrush"
+                                         StartPoint="0%,0%" EndPoint="0%,100%">
+                        <GradientStop Offset="0" Color="#14FFFFFF"/>
+                        <GradientStop Offset="1" Color="#23000000"/>
                     </LinearGradientBrush>
                     <SolidColorBrush x:Key="SolidBackgroundFillColorBaseBrush"        Color="#202020"/>
                     <SolidColorBrush x:Key="SolidBackgroundFillColorSecondaryBrush"   Color="#1C1C1C"/>
@@ -363,12 +398,22 @@
                     <StaticResource x:Key="ToggleButtonBorderBrushPointerOver" ResourceKey="ControlElevationBorderBrush"/>
                     <StaticResource x:Key="ToggleButtonBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush"/>
                     <StaticResource x:Key="ToggleButtonBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush"/>
-                    <!-- Checked accent controls keep an elevation edge at rest/hover; pressed
-                         and disabled deliberately drop it, like current WinUI. -->
-                    <StaticResource x:Key="ToggleButtonBorderBrushChecked" ResourceKey="AccentFillColorDefaultBrush"/>
-                    <StaticResource x:Key="ToggleButtonBorderBrushCheckedPointerOver" ResourceKey="AccentFillColorSecondaryBrush"/>
-                    <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPressed" Color="Transparent"/>
-                    <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedDisabled" Color="Transparent"/>
+                    <StaticResource x:Key="ToggleButtonBackgroundIndeterminate" ResourceKey="ControlFillColorDefaultBrush"/>
+                    <StaticResource x:Key="ToggleButtonBackgroundIndeterminatePointerOver" ResourceKey="ControlFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonBackgroundIndeterminatePressed" ResourceKey="ControlFillColorTertiaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonBackgroundIndeterminateDisabled" ResourceKey="ControlFillColorDisabledBrush"/>
+                    <StaticResource x:Key="ToggleButtonForegroundIndeterminate" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonForegroundIndeterminatePointerOver" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonForegroundIndeterminatePressed" ResourceKey="TextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonForegroundIndeterminateDisabled" ResourceKey="TextFillColorDisabledBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushIndeterminate" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushIndeterminatePointerOver" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushIndeterminatePressed" ResourceKey="ControlStrokeColorDefaultBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushIndeterminateDisabled" ResourceKey="ControlStrokeColorDefaultBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushChecked" ResourceKey="AccentControlElevationBorderBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushCheckedPointerOver" ResourceKey="AccentControlElevationBorderBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushCheckedPressed" ResourceKey="ControlFillColorTransparentBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushCheckedDisabled" ResourceKey="ControlFillColorTransparentBrush"/>
                     <!-- Settings cards -->
                     <SolidColorBrush x:Key="SettingsCardBackground"      Color="#0DFFFFFF"/>
                     <SolidColorBrush x:Key="SettingsCardBorderBrush"     Color="#19000000"/>
@@ -456,6 +501,9 @@
     <!-- WinUI changes fill/foreground on press without shrinking the control. Avalonia's Fluent
          Button theme adds a 0.98 scale animation, so remove it globally for WinUI parity. -->
     <Style Selector="Button:pressed">
+        <Setter Property="RenderTransform" Value="none"/>
+    </Style>
+    <Style Selector="ToggleButton:pressed">
         <Setter Property="RenderTransform" Value="none"/>
     </Style>
 
