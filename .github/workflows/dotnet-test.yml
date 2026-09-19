@@ -1,7 +1,7 @@
 name: .NET Tests
 on:
   push:
-    branches: [ "main", "dialog-settings-ui-upstream-main-ci" ]
+    branches: [ "main", "dialog-settings-ui-inter-font-ci" ]
     paths:
       - 'global.json'
       - '**.cs'
@@ -126,12 +126,48 @@ jobs:
       shell: pwsh
       run: |
         $PublishDir = "${{ runner.temp }}\unigetui-nativeaot-publish"
-        $Archive = "${{ runner.temp }}\UniGetUI.dialog-settings-ui-upstream-main.win-x64.zip"
+        $Archive = "${{ runner.temp }}\UniGetUI.dialog-settings-ui-inter-font.win-x64.zip"
         Compress-Archive -Path "$PublishDir\*" -DestinationPath $Archive -CompressionLevel Optimal
         Compress-Archive -Path "InstallerExtras\ForceUniGetUIPortable" -DestinationPath $Archive -Update
 
     - name: Upload Windows x64 portable build
       uses: actions/upload-artifact@v7
       with:
-        name: UniGetUI-dialog-settings-ui-upstream-main-win-x64
-        path: ${{ runner.temp }}\UniGetUI.dialog-settings-ui-upstream-main.win-x64.zip
+        name: UniGetUI-dialog-settings-ui-inter-font-win-x64
+        path: ${{ runner.temp }}\UniGetUI.dialog-settings-ui-inter-font.win-x64.zip
+
+
+  build-non-windows:
+    name: Build non-Windows (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    env:
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v7
+
+    - name: Install .NET SDK
+      uses: actions/setup-dotnet@v6
+      with:
+        global-json-file: global.json
+
+    - name: Cache NuGet packages
+      uses: actions/cache@v6
+      with:
+        path: ${{ env.NUGET_PACKAGES }}
+        key: ${{ runner.os }}-nuget-${{ hashFiles('global.json', 'src/**/*.csproj', 'src/**/*.props', 'src/**/*.targets') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+
+    - name: Restore Avalonia project
+      working-directory: src
+      run: dotnet restore UniGetUI.Avalonia/UniGetUI.Avalonia.csproj
+
+    - name: Build Avalonia project
+      working-directory: src
+      run: dotnet build UniGetUI.Avalonia/UniGetUI.Avalonia.csproj --no-restore --configuration Debug --verbosity minimal
