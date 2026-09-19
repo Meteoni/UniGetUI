@@ -171,3 +171,121 @@ jobs:
     - name: Build Avalonia project
       working-directory: src
       run: dotnet build UniGetUI.Avalonia/UniGetUI.Avalonia.csproj --no-restore --configuration Debug --verbosity minimal
+
+
+  publish-linux-x64:
+    name: Publish Ubuntu/Linux x64
+    runs-on: ubuntu-latest
+    env:
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+      UNIGETUI_GITHUB_CLIENT_ID: ${{ secrets.UNIGETUI_GITHUB_CLIENT_ID }}
+      UNIGETUI_GITHUB_CLIENT_SECRET: ${{ secrets.UNIGETUI_GITHUB_CLIENT_SECRET }}
+      UNIGETUI_OPENSEARCH_USERNAME: ${{ secrets.UNIGETUI_OPENSEARCH_USERNAME }}
+      UNIGETUI_OPENSEARCH_PASSWORD: ${{ secrets.UNIGETUI_OPENSEARCH_PASSWORD }}
+
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v7
+
+    - name: Install .NET SDK
+      uses: actions/setup-dotnet@v6
+      with:
+        global-json-file: global.json
+
+    - name: Cache NuGet packages
+      uses: actions/cache@v6
+      with:
+        path: ${{ env.NUGET_PACKAGES }}
+        key: Linux-publish-nuget-${{ hashFiles('global.json', 'src/**/*.csproj', 'src/**/*.props', 'src/**/*.targets') }}
+        restore-keys: |
+          Linux-publish-nuget-
+          Linux-nuget-
+
+    - name: Free disk space
+      shell: bash
+      run: |
+        sudo rm -rf /usr/local/lib/android /opt/ghc || true
+        df -h /
+
+    - name: Build Linux cross-compilation image
+      shell: bash
+      run: |
+        set -euo pipefail
+        SDK_TAG="$(jq -er '.sdk.version' global.json)"
+        docker build --pull --build-arg "SDK_TAG=$SDK_TAG" -t unigetui-cross-build - <<'DOCKERFILE'
+        ARG SDK_TAG
+        FROM mcr.microsoft.com/dotnet/sdk:${SDK_TAG} AS sdk
+        FROM mcr.microsoft.com/dotnet-buildtools/prereqs:azurelinux-3.0-net10.0-cross-amd64
+        COPY --from=sdk /usr/share/dotnet /usr/share/dotnet
+        ENV DOTNET_ROOT=/usr/share/dotnet
+        ENV PATH=/usr/share/dotnet:$PATH
+        ENV DOTNET_NOLOGO=true
+        DOCKERFILE
+
+    - name: Set test version
+      shell: pwsh
+      run: ./scripts/set-version.ps1 -Version 2026.9.20-interfont
+
+    - name: Publish Linux x64 NativeAOT
+      shell: bash
+      run: |
+        set -euo pipefail
+        mkdir -p bin/linux-x64
+        DOCKER_ARGS=(
+          --rm
+          --user "$(id -u):$(id -g)"
+          --volume "${{ github.workspace }}:/source"
+          --workdir /source/src
+          --env HOME=/tmp
+          --env DOTNET_CLI_HOME=/tmp
+          --env NUGET_PACKAGES=/source/.nuget/packages
+          --env UNIGETUI_GITHUB_CLIENT_ID
+          --env UNIGETUI_GITHUB_CLIENT_SECRET
+          --env UNIGETUI_OPENSEARCH_USERNAME
+          --env UNIGETUI_OPENSEARCH_PASSWORD
+        )
+        PUBLISH_ARGS=(
+          publish UniGetUI.Avalonia/UniGetUI.Avalonia.csproj
+          --configuration Release
+          --runtime linux-x64
+          --self-contained true
+          --output ../bin/linux-x64
+          /p:PublishProfile=linux-x64-NativeAot
+          /p:SysRoot=/crossrootfs/x64
+          /p:LinkerFlavor=lld
+          /p:TrimmerSingleWarn=false
+          /p:UseSharedCompilation=false
+          --verbosity minimal
+        )
+        docker run "${DOCKER_ARGS[@]}" unigetui-cross-build dotnet "${PUBLISH_ARGS[@]}"
+        test -x bin/linux-x64/UniGetUI
+
+    - name: Verify Linux glibc baseline
+      shell: pwsh
+      run: ./scripts/check-linux-glibc.ps1 -Path "bin/linux-x64" -MaxVersion '2.27'
+
+    - name: Package Ubuntu artifacts
+      shell: pwsh
+      run: |
+        New-Item -ItemType Directory -Force -Path output | Out-Null
+
+        & tar -czf "output/UniGetUI.inter-font.linux-x64.tar.gz" -C "bin/linux-x64" .
+        if ($LASTEXITCODE -ne 0) { exit 1 }
+
+        & ./scripts/package-linux.ps1 `
+          -PackageType deb `
+          -SourceDir "bin/linux-x64" `
+          -OutputPath "output/UniGetUI.inter-font.linux-x64.deb" `
+          -Version "2026.9.20~interfont" `
+          -Architecture amd64
+
+        if (-not (Test-Path "output/UniGetUI.inter-font.linux-x64.tar.gz")) { throw "tar.gz was not created" }
+        if (-not (Test-Path "output/UniGetUI.inter-font.linux-x64.deb")) { throw ".deb was not created" }
+
+    - name: Upload Ubuntu/Linux x64 artifacts
+      uses: actions/upload-artifact@v7
+      with:
+        name: UniGetUI-inter-font-linux-x64
+        path: |
+          output/UniGetUI.inter-font.linux-x64.tar.gz
+          output/UniGetUI.inter-font.linux-x64.deb
