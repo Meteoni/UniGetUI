@@ -3,7 +3,6 @@ using Avalonia.Automation;
 using Avalonia.Automation.Peers;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Media;
 using Avalonia.VisualTree;
 using UniGetUI.Avalonia.Infrastructure;
 using UniGetUI.Avalonia.ViewModels;
@@ -111,12 +110,12 @@ public partial class InfoBar : UserControl
         _severityStripBinding = null;
         _severityIconBinding = null;
 
-        Color? stripColor = severity switch
+        string severityResource = severity switch
         {
-            InfoBarSeverity.Warning => Color.Parse("#F7A800"),
-            InfoBarSeverity.Error => Color.Parse("#C42B1C"),
-            InfoBarSeverity.Success => Color.Parse("#107C10"),
-            _ => null,
+            InfoBarSeverity.Warning => "StatusWarningForeground",
+            InfoBarSeverity.Error => "StatusErrorForeground",
+            InfoBarSeverity.Success => "StatusSuccessForeground",
+            _ => "AccentFillColorDefaultBrush",
         };
 
         SeverityIcon.Path = severity switch
@@ -127,22 +126,13 @@ public partial class InfoBar : UserControl
             _ => InfoIcon,
         };
 
-        if (stripColor is { } color)
-        {
-            var brush = new SolidColorBrush(color);
-            SeverityStrip.Background = brush;
-            SeverityIcon.Foreground = brush;
-        }
-        else
-        {
-            SeverityStrip.ClearValue(Border.BackgroundProperty);
-            SeverityIcon.ClearValue(ForegroundProperty);
-            _severityStripBinding = SeverityStrip.Bind(
-                Border.BackgroundProperty,
-                this.GetResourceObservable("AccentFillColorDefaultBrush"));
-            _severityIconBinding = SeverityIcon.Bind(
-                ForegroundProperty,
-                this.GetResourceObservable("AccentFillColorDefaultBrush"));
-        }
+        SeverityStrip.ClearValue(Border.BackgroundProperty);
+        SeverityIcon.ClearValue(ForegroundProperty);
+        _severityStripBinding = SeverityStrip.Bind(
+            Border.BackgroundProperty,
+            this.GetResourceObservable(severityResource));
+        _severityIconBinding = SeverityIcon.Bind(
+            ForegroundProperty,
+            this.GetResourceObservable(severityResource));
     }
 }

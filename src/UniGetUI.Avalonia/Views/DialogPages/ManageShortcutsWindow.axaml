@@ -373,14 +373,15 @@
                                                                                VerticalAlignment="Center"
                                                                                TextTrimming="CharacterEllipsis"
                                                                                ToolTip.Tip="{Binding Path}"/>
-                                                                    <Border Grid.Column="1" Background="{DynamicResource SystemAccentColor}"
+                                                                    <Border Grid.Column="1"
+                                                                            Background="{DynamicResource AccentFillColorDefaultBrush}"
                                                                             CornerRadius="4"
                                                                             Padding="4,0"
                                                                             VerticalAlignment="Center"
                                                                             IsVisible="{Binding IsNew}">
                                                                         <TextBlock Text="{t:Translate Text='new'}"
                                                                                    FontSize="10"
-                                                                                   Foreground="White"/>
+                                                                                   Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}"/>
                                                                     </Border>
                                                                 </Grid>
 
