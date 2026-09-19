@@ -4,6 +4,7 @@ using Avalonia.Input.Platform;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
+using Avalonia.Styling;
 using UniGetUI.Avalonia.ViewModels.Pages.LogPages;
 using UniGetUI.Avalonia.Views;
 using UniGetUI.Avalonia.Views.Controls;
@@ -126,7 +127,7 @@ internal static class OperationHistoryLogDialog
         await dialog.ShowDialog(owner);
     }
 
-    private static IBrush LookupBrush(string key, Avalonia.Styling.ThemeVariant theme, IBrush fallback)
+    private static IBrush LookupBrush(string key, ThemeVariant theme, IBrush fallback)
     {
         if (Application.Current?.TryGetResource(key, theme, out var resource) == true &&
             resource is IBrush brush)
