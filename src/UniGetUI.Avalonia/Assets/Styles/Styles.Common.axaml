@@ -113,6 +113,33 @@
                     <StaticResource x:Key="SplitButtonBorderBrushPointerOver" ResourceKey="ControlElevationBorderBrush"/>
                     <StaticResource x:Key="SplitButtonBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush"/>
                     <StaticResource x:Key="SplitButtonBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush"/>
+
+                    <StaticResource x:Key="ToggleButtonBackground" ResourceKey="ControlFillColorDefaultBrush"/>
+                    <StaticResource x:Key="ToggleButtonBackgroundPointerOver" ResourceKey="ControlFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonBackgroundPressed" ResourceKey="ControlFillColorTertiaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonBackgroundDisabled" ResourceKey="ControlFillColorDisabledBrush"/>
+                    <StaticResource x:Key="ToggleButtonBackgroundChecked" ResourceKey="AccentFillColorDefaultBrush"/>
+                    <StaticResource x:Key="ToggleButtonBackgroundCheckedPointerOver" ResourceKey="AccentFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonBackgroundCheckedPressed" ResourceKey="AccentFillColorTertiaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonBackgroundCheckedDisabled" ResourceKey="AccentFillColorDisabledBrush"/>
+                    <StaticResource x:Key="ToggleButtonForeground" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonForegroundPointerOver" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonForegroundPressed" ResourceKey="TextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonForegroundDisabled" ResourceKey="TextFillColorDisabledBrush"/>
+                    <StaticResource x:Key="ToggleButtonForegroundChecked" ResourceKey="TextOnAccentFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonForegroundCheckedPointerOver" ResourceKey="TextOnAccentFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonForegroundCheckedPressed" ResourceKey="TextOnAccentFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonForegroundCheckedDisabled" ResourceKey="TextOnAccentFillColorDisabledBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrush" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushPointerOver" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush"/>
+                    <!-- Checked accent controls keep an elevation edge at rest/hover; pressed
+                         and disabled deliberately drop it, like current WinUI. -->
+                    <StaticResource x:Key="ToggleButtonBorderBrushChecked" ResourceKey="AccentFillColorDefaultBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushCheckedPointerOver" ResourceKey="AccentFillColorSecondaryBrush"/>
+                    <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPressed" Color="Transparent"/>
+                    <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedDisabled" Color="Transparent"/>
                     <!-- Settings cards -->
                     <SolidColorBrush x:Key="SettingsCardBackground"      Color="#B3FFFFFF"/>
                     <SolidColorBrush x:Key="SettingsCardBorderBrush"     Color="#ECECEC"/>
@@ -317,6 +344,33 @@
                     <StaticResource x:Key="SplitButtonBorderBrushPointerOver" ResourceKey="ControlElevationBorderBrush"/>
                     <StaticResource x:Key="SplitButtonBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush"/>
                     <StaticResource x:Key="SplitButtonBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush"/>
+
+                    <StaticResource x:Key="ToggleButtonBackground" ResourceKey="ControlFillColorDefaultBrush"/>
+                    <StaticResource x:Key="ToggleButtonBackgroundPointerOver" ResourceKey="ControlFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonBackgroundPressed" ResourceKey="ControlFillColorTertiaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonBackgroundDisabled" ResourceKey="ControlFillColorDisabledBrush"/>
+                    <StaticResource x:Key="ToggleButtonBackgroundChecked" ResourceKey="AccentFillColorDefaultBrush"/>
+                    <StaticResource x:Key="ToggleButtonBackgroundCheckedPointerOver" ResourceKey="AccentFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonBackgroundCheckedPressed" ResourceKey="AccentFillColorTertiaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonBackgroundCheckedDisabled" ResourceKey="AccentFillColorDisabledBrush"/>
+                    <StaticResource x:Key="ToggleButtonForeground" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonForegroundPointerOver" ResourceKey="TextFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonForegroundPressed" ResourceKey="TextFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonForegroundDisabled" ResourceKey="TextFillColorDisabledBrush"/>
+                    <StaticResource x:Key="ToggleButtonForegroundChecked" ResourceKey="TextOnAccentFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonForegroundCheckedPointerOver" ResourceKey="TextOnAccentFillColorPrimaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonForegroundCheckedPressed" ResourceKey="TextOnAccentFillColorSecondaryBrush"/>
+                    <StaticResource x:Key="ToggleButtonForegroundCheckedDisabled" ResourceKey="TextOnAccentFillColorDisabledBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrush" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushPointerOver" ResourceKey="ControlElevationBorderBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush"/>
+                    <!-- Checked accent controls keep an elevation edge at rest/hover; pressed
+                         and disabled deliberately drop it, like current WinUI. -->
+                    <StaticResource x:Key="ToggleButtonBorderBrushChecked" ResourceKey="AccentFillColorDefaultBrush"/>
+                    <StaticResource x:Key="ToggleButtonBorderBrushCheckedPointerOver" ResourceKey="AccentFillColorSecondaryBrush"/>
+                    <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPressed" Color="Transparent"/>
+                    <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedDisabled" Color="Transparent"/>
                     <!-- Settings cards -->
                     <SolidColorBrush x:Key="SettingsCardBackground"      Color="#0DFFFFFF"/>
                     <SolidColorBrush x:Key="SettingsCardBorderBrush"     Color="#19000000"/>
@@ -928,7 +982,7 @@
                     <ResourceDictionary x:Key="Dark">
                         <SolidColorBrush x:Key="ToggleButtonBackgroundChecked"             Color="#2D2D2D"/>
                         <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPointerOver"  Color="#323232"/>
-                        <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed"      Color="#3C3C3C"/>
+                        <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed"      Color="#282828"/>
                         <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedDisabled"     Color="#2D2D2D"/>
                         <SolidColorBrush x:Key="ToggleButtonBorderBrushChecked"            Color="#393939"/>
                         <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPointerOver" Color="#393939"/>
@@ -951,10 +1005,10 @@
                     <ResourceDictionary x:Key="Light">
                         <SolidColorBrush x:Key="ToggleButtonBackground"                    Color="Transparent"/>
                         <SolidColorBrush x:Key="ToggleButtonBackgroundPointerOver"         Color="#0F000000"/>
-                        <SolidColorBrush x:Key="ToggleButtonBackgroundPressed"             Color="#1A000000"/>
+                        <SolidColorBrush x:Key="ToggleButtonBackgroundPressed"             Color="#06000000"/>
                         <SolidColorBrush x:Key="ToggleButtonBackgroundChecked"             Color="Transparent"/>
                         <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPointerOver"  Color="#0F000000"/>
-                        <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed"      Color="#1A000000"/>
+                        <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed"      Color="#06000000"/>
                         <SolidColorBrush x:Key="ToggleButtonBorderBrush"                   Color="Transparent"/>
                         <SolidColorBrush x:Key="ToggleButtonBorderBrushPointerOver"        Color="Transparent"/>
                         <SolidColorBrush x:Key="ToggleButtonBorderBrushPressed"            Color="Transparent"/>
@@ -968,10 +1022,10 @@
                     <ResourceDictionary x:Key="Dark">
                         <SolidColorBrush x:Key="ToggleButtonBackground"                    Color="Transparent"/>
                         <SolidColorBrush x:Key="ToggleButtonBackgroundPointerOver"         Color="#15FFFFFF"/>
-                        <SolidColorBrush x:Key="ToggleButtonBackgroundPressed"             Color="#20FFFFFF"/>
+                        <SolidColorBrush x:Key="ToggleButtonBackgroundPressed"             Color="#0AFFFFFF"/>
                         <SolidColorBrush x:Key="ToggleButtonBackgroundChecked"             Color="Transparent"/>
                         <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPointerOver"  Color="#15FFFFFF"/>
-                        <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed"      Color="#20FFFFFF"/>
+                        <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed"      Color="#0AFFFFFF"/>
                         <SolidColorBrush x:Key="ToggleButtonBorderBrush"                   Color="Transparent"/>
                         <SolidColorBrush x:Key="ToggleButtonBorderBrushPointerOver"        Color="Transparent"/>
                         <SolidColorBrush x:Key="ToggleButtonBorderBrushPressed"            Color="Transparent"/>

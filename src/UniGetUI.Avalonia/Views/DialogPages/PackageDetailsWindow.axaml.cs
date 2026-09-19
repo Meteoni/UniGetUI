@@ -831,11 +831,17 @@ public partial class PackageDetailsWindow : UniGetUI.Avalonia.Views.DialogPages.
         AddInlineRow(DetailsPanel, _vm.LabelReleaseNotesUrl, _vm.ReleaseNotesUrl);
     }
 
-    private static readonly IBrush NotAvailableBrush =
-        new SolidColorBrush(Color.FromArgb(255, 127, 127, 127));
+    private IBrush NotAvailableBrush =>
+        this.TryFindResource("TextFillColorTertiaryBrush", ActualThemeVariant, out var textBrush)
+            && textBrush is IBrush themedText
+            ? themedText
+            : Brushes.Gray;
 
-    private static readonly IBrush WarningBrush =
-        new SolidColorBrush(Color.FromArgb(255, 245, 158, 11));
+    private IBrush WarningBrush =>
+        this.TryFindResource("StatusWarningForeground", ActualThemeVariant, out var warningBrush)
+            && warningBrush is IBrush themedWarning
+            ? themedWarning
+            : Brushes.Orange;
 
     private static void AddSpacer(StackPanel host) =>
         host.Children.Add(new Border { Height = 10 });
@@ -872,7 +878,7 @@ public partial class PackageDetailsWindow : UniGetUI.Avalonia.Views.DialogPages.
         host.Children.Add(BuildWarningRow(tb, warningTooltip));
     }
 
-    private static Grid BuildWarningRow(Control content, string tooltip)
+    private Grid BuildWarningRow(Control content, string tooltip)
     {
         ToolTip.SetTip(content, tooltip);
         var icon = new SvgIcon
