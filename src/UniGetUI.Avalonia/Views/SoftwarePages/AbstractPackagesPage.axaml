@@ -57,6 +57,21 @@
       <Style Selector="DataGridColumnHeader.package-header-first.package-header-last">
          <Setter Property="CornerRadius" Value="4"/>
       </Style>
+      <!-- Avalonia's Fluent DataGrid theme paints hover/pressed state on the rectangular
+           PART_ColumnHeaderRoot grid. Paint those states on HeaderBorder instead so the
+           first/last visible header keeps its rounded outer corners while highlighted. -->
+      <Style Selector="DataGridColumnHeader:pointerover /template/ Grid#PART_ColumnHeaderRoot">
+         <Setter Property="Background" Value="Transparent"/>
+      </Style>
+      <Style Selector="DataGridColumnHeader:pointerover /template/ Border#HeaderBorder">
+         <Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderHoveredBackgroundBrush}"/>
+      </Style>
+      <Style Selector="DataGridColumnHeader:pressed /template/ Grid#PART_ColumnHeaderRoot">
+         <Setter Property="Background" Value="Transparent"/>
+      </Style>
+      <Style Selector="DataGridColumnHeader:pressed /template/ Border#HeaderBorder">
+         <Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderPressedBackgroundBrush}"/>
+      </Style>
       <Style Selector="Expander /template/ ToggleButton#ExpanderHeader">
          <Setter Property="Background" Value="{DynamicResource SettingsCardBackground}"/>
       </Style>
@@ -354,15 +369,19 @@
                               VerticalContentAlignment="Stretch"
                               HorizontalAlignment="Stretch"
                               VerticalAlignment="Stretch"
-                              Padding="4,8,4,0"
+                              Padding="4,8,4,8"
                               automation:AutomationProperties.AccessibilityView="Control"
                               automation:AutomationProperties.Name="{t:Translate Filters}"
                               automation:AutomationProperties.LandmarkType="{x:Static peers:AutomationLandmarkType.Search}"
                               Background="{DynamicResource MicaPageBackground}">
-                    <StackPanel x:Name="SidePanelGrid" Spacing="8" Margin="0,0,0,8">
+                    <Grid x:Name="SidePanelGrid"
+                          RowDefinitions="Auto,Auto,Auto"
+                          RowSpacing="8"
+                          HorizontalAlignment="Stretch">
 
                         <!-- Sources expander -->
-                        <Expander HorizontalAlignment="Stretch"
+                        <Expander Grid.Row="0"
+                                  HorizontalAlignment="Stretch"
                                   HorizontalContentAlignment="Stretch"
                                   IsExpanded="True"
                                   CornerRadius="8"
@@ -477,7 +496,8 @@
                         </Expander>
 
                         <!-- Filter options expander -->
-                        <Expander HorizontalAlignment="Stretch"
+                        <Expander Grid.Row="1"
+                                  HorizontalAlignment="Stretch"
                                   HorizontalContentAlignment="Stretch"
                                   IsExpanded="False"
                                   CornerRadius="8"
@@ -509,7 +529,8 @@
                         </Expander>
 
                         <!-- Search mode expander -->
-                        <Expander HorizontalAlignment="Stretch"
+                        <Expander Grid.Row="2"
+                                  HorizontalAlignment="Stretch"
                                   HorizontalContentAlignment="Stretch"
                                   IsExpanded="True"
                                   CornerRadius="8"
@@ -556,7 +577,7 @@
                             </StackPanel>
                         </Expander>
 
-                    </StackPanel>
+                    </Grid>
                     </ScrollViewer>
                 </DataTemplate>
             </Grid.Resources>
