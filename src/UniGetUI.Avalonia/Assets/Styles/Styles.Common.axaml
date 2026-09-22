@@ -111,7 +111,6 @@
                     <!-- Settings cards -->
                     <SolidColorBrush x:Key="SettingsCardBackground"      Color="#B3FFFFFF"/>
                     <SolidColorBrush x:Key="SettingsCardBorderBrush"     Color="#0F000000"/>
-                    <SolidColorBrush x:Key="SettingsCardGroupedBorderBrush" Color="#0F000000"/>
                     <SolidColorBrush x:Key="SettingsCardHoverBackground" Color="#F6F6F6"/>
                     <!-- Same-channel alpha overlay for animated SettingsCard hover.
                          Avoids ARGB interpolation flashes on solid/non-Mica surfaces. -->
@@ -321,8 +320,7 @@
                     <StaticResource x:Key="AccentButtonForegroundDisabled" ResourceKey="TextOnAccentFillColorDisabledBrush"/>
                     <!-- Settings cards -->
                     <SolidColorBrush x:Key="SettingsCardBackground"      Color="#0DFFFFFF"/>
-                    <SolidColorBrush x:Key="SettingsCardBorderBrush"     Color="Transparent"/>
-                    <SolidColorBrush x:Key="SettingsCardGroupedBorderBrush" Color="#19000000"/>
+                    <SolidColorBrush x:Key="SettingsCardBorderBrush"     Color="#19000000"/>
                     <SolidColorBrush x:Key="SettingsCardHoverBackground" Color="#323232"/>
                     <!-- Rest and hover stay in the translucent-white channel so BrushTransition
                          cannot brighten through an opaque-gray midpoint. -->
@@ -855,9 +853,6 @@
         <Setter Property="Background"   Value="{DynamicResource SettingsCardBackground}"/>
         <Setter Property="BorderBrush"  Value="{DynamicResource SettingsCardBorderBrush}"/>
         <Setter Property="Margin"       Value="40,0"/>
-    </Style>
-    <Style Selector="Border.settings-card-grouped">
-        <Setter Property="BorderBrush" Value="{DynamicResource SettingsCardGroupedBorderBrush}"/>
     </Style>
     <Style Selector="Border.settings-card-clickable:pointerover">
         <Setter Property="Background"   Value="{DynamicResource SettingsCardAnimatedHoverBackground}"/>

@@ -63,7 +63,7 @@
             <SolidColorBrush x:Key="MicaPageBackground"          Color="Transparent"/>
             <!-- Cards / panels: WinUI's translucent card layer over the Mica backdrop -->
             <SolidColorBrush x:Key="SettingsCardBackground"      Color="#0DFFFFFF"/>
-            <SolidColorBrush x:Key="SettingsCardBorderBrush"     Color="Transparent"/>
+            <SolidColorBrush x:Key="SettingsCardBorderBrush"     Color="#19000000"/>
             <!-- Package list: near-transparent so Mica shows through, matching WinUI's SystemFillColorNeutralBackground -->
             <SolidColorBrush x:Key="PackageListBackground"       Color="#08FFFFFF"/>
             <SolidColorBrush x:Key="SettingsCardHoverBackground" Color="#15FFFFFF"/>

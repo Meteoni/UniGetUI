@@ -135,21 +135,13 @@ public class SettingsCard : UserControl
     public new CornerRadius CornerRadius
     {
         get => _border.CornerRadius;
-        set
-        {
-            _border.CornerRadius = value;
-            UpdateGroupedCardClass();
-        }
+        set => _border.CornerRadius = value;
     }
 
     public new Thickness BorderThickness
     {
         get => _border.BorderThickness;
-        set
-        {
-            _border.BorderThickness = value;
-            UpdateGroupedCardClass();
-        }
+        set => _border.BorderThickness = value;
     }
 
     // ── Constructor ────────────────────────────────────────────────────────
@@ -295,24 +287,6 @@ public class SettingsCard : UserControl
             _contentPresenter.HorizontalContentAlignment = HorizontalAlignment.Right;
             _contentPresenter.Margin = new Thickness(16, 0, 0, 0);
             _layoutGrid.RowSpacing = 0;
-        }
-    }
-
-    private void UpdateGroupedCardClass()
-    {
-        bool hasBorder = !_border.BorderThickness.Equals(new Thickness(0));
-        bool usesGroupedGeometry =
-            !_border.CornerRadius.Equals(new CornerRadius(8))
-            || !_border.BorderThickness.Equals(new Thickness(1));
-
-        if (hasBorder && usesGroupedGeometry)
-        {
-            if (!_border.Classes.Contains("settings-card-grouped"))
-                _border.Classes.Add("settings-card-grouped");
-        }
-        else
-        {
-            _border.Classes.Remove("settings-card-grouped");
         }
     }
 
