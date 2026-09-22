@@ -45,6 +45,7 @@
       </Style>
       <Style Selector="DataGridColumnHeader /template/ Border#HeaderBorder">
          <Setter Property="Margin" Value="0,6,0,6"/>
+         <Setter Property="ClipToBounds" Value="True"/>
       </Style>
       <!-- Edge classes are assigned from the actual visible header cells. Hidden optional
            columns and Avalonia's filler header therefore cannot steal the rounded end. -->
@@ -57,23 +58,15 @@
       <Style Selector="DataGridColumnHeader.package-header-first.package-header-last">
          <Setter Property="CornerRadius" Value="4"/>
       </Style>
-      <!-- Avalonia's Fluent DataGrid theme paints hover/pressed state on the rectangular
-           PART_ColumnHeaderRoot grid. Paint those states on HeaderBorder instead so the
-           first/last visible header keeps its rounded outer corners while highlighted. -->
-      <Style Selector="DataGridColumnHeader:pointerover /template/ Grid#PART_ColumnHeaderRoot">
-         <Setter Property="Background" Value="Transparent"/>
-      </Style>
-      <Style Selector="DataGridColumnHeader:pointerover /template/ Border#HeaderBorder">
-         <Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderHoveredBackgroundBrush}"/>
-      </Style>
-      <Style Selector="DataGridColumnHeader:pressed /template/ Grid#PART_ColumnHeaderRoot">
-         <Setter Property="Background" Value="Transparent"/>
-      </Style>
-      <Style Selector="DataGridColumnHeader:pressed /template/ Border#HeaderBorder">
-         <Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderPressedBackgroundBrush}"/>
-      </Style>
       <Style Selector="Expander /template/ ToggleButton#ExpanderHeader">
          <Setter Property="Background" Value="{DynamicResource SettingsCardBackground}"/>
+      </Style>
+      <!-- All package-page filter cards share this class. Override Fluent's flyout-derived
+           minimum width so the cards can contract to any saved pane width without overflowing. -->
+      <Style Selector="Expander.filter-pane-expander">
+         <Setter Property="MinWidth" Value="0"/>
+         <Setter Property="HorizontalAlignment" Value="Stretch"/>
+         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
       </Style>
       <!-- Search-mode options must shrink with the filter pane just like the checkbox rows.
            A fixed RadioButton height makes wrapped labels prefer extra width and then clip. -->
@@ -376,21 +369,23 @@
                               HorizontalScrollBarVisibility="Disabled"
                               VerticalScrollBarVisibility="Auto"
                               HorizontalContentAlignment="Stretch"
-                              VerticalContentAlignment="Stretch"
+                              VerticalContentAlignment="Top"
                               HorizontalAlignment="Stretch"
                               VerticalAlignment="Stretch"
-                              Padding="4,8,4,8"
+                              Padding="4,8,4,0"
                               automation:AutomationProperties.AccessibilityView="Control"
                               automation:AutomationProperties.Name="{t:Translate Filters}"
                               automation:AutomationProperties.LandmarkType="{x:Static peers:AutomationLandmarkType.Search}"
                               Background="{DynamicResource MicaPageBackground}">
                     <Grid x:Name="SidePanelGrid"
-                          RowDefinitions="Auto,Auto,Auto"
+                          RowDefinitions="Auto,Auto,Auto,8"
                           RowSpacing="8"
-                          HorizontalAlignment="Stretch">
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Top">
 
                         <!-- Sources expander -->
                         <Expander Grid.Row="0"
+                                  Classes="filter-pane-expander"
                                   HorizontalAlignment="Stretch"
                                   HorizontalContentAlignment="Stretch"
                                   IsExpanded="True"
@@ -428,7 +423,8 @@
                                             Command="{Binding SelectAllSources_CmdCommand}"
                                             automation:AutomationProperties.Name="{t:Translate Select all}"
                                             Padding="2">
-                                        <TextBlock Text="{t:Translate Select all}" FontSize="12" FontWeight="SemiBold"/>
+                                        <TextBlock Text="{t:Translate Select all}" FontSize="12" FontWeight="SemiBold"
+                                                   TextWrapping="Wrap" TextAlignment="Center"/>
                                     </Button>
                                     <Button x:Name="ClearSourceSelectionButton"
                                             Classes="filter-hyperlink"
@@ -438,7 +434,8 @@
                                             Command="{Binding ClearSourceSelection_CmdCommand}"
                                             automation:AutomationProperties.Name="{t:Translate Clear selection}"
                                             Padding="2">
-                                        <TextBlock Text="{t:Translate Clear selection}" FontSize="12" FontWeight="SemiBold"/>
+                                        <TextBlock Text="{t:Translate Clear selection}" FontSize="12" FontWeight="SemiBold"
+                                                   TextWrapping="Wrap" TextAlignment="Center"/>
                                     </Button>
                                     <ItemsControl x:Name="SourcesTreeView"
                                               Grid.Row="1"
@@ -481,7 +478,10 @@
                                                                       IsVisible="{Binding IsExpanded}"/>
                                                             </Grid>
                                                         </ToggleButton>
-                                                                <TextBlock Grid.Column="1" Text="{Binding PackageName}" VerticalAlignment="Center"/>
+                                                                <TextBlock Grid.Column="1"
+                                                                           Text="{Binding PackageName}"
+                                                                           VerticalAlignment="Center"
+                                                                           TextWrapping="Wrap"/>
                                                             </Grid>
                                                         </CheckBox.Content>
                                                     </CheckBox>
@@ -507,6 +507,7 @@
 
                         <!-- Filter options expander -->
                         <Expander Grid.Row="1"
+                                  Classes="filter-pane-expander"
                                   HorizontalAlignment="Stretch"
                                   HorizontalContentAlignment="Stretch"
                                   IsExpanded="False"
@@ -540,6 +541,7 @@
 
                         <!-- Search mode expander -->
                         <Expander Grid.Row="2"
+                                  Classes="filter-pane-expander"
                                   HorizontalAlignment="Stretch"
                                   HorizontalContentAlignment="Stretch"
                                   IsExpanded="True"
@@ -554,33 +556,38 @@
                             </Expander.Header>
                             <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical" Spacing="0">
                                 <RadioButton Classes="filter-radio"
-                                             Margin="0,-2,0,-2"
+                                             Margin="0"
                                              IsChecked="{Binding SearchMode_Name, Mode=TwoWay}"
                                              Content="{t:Translate Package Name}"
                                              automation:AutomationProperties.Name="{t:Translate Package Name}"/>
                                 <RadioButton Classes="filter-radio"
-                                             Margin="0,-2,0,-2"
+                                             Margin="0"
                                              IsChecked="{Binding SearchMode_Id, Mode=TwoWay}"
                                              Content="{t:Translate Package ID}"
                                              automation:AutomationProperties.Name="{t:Translate Package ID}"/>
                                 <RadioButton Classes="filter-radio"
-                                             Margin="0,-2,0,-2"
+                                             Margin="0"
                                              IsChecked="{Binding SearchMode_Both, Mode=TwoWay}"
                                              Content="{t:Translate Both}"
                                              automation:AutomationProperties.Name="{t:Translate Both}"/>
                                 <RadioButton Classes="filter-radio"
-                                             Margin="0,-2,0,-2"
+                                             Margin="0"
                                              IsChecked="{Binding SearchMode_Exact, Mode=TwoWay}"
                                              Content="{t:Translate Exact match}"
                                              automation:AutomationProperties.Name="{t:Translate Exact match}"/>
                                 <RadioButton Classes="filter-radio"
-                                             Margin="0,-2,0,-2"
+                                             Margin="0"
                                              IsChecked="{Binding SearchMode_Similar, Mode=TwoWay}"
                                              IsEnabled="{Binding SimilarSearchEnabled}"
                                              Content="{t:Translate Show similar packages}"
                                              automation:AutomationProperties.Name="{t:Translate Show similar packages}"/>
                             </StackPanel>
                         </Expander>
+
+                        <!-- Real scroll-content tail. Unlike ScrollViewer padding or negative
+                             child margins, this participates directly in Extent.Height. -->
+                        <Border Grid.Row="3" Height="8" Background="Transparent"
+                                IsHitTestVisible="False"/>
 
                     </Grid>
                     </ScrollViewer>
