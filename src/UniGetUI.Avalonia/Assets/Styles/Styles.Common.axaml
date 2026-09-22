@@ -418,7 +418,8 @@
         </Setter>
     </Style>
 
-    <Style Selector="settings|SettingsCard.settings-card-control">
+    <Style Selector=".settings-card-control"
+           x:SetterTargetType="settings:SettingsCard">
         <Setter Property="FocusAdorner">
             <FocusAdornerTemplate>
                 <Border Margin="40,0"
