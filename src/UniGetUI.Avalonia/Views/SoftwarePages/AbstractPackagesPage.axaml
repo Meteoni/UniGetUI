@@ -75,6 +75,16 @@
       <Style Selector="Expander /template/ ToggleButton#ExpanderHeader">
          <Setter Property="Background" Value="{DynamicResource SettingsCardBackground}"/>
       </Style>
+      <!-- Search-mode options must shrink with the filter pane just like the checkbox rows.
+           A fixed RadioButton height makes wrapped labels prefer extra width and then clip. -->
+      <Style Selector="RadioButton.filter-radio">
+         <Setter Property="HorizontalAlignment" Value="Stretch"/>
+         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+         <Setter Property="MinHeight" Value="30"/>
+      </Style>
+      <Style Selector="RadioButton.filter-radio /template/ ContentPresenter#PART_ContentPresenter">
+         <Setter Property="TextWrapping" Value="Wrap"/>
+      </Style>
        <!-- The old WinUI source actions were HyperlinkButtons. Keep their border transparent
             in every state and use subtle hover/pressed fills instead of generic Button chrome. -->
        <Style Selector="Button.filter-hyperlink">
@@ -543,37 +553,32 @@
                                 </StackPanel>
                             </Expander.Header>
                             <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical" Spacing="0">
-                                <RadioButton Height="30"
+                                <RadioButton Classes="filter-radio"
                                              Margin="0,-2,0,-2"
                                              IsChecked="{Binding SearchMode_Name, Mode=TwoWay}"
-                                             automation:AutomationProperties.Name="{t:Translate Package Name}">
-                                    <TextBlock Text="{t:Translate Package Name}" TextWrapping="Wrap"/>
-                                </RadioButton>
-                                <RadioButton Height="30"
+                                             Content="{t:Translate Package Name}"
+                                             automation:AutomationProperties.Name="{t:Translate Package Name}"/>
+                                <RadioButton Classes="filter-radio"
                                              Margin="0,-2,0,-2"
                                              IsChecked="{Binding SearchMode_Id, Mode=TwoWay}"
-                                             automation:AutomationProperties.Name="{t:Translate Package ID}">
-                                    <TextBlock Text="{t:Translate Package ID}" TextWrapping="Wrap"/>
-                                </RadioButton>
-                                <RadioButton Height="30"
+                                             Content="{t:Translate Package ID}"
+                                             automation:AutomationProperties.Name="{t:Translate Package ID}"/>
+                                <RadioButton Classes="filter-radio"
                                              Margin="0,-2,0,-2"
                                              IsChecked="{Binding SearchMode_Both, Mode=TwoWay}"
-                                             automation:AutomationProperties.Name="{t:Translate Both}">
-                                    <TextBlock Text="{t:Translate Both}" TextWrapping="Wrap"/>
-                                </RadioButton>
-                                <RadioButton Height="30"
+                                             Content="{t:Translate Both}"
+                                             automation:AutomationProperties.Name="{t:Translate Both}"/>
+                                <RadioButton Classes="filter-radio"
                                              Margin="0,-2,0,-2"
                                              IsChecked="{Binding SearchMode_Exact, Mode=TwoWay}"
-                                             automation:AutomationProperties.Name="{t:Translate Exact match}">
-                                    <TextBlock Text="{t:Translate Exact match}" TextWrapping="Wrap"/>
-                                </RadioButton>
-                                <RadioButton Height="30"
+                                             Content="{t:Translate Exact match}"
+                                             automation:AutomationProperties.Name="{t:Translate Exact match}"/>
+                                <RadioButton Classes="filter-radio"
                                              Margin="0,-2,0,-2"
                                              IsChecked="{Binding SearchMode_Similar, Mode=TwoWay}"
                                              IsEnabled="{Binding SimilarSearchEnabled}"
-                                             automation:AutomationProperties.Name="{t:Translate Show similar packages}">
-                                    <TextBlock Text="{t:Translate Show similar packages}" TextWrapping="Wrap"/>
-                                </RadioButton>
+                                             Content="{t:Translate Show similar packages}"
+                                             automation:AutomationProperties.Name="{t:Translate Show similar packages}"/>
                             </StackPanel>
                         </Expander>
 
