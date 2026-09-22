@@ -205,15 +205,8 @@ public abstract partial class AbstractPackagesPage : UserControl,
             };
         }
 
-        // Restore per-page filter pane width from settings. A 260-DIP default briefly shipped
-        // on this experimental branch; migrate that exact temporary default back to 220 while
-        // preserving any other user-resized width.
+        // Restore per-page filter pane width from settings.
         var savedWidth = Settings.GetDictionaryItem<string, int>(Settings.K.SidepanelWidths, ViewModel.PageName);
-        if (savedWidth == 260)
-        {
-            savedWidth = 220;
-            Settings.SetDictionaryItem(Settings.K.SidepanelWidths, ViewModel.PageName, savedWidth);
-        }
         if (savedWidth >= 100) _savedFilterPaneWidth = savedWidth;
         ViewModel.TrackedFilterPaneWidth = _savedFilterPaneWidth;
 
