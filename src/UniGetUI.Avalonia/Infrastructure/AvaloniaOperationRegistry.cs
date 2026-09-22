@@ -84,17 +84,12 @@ public static class AvaloniaOperationRegistry
             Dispatcher.UIThread.Post(UpdateTrayStatus);
         };
 
-        // Cancellation can report Canceled from several code paths. Keep the finished card
-        // visible until the user closes it, but release IPC tracking after the same short grace
-        // period used by the old delayed-removal path.
-        int cancelHandled = 0;
+        // Keep canceled cards visible, like failed cards. Their IPC lifetime follows the card:
+        // closing/clearing the card removes tracking through Remove().
         op.StatusChanged += (_, status) =>
         {
-            if (status is OperationStatus.Canceled && Interlocked.Exchange(ref cancelHandled, 1) == 0)
-            {
+            if (status is OperationStatus.Canceled)
                 WindowsAppNotificationBridge.RemoveProgress(op);
-                _ = ForgetTrackingAfterDelayAsync(op, milliseconds: 2500);
-            }
 
             Dispatcher.UIThread.Post(UpdateTrayStatus);
         };
@@ -165,13 +160,6 @@ public static class AvaloniaOperationRegistry
         {
             IpcOperationApi.ForgetTracking(vm.Operation.Metadata.Identifier);
         }
-    }
-
-    private static async Task ForgetTrackingAfterDelayAsync(AbstractOperation op, int milliseconds)
-    {
-        await Task.Delay(milliseconds);
-        if (op.Status is not (OperationStatus.InQueue or OperationStatus.Running))
-            IpcOperationApi.ForgetTracking(op.Metadata.Identifier);
     }
 
     private static async Task RemoveAfterDelayAsync(AbstractOperation op, int milliseconds)

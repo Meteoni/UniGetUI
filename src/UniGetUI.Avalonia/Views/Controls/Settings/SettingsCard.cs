@@ -119,7 +119,10 @@ public class SettingsCard : UserControl
         set
         {
             _isClickEnabled = value;
-            Focusable = value;
+            // Focus the visible inner card surface so Avalonia's normal focus adorner hugs
+            // the card instead of the full-width UserControl wrapper.
+            Focusable = false;
+            _border.Focusable = value;
             Cursor = value ? new Cursor(StandardCursorType.Hand) : Cursor.Default;
             _chevron.IsVisible = value;
             if (value)
@@ -153,10 +156,6 @@ public class SettingsCard : UserControl
 
     public SettingsCard()
     {
-        // Keep the historical 40-DIP page gutter on the focusable control itself so
-        // Bounds, the focus adorner and responsive breakpoints all match the visible card.
-        Margin = new Thickness(40, 0);
-
         _iconPresenter = new ContentControl
         {
             IsVisible = false,
@@ -265,11 +264,12 @@ public class SettingsCard : UserControl
             return;
         }
 
+        double cardWidth = Math.Max(0, width - _border.Margin.Left - _border.Margin.Right);
         bool wrapContent = _rightContent is not null
             && (_contentWrapped
-                ? width <= ContentUnwrapThreshold
-                : width <= ContentWrapThreshold);
-        bool hideHeaderIcon = width <= HideHeaderIconThreshold;
+                ? cardWidth <= ContentUnwrapThreshold
+                : cardWidth <= ContentWrapThreshold);
+        bool hideHeaderIcon = cardWidth <= HideHeaderIconThreshold;
 
         _iconPresenter.IsVisible = _headerIcon is not null && !hideHeaderIcon;
 
@@ -316,7 +316,7 @@ public class SettingsCard : UserControl
         }
     }
 
-        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
         if (change.Property == HeaderProperty)
@@ -413,7 +413,7 @@ public class SettingsCard : UserControl
     private void OnKeyDown(object? sender, KeyEventArgs e)
     {
         if (!_isClickEnabled) return;
-        if (e.Source != this) return;   // only when the card itself has focus, not a child
+        if (e.Source != _border) return;   // only when the card surface has focus, not a child control
         if (e.Key is not (Key.Enter or Key.Space)) return;
 
         InvokeClick();

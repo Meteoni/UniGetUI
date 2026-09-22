@@ -21,6 +21,7 @@
             <!-- Package list: near-transparent so Mica shows through, matching WinUI's SystemFillColorNeutralBackground -->
             <SolidColorBrush x:Key="PackageListBackground"       Color="#06000000"/>
             <SolidColorBrush x:Key="SettingsCardHoverBackground" Color="#99FFFFFF"/>
+            <SolidColorBrush x:Key="SettingsCardAnimatedHoverBackground" Color="#99FFFFFF"/>
             <SolidColorBrush x:Key="AppSplitterBackground"       Color="#18000000"/>
             <SolidColorBrush x:Key="AppOperationsPanelBackground" Color="Transparent"/>
             <SolidColorBrush x:Key="AppBorderBrush"              Color="#18000000"/>
@@ -66,6 +67,7 @@
             <!-- Package list: near-transparent so Mica shows through, matching WinUI's SystemFillColorNeutralBackground -->
             <SolidColorBrush x:Key="PackageListBackground"       Color="#08FFFFFF"/>
             <SolidColorBrush x:Key="SettingsCardHoverBackground" Color="#15FFFFFF"/>
+            <SolidColorBrush x:Key="SettingsCardAnimatedHoverBackground" Color="#15FFFFFF"/>
             <SolidColorBrush x:Key="AppSplitterBackground"       Color="#66000000"/>
             <SolidColorBrush x:Key="AppOperationsPanelBackground" Color="Transparent"/>
             <SolidColorBrush x:Key="AppBorderBrush"              Color="#15FFFFFF"/>
