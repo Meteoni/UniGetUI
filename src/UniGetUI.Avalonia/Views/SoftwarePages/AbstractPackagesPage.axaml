@@ -62,11 +62,11 @@
       <Style Selector="RadioButton.filter-radio /template/ ContentPresenter#PART_ContentPresenter">
          <Setter Property="TextWrapping" Value="Wrap"/>
       </Style>
-      <Style Selector="Grid#SidePanelGrid CheckBox">
+      <Style Selector="StackPanel#SidePanelGrid CheckBox">
          <Setter Property="HorizontalAlignment" Value="Stretch"/>
          <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
       </Style>
-      <Style Selector="Grid#SidePanelGrid CheckBox /template/ ContentPresenter#PART_ContentPresenter">
+      <Style Selector="StackPanel#SidePanelGrid CheckBox /template/ ContentPresenter#PART_ContentPresenter">
          <Setter Property="TextWrapping" Value="Wrap"/>
       </Style>
        <!-- The old WinUI source actions were HyperlinkButtons. Keep their border transparent
@@ -180,94 +180,34 @@
                         TargetType="DataGridColumnHeader"
                         BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
              <ControlTheme.Children>
+                <!-- Keep the visual bar inset without shrinking the header's hit target. -->
+                <Style Selector="^ /template/ Border#HeaderBorder">
+                   <Setter Property="Margin" Value="0,6,0,6"/>
+                </Style>
+
+                <!-- DataGrid already tracks the real visible right edge through separator state. -->
                 <Style Selector="^:nth-child(1)">
                    <Setter Property="CornerRadius" Value="4,0,0,4"/>
                 </Style>
                 <Style Selector="^[AreSeparatorsVisible=False]">
                    <Setter Property="CornerRadius" Value="0,4,4,0"/>
                 </Style>
+
+                <!-- Fluent normally paints these states on a rectangular inner Grid. Paint them
+                     on the existing rounded HeaderBorder by changing the header background. -->
+                <Style Selector="^:pointerover">
+                   <Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderHoveredBackgroundBrush}"/>
+                </Style>
+                <Style Selector="^:pointerover /template/ Grid#PART_ColumnHeaderRoot">
+                   <Setter Property="Background" Value="Transparent"/>
+                </Style>
+                <Style Selector="^:pressed">
+                   <Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderPressedBackgroundBrush}"/>
+                </Style>
+                <Style Selector="^:pressed /template/ Grid#PART_ColumnHeaderRoot">
+                   <Setter Property="Background" Value="Transparent"/>
+                </Style>
              </ControlTheme.Children>
-             <Setter Property="Template">
-                <ControlTemplate>
-                   <Border x:Name="HeaderBorder"
-                           Margin="0,6,0,6"
-                           Background="{TemplateBinding Background}"
-                           BorderBrush="{TemplateBinding BorderBrush}"
-                           BorderThickness="{TemplateBinding BorderThickness}"
-                           CornerRadius="{TemplateBinding CornerRadius}"
-                           ClipToBounds="True">
-                      <Border x:Name="PART_ColumnHeaderRoot"
-                              Background="Transparent"
-                              CornerRadius="{TemplateBinding CornerRadius}"
-                              ClipToBounds="True">
-                         <Grid ColumnDefinitions="*,Auto">
-                            <Panel Margin="{TemplateBinding Padding}"
-                                   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-                               <Grid>
-                                  <Grid.ColumnDefinitions>
-                                     <ColumnDefinition Width="*"/>
-                                     <ColumnDefinition Width="Auto"
-                                                       MinWidth="{DynamicResource DataGridSortIconMinWidth}"/>
-                                  </Grid.ColumnDefinitions>
-                                  <ContentPresenter x:Name="PART_ContentPresenter"
-                                                    Content="{TemplateBinding Content}"
-                                                    ContentTemplate="{TemplateBinding ContentTemplate}"/>
-                                  <Path x:Name="SortIcon"
-                                        Grid.Column="1"
-                                        IsVisible="False"
-                                        Height="12"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Fill="{TemplateBinding Foreground}"
-                                        Stretch="Uniform"/>
-                               </Grid>
-                            </Panel>
-                            <Rectangle x:Name="VerticalSeparator"
-                                       Grid.Column="1"
-                                       Width="1"
-                                       VerticalAlignment="Stretch"
-                                       Fill="{TemplateBinding SeparatorBrush}"
-                                       IsVisible="{TemplateBinding AreSeparatorsVisible}"/>
-                            <Grid x:Name="FocusVisual"
-                                  Grid.ColumnSpan="2"
-                                  IsHitTestVisible="False"
-                                  IsVisible="False">
-                               <Rectangle x:Name="FocusVisualPrimary"
-                                          Fill="Transparent"
-                                          Stroke="{DynamicResource DataGridCellFocusVisualPrimaryBrush}"
-                                          StrokeThickness="2"/>
-                               <Rectangle x:Name="FocusVisualSecondary"
-                                          Margin="2"
-                                          Fill="Transparent"
-                                          Stroke="{DynamicResource DataGridCellFocusVisualSecondaryBrush}"
-                                          StrokeThickness="1"/>
-                            </Grid>
-                         </Grid>
-                      </Border>
-                   </Border>
-                </ControlTemplate>
-             </Setter>
-             <Style Selector="^:focus-visible /template/ Grid#FocusVisual">
-                <Setter Property="IsVisible" Value="True"/>
-             </Style>
-             <Style Selector="^:pointerover /template/ Border#PART_ColumnHeaderRoot">
-                <Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderHoveredBackgroundBrush}"/>
-             </Style>
-             <Style Selector="^:pressed /template/ Border#PART_ColumnHeaderRoot">
-                <Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderPressedBackgroundBrush}"/>
-             </Style>
-             <Style Selector="^:dragIndicator">
-                <Setter Property="Opacity" Value="0.5"/>
-             </Style>
-             <Style Selector="^:sortascending /template/ Path#SortIcon">
-                <Setter Property="IsVisible" Value="True"/>
-                <Setter Property="Data" Value="{StaticResource DataGridSortIconAscendingPath}"/>
-             </Style>
-             <Style Selector="^:sortdescending /template/ Path#SortIcon">
-                <Setter Property="IsVisible" Value="True"/>
-                <Setter Property="Data" Value="{StaticResource DataGridSortIconDescendingPath}"/>
-             </Style>
           </ControlTheme>
 
           <!-- Match WinUI Expander interaction states inside the filter pane.
@@ -466,15 +406,13 @@
                                Padding="4,3,4,4"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Top">
-                          <Grid x:Name="SidePanelGrid"
-                                RowDefinitions="Auto,Auto,Auto"
-                                RowSpacing="8"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Top">
+                          <StackPanel x:Name="SidePanelGrid"
+                                      Spacing="8"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Top">
 
                         <!-- Sources expander -->
-                        <Expander Grid.Row="0"
-                                  Classes="filter-pane-expander"
+                        <Expander Classes="filter-pane-expander"
                                   HorizontalAlignment="Stretch"
                                   HorizontalContentAlignment="Stretch"
                                   IsExpanded="True"
@@ -603,8 +541,7 @@
                         </Expander>
 
                         <!-- Filter options expander -->
-                        <Expander Grid.Row="1"
-                                  Classes="filter-pane-expander"
+                        <Expander Classes="filter-pane-expander"
                                   HorizontalAlignment="Stretch"
                                   HorizontalContentAlignment="Stretch"
                                   IsExpanded="False"
@@ -645,8 +582,7 @@
                         </Expander>
 
                         <!-- Search mode expander -->
-                        <Expander Grid.Row="2"
-                                  Classes="filter-pane-expander"
+                        <Expander Classes="filter-pane-expander"
                                   HorizontalAlignment="Stretch"
                                   HorizontalContentAlignment="Stretch"
                                   IsExpanded="True"
@@ -697,7 +633,7 @@
                             </StackPanel>
                         </Expander>
 
-                          </Grid>
+                          </StackPanel>
                        </Border>
                     </ScrollViewer>
                 </DataTemplate>
