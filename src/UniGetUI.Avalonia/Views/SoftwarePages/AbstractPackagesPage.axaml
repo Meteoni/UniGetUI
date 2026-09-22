@@ -467,7 +467,7 @@
                                   automation:AutomationProperties.LandmarkType="{x:Static peers:AutomationLandmarkType.Search}"
                                   Background="{DynamicResource MicaPageBackground}">
                        <Border Width="{Binding #FilterPaneScrollViewer.Viewport.Width}"
-                               Padding="4,3,4,3"
+                               Padding="4,3,4,4"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Top">
                           <Grid x:Name="SidePanelGrid"

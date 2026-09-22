@@ -122,6 +122,7 @@ public abstract partial class AbstractPackagesPage : UserControl,
         // ordering, so nth-last-child cannot reliably identify the right edge.
         PackageList.AttachedToVisualTree += (_, _) =>
             Dispatcher.UIThread.Post(UpdatePackageHeaderEdgeClasses);
+        PackageList.LayoutUpdated += (_, _) => UpdatePackageHeaderEdgeClasses();
         PackageList.ColumnDisplayIndexChanged += (_, _) =>
             Dispatcher.UIThread.Post(UpdatePackageHeaderEdgeClasses);
         foreach (var column in PackageList.Columns)
@@ -404,7 +405,7 @@ public abstract partial class AbstractPackagesPage : UserControl,
         }
 
         var visibleHeaders = allHeaders
-            .Where(header => header.IsVisible && header.IsEnabled && header.Bounds.Width > 0)
+            .Where(header => header.IsVisible && header.IsEnabled)
             .OrderBy(header => header.Bounds.X)
             .ToList();
 
