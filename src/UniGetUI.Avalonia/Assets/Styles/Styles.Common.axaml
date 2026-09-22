@@ -114,7 +114,7 @@
                     <SolidColorBrush x:Key="SettingsCardHoverBackground" Color="#F6F6F6"/>
                     <!-- Same-channel alpha overlay for animated SettingsCard hover.
                          Avoids ARGB interpolation flashes on solid/non-Mica surfaces. -->
-                    <SolidColorBrush x:Key="SettingsCardAnimatedHoverBackground" Color="#40FFFFFF"/>
+                    <SolidColorBrush x:Key="SettingsCardAnimatedHoverBackground" Color="#F0F0F0"/>
                     <!-- Secondary actions keep a 1-DIP edge, but use WinUI's low-contrast
                          control stroke here. The full elevation gradient reads too strongly in
                          Avalonia on these compact settings buttons. -->

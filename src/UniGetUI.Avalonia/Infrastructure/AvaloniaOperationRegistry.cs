@@ -85,7 +85,8 @@ public static class AvaloniaOperationRegistry
         };
 
         // Keep canceled cards visible, like failed cards. Their IPC lifetime follows the card:
-        // closing/clearing the card removes tracking through Remove().
+        // closing/clearing removes tracking through Remove(), and IpcOperationApi independently
+        // bounds retained completed operations so this cannot grow without limit.
         op.StatusChanged += (_, status) =>
         {
             if (status is OperationStatus.Canceled)
