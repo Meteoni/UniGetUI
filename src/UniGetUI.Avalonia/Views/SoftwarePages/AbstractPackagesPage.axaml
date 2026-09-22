@@ -34,7 +34,6 @@
          <Setter Property="Background" Value="{DynamicResource PackageListHeaderBackground}"/>
          <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}"/>
          <Setter Property="HorizontalContentAlignment" Value="Center"/>
-         <Setter Property="AreSeparatorsVisible" Value="False"/>
          <Setter Property="SeparatorBrush" Value="Transparent"/>
          <Setter Property="BorderThickness" Value="0"/>
          <Setter Property="CornerRadius" Value="0"/>
@@ -42,17 +41,6 @@
               applied to the template border below instead of shrinking the hit target. -->
          <Setter Property="MinHeight" Value="44"/>
          <Setter Property="Margin" Value="0"/>
-      </Style>
-      <!-- Edge classes are assigned from the actual visible header cells. Hidden optional
-           columns and Avalonia's filler header therefore cannot steal the rounded end. -->
-      <Style Selector="DataGridColumnHeader.package-header-first">
-         <Setter Property="CornerRadius" Value="4,0,0,4"/>
-      </Style>
-      <Style Selector="DataGridColumnHeader.package-header-last">
-         <Setter Property="CornerRadius" Value="0,4,4,0"/>
-      </Style>
-      <Style Selector="DataGridColumnHeader.package-header-first.package-header-last">
-         <Setter Property="CornerRadius" Value="4"/>
       </Style>
       <Style Selector="Expander /template/ ToggleButton#ExpanderHeader">
          <Setter Property="Background" Value="{DynamicResource SettingsCardBackground}"/>
@@ -191,6 +179,14 @@
           <ControlTheme x:Key="PackageColumnHeaderTheme"
                         TargetType="DataGridColumnHeader"
                         BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+             <ControlTheme.Children>
+                <Style Selector="^:nth-child(1)">
+                   <Setter Property="CornerRadius" Value="4,0,0,4"/>
+                </Style>
+                <Style Selector="^[AreSeparatorsVisible=False]">
+                   <Setter Property="CornerRadius" Value="0,4,4,0"/>
+                </Style>
+             </ControlTheme.Children>
              <Setter Property="Template">
                 <ControlTemplate>
                    <Border x:Name="HeaderBorder"
