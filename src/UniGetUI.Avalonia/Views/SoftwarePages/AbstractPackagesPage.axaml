@@ -48,10 +48,31 @@
          <Setter Property="SeparatorBrush" Value="Transparent"/>
          <Setter Property="BorderThickness" Value="0"/>
          <Setter Property="CornerRadius" Value="0"/>
-         <!-- Keep the whole 44-DIP header row interactive. The visual 6-DIP inset is
-              applied to the template border below instead of shrinking the hit target. -->
+         <!-- Keep the whole 44-DIP header row interactive. -->
          <Setter Property="MinHeight" Value="44"/>
          <Setter Property="Margin" Value="0"/>
+      </Style>
+      <Style Selector="DataGrid#PackageList DataGridColumnHeader /template/ Border#HeaderBorder">
+         <Setter Property="Margin" Value="0,6,0,6"/>
+      </Style>
+      <Style Selector="DataGrid#PackageList DataGridColumnHeader:nth-child(1)">
+         <Setter Property="CornerRadius" Value="4,0,0,4"/>
+      </Style>
+      <!-- DataGrid itself marks the actual visible right-edge header by hiding its separator. -->
+      <Style Selector="DataGrid#PackageList DataGridColumnHeader[AreSeparatorsVisible=False]">
+         <Setter Property="CornerRadius" Value="0,4,4,0"/>
+      </Style>
+      <Style Selector="DataGrid#PackageList DataGridColumnHeader:pointerover">
+         <Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderHoveredBackgroundBrush}"/>
+      </Style>
+      <Style Selector="DataGrid#PackageList DataGridColumnHeader:pointerover /template/ Grid#PART_ColumnHeaderRoot">
+         <Setter Property="Background" Value="Transparent"/>
+      </Style>
+      <Style Selector="DataGrid#PackageList DataGridColumnHeader:pressed">
+         <Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderPressedBackgroundBrush}"/>
+      </Style>
+      <Style Selector="DataGrid#PackageList DataGridColumnHeader:pressed /template/ Grid#PART_ColumnHeaderRoot">
+         <Setter Property="Background" Value="Transparent"/>
       </Style>
       <Style Selector="Expander /template/ ToggleButton#ExpanderHeader">
          <Setter Property="Background" Value="{DynamicResource SettingsCardBackground}"/>
@@ -180,40 +201,6 @@
 
    <UserControl.Resources>
        <ResourceDictionary>
-          <ControlTheme x:Key="PackageColumnHeaderTheme"
-                        TargetType="DataGridColumnHeader"
-                        BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
-             <ControlTheme.Children>
-                <!-- Keep the visual bar inset without shrinking the header's hit target. -->
-                <Style Selector="^ /template/ Border#HeaderBorder">
-                   <Setter Property="Margin" Value="0,6,0,6"/>
-                </Style>
-
-                <!-- DataGrid already tracks the real visible right edge through separator state. -->
-                <Style Selector="^:nth-child(1)">
-                   <Setter Property="CornerRadius" Value="4,0,0,4"/>
-                </Style>
-                <Style Selector="^[AreSeparatorsVisible=False]">
-                   <Setter Property="CornerRadius" Value="0,4,4,0"/>
-                </Style>
-
-                <!-- Fluent normally paints these states on a rectangular inner Grid. Paint them
-                     on the existing rounded HeaderBorder by changing the header background. -->
-                <Style Selector="^:pointerover">
-                   <Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderHoveredBackgroundBrush}"/>
-                </Style>
-                <Style Selector="^:pointerover /template/ Grid#PART_ColumnHeaderRoot">
-                   <Setter Property="Background" Value="Transparent"/>
-                </Style>
-                <Style Selector="^:pressed">
-                   <Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderPressedBackgroundBrush}"/>
-                </Style>
-                <Style Selector="^:pressed /template/ Grid#PART_ColumnHeaderRoot">
-                   <Setter Property="Background" Value="Transparent"/>
-                </Style>
-             </ControlTheme.Children>
-          </ControlTheme>
-
           <!-- Match WinUI Expander interaction states inside the filter pane.
                The card/header stays visually stable; only the chevron button reacts. -->
           <SolidColorBrush x:Key="ExpanderChevronBackground" Color="Transparent"/>
@@ -724,7 +711,6 @@
                     <!-- Package list (list/grid/icons views) -->
                     <Panel Grid.Row="1" x:Name="PackageListHost">
                         <DataGrid x:Name="PackageList"
-                                  ColumnHeaderTheme="{StaticResource PackageColumnHeaderTheme}"
                                   IsVisible="{Binding IsListViewMode}"
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Stretch"
