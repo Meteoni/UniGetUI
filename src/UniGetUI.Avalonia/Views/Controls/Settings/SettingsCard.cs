@@ -32,6 +32,7 @@ public class SettingsCard : UserControl
     // the layout is unchanged; below these widths the content drops below the header,
     // and at the narrowest width the header icon is hidden.
     private const double ContentWrapThreshold = 476;
+    private const double ContentUnwrapThreshold = 488;
     private const double HideHeaderIconThreshold = 286;
     private bool _contentWrapped;
 
@@ -131,19 +132,31 @@ public class SettingsCard : UserControl
     public new CornerRadius CornerRadius
     {
         get => _border.CornerRadius;
-        set => _border.CornerRadius = value;
+        set
+        {
+            _border.CornerRadius = value;
+            UpdateGroupedCardClass();
+        }
     }
 
     public new Thickness BorderThickness
     {
         get => _border.BorderThickness;
-        set => _border.BorderThickness = value;
+        set
+        {
+            _border.BorderThickness = value;
+            UpdateGroupedCardClass();
+        }
     }
 
     // ── Constructor ────────────────────────────────────────────────────────
 
     public SettingsCard()
     {
+        // Keep the historical 40-DIP page gutter on the focusable control itself so
+        // Bounds, the focus adorner and responsive breakpoints all match the visible card.
+        Margin = new Thickness(40, 0);
+
         _iconPresenter = new ContentControl
         {
             IsVisible = false,
@@ -252,7 +265,10 @@ public class SettingsCard : UserControl
             return;
         }
 
-        bool wrapContent = _rightContent is not null && width <= ContentWrapThreshold;
+        bool wrapContent = _rightContent is not null
+            && (_contentWrapped
+                ? width <= ContentUnwrapThreshold
+                : width <= ContentWrapThreshold);
         bool hideHeaderIcon = width <= HideHeaderIconThreshold;
 
         _iconPresenter.IsVisible = _headerIcon is not null && !hideHeaderIcon;
@@ -282,7 +298,25 @@ public class SettingsCard : UserControl
         }
     }
 
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    private void UpdateGroupedCardClass()
+    {
+        bool hasBorder = !_border.BorderThickness.Equals(new Thickness(0));
+        bool usesGroupedGeometry =
+            !_border.CornerRadius.Equals(new CornerRadius(8))
+            || !_border.BorderThickness.Equals(new Thickness(1));
+
+        if (hasBorder && usesGroupedGeometry)
+        {
+            if (!_border.Classes.Contains("settings-card-grouped"))
+                _border.Classes.Add("settings-card-grouped");
+        }
+        else
+        {
+            _border.Classes.Remove("settings-card-grouped");
+        }
+    }
+
+        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
         if (change.Property == HeaderProperty)

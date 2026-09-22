@@ -111,7 +111,8 @@
                     <!-- Settings cards -->
                     <SolidColorBrush x:Key="SettingsCardBackground"      Color="#B3FFFFFF"/>
                     <SolidColorBrush x:Key="SettingsCardBorderBrush"     Color="#0F000000"/>
-                    <SolidColorBrush x:Key="SettingsCardHoverBackground" Color="#F6F6F6"/>
+                    <SolidColorBrush x:Key="SettingsCardGroupedBorderBrush" Color="#0F000000"/>
+                    <SolidColorBrush x:Key="SettingsCardHoverBackground" Color="#F0F0F0"/>
                     <!-- Secondary actions keep a 1-DIP edge, but use WinUI's low-contrast
                          control stroke here. The full elevation gradient reads too strongly in
                          Avalonia on these compact settings buttons. -->
@@ -318,7 +319,8 @@
                     <!-- Settings cards -->
                     <SolidColorBrush x:Key="SettingsCardBackground"      Color="#0DFFFFFF"/>
                     <SolidColorBrush x:Key="SettingsCardBorderBrush"     Color="Transparent"/>
-                    <SolidColorBrush x:Key="SettingsCardHoverBackground" Color="#323232"/>
+                    <SolidColorBrush x:Key="SettingsCardGroupedBorderBrush" Color="#19000000"/>
+                    <SolidColorBrush x:Key="SettingsCardHoverBackground" Color="#383838"/>
                     <StaticResource x:Key="SecondaryActionBorderBrush" ResourceKey="ControlStrokeColorDefaultBrush"/>
                     <Thickness x:Key="SecondaryActionBorderThickness">1</Thickness>
                     <!-- WinUI dropdown controls use the same control/card fill as settings actions. -->
@@ -433,14 +435,6 @@
             </Transitions>
         </Setter>
     </Style>
-    <Style Selector="Border.settings-card">
-        <Setter Property="Transitions">
-            <Transitions>
-                <BrushTransition Property="Background" Duration="0:0:0.083"/>
-            </Transitions>
-        </Setter>
-    </Style>
-
     <!-- Avalonia's Fluent controls still consume UWP-era accent resources, whose dark-theme
          defaults use the base accent and white foreground. Bind every filled accent control to
          the WinUI v2 tokens above so dark mode consistently uses a lighter fill and dark glyphs. -->
@@ -846,7 +840,9 @@
     <Style Selector="Border.settings-card">
         <Setter Property="Background"   Value="{DynamicResource SettingsCardBackground}"/>
         <Setter Property="BorderBrush"  Value="{DynamicResource SettingsCardBorderBrush}"/>
-        <Setter Property="Margin"       Value="40,0"/>
+    </Style>
+    <Style Selector="Border.settings-card-grouped">
+        <Setter Property="BorderBrush" Value="{DynamicResource SettingsCardGroupedBorderBrush}"/>
     </Style>
     <Style Selector="Border.settings-card-clickable:pointerover">
         <Setter Property="Background"   Value="{DynamicResource SettingsCardHoverBackground}"/>

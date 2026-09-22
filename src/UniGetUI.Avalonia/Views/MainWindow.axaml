@@ -360,7 +360,7 @@
                                         Padding="8"
                                         Cursor="Hand"
                                         Tapped="OperationCard_Tapped">
-                                    <Grid ColumnDefinitions="40,Auto,*,Auto,110,36"
+                                    <Grid ColumnDefinitions="40,*,2*,Auto,110,36"
                                           ColumnSpacing="0">
 
                                             <Image Grid.Column="0"
