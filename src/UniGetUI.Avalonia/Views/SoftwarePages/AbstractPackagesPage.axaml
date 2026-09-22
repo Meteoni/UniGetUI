@@ -25,6 +25,17 @@
       <Style Selector="DataGridCell:current">
          <Setter Property="BorderBrush" Value="Transparent"/>
       </Style>
+
+      <!-- Package-row hover uses the same rounded RowBorder surface as selection.
+           Avalonia's default hover paints the inner BackgroundRectangle instead, which can
+           reach the viewport edge without the row's outer corner geometry. -->
+      <Style Selector="DataGrid#PackageList DataGridRow:pointerover">
+         <Setter Property="Background" Value="{DynamicResource SettingsCardHoverBackground}"/>
+      </Style>
+      <Style Selector="DataGrid#PackageList DataGridRow:pointerover /template/ Rectangle#BackgroundRectangle">
+         <Setter Property="Fill" Value="Transparent"/>
+      </Style>
+
       <!-- Remove the DataGrid's built-in line between the header and the rows -->
       <Style Selector="DataGrid /template/ Rectangle#PART_ColumnHeadersAndRowsSeparator">
          <Setter Property="IsVisible" Value="False"/>
