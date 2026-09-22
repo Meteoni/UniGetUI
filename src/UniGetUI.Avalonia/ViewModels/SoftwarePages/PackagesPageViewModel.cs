@@ -108,7 +108,7 @@ public partial class PackagesPageViewModel : ViewModelBase
     private const int MaximumPreloadedIcons = 512;
     // Live width of the filter pane. Code-behind keeps this in sync with the GridSplitter
     // so the toolbar's main button (bound to FilterPaneColumnWidth) tracks resizes.
-    private double _trackedFilterPaneWidth = 220.0;
+    private double _trackedFilterPaneWidth = 260.0;
     public double TrackedFilterPaneWidth
     {
         get => _trackedFilterPaneWidth;

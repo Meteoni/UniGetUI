@@ -329,7 +329,7 @@
         <Grid x:Name="FilteringPanel"
               Grid.Row="2"
               ClipToBounds="True"
-              ColumnDefinitions="220,12,*">
+              ColumnDefinitions="260,12,*">
 
             <!-- Both presentations use this single content definition. Their containers remain
                  isolated so compact compositor state cannot leak into the inline pane. -->
@@ -338,6 +338,11 @@
                               x:DataType="vm:PackagesPageViewModel">
                     <ScrollViewer
                               HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalContentAlignment="Stretch"
+                              VerticalContentAlignment="Stretch"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch"
                               Padding="4,8,4,0"
                               automation:AutomationProperties.AccessibilityView="Control"
                               automation:AutomationProperties.Name="{t:Translate Filters}"
@@ -555,6 +560,8 @@
                     <BitmapCache RenderAtScale="1"/>
                 </Border.CacheMode>
                 <ContentControl Content="{Binding}"
+                                HorizontalContentAlignment="Stretch"
+                                VerticalContentAlignment="Stretch"
                                 ContentTemplate="{StaticResource FilterPaneContentTemplate}"/>
             </Border>
             <!-- ===== DRAG SPLITTER ===== -->
@@ -580,7 +587,7 @@
                     Grid.Column="0"
                     Grid.ColumnSpan="3"
                     ZIndex="10"
-                    Width="220"
+                    Width="260"
                     HorizontalAlignment="Left"
                     CornerRadius="0,8,8,0"
                     BorderThickness="0,1,1,1"
@@ -592,6 +599,8 @@
                     <BitmapCache RenderAtScale="1"/>
                 </Border.CacheMode>
                 <ContentControl Content="{Binding}"
+                                HorizontalContentAlignment="Stretch"
+                                VerticalContentAlignment="Stretch"
                                 ContentTemplate="{StaticResource FilterPaneContentTemplate}"/>
             </Border>
 

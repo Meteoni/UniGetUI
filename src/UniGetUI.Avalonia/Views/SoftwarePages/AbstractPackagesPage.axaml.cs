@@ -33,7 +33,7 @@ public abstract partial class AbstractPackagesPage : UserControl,
 {
     public PackagesPageViewModel ViewModel => (PackagesPageViewModel)DataContext!;
     private readonly ContextMenu? _contextMenu;
-    private double _savedFilterPaneWidth = 220;
+    private double _savedFilterPaneWidth = 260;
     private bool _isOverlayMode;
     private IDisposable? _inlineSidePanelBgBinding;
     private CancellationTokenSource? _inlineFilterPaneAnimCts;
@@ -155,8 +155,8 @@ public abstract partial class AbstractPackagesPage : UserControl,
                 }
                 else if (width.IsAbsolute && width.Value < 100)
                 {
-                    _savedFilterPaneWidth = 220;
-                    ViewModel.TrackedFilterPaneWidth = 220;
+                    _savedFilterPaneWidth = 260;
+                    ViewModel.TrackedFilterPaneWidth = 260;
                     ViewModel.IsFilterPaneOpen = false;
                 }
             });
@@ -192,7 +192,7 @@ public abstract partial class AbstractPackagesPage : UserControl,
         if (savedWidth >= 100) _savedFilterPaneWidth = savedWidth;
         ViewModel.TrackedFilterPaneWidth = _savedFilterPaneWidth;
 
-        // Apply the initial filter-pane state (AXAML defaults to 220px open).
+        // Apply the initial filter-pane state (AXAML defaults to 260px open).
         UpdateFilterPaneColumn(ViewModel.IsFilterPaneOpen);
 
         // Attach inline transitions AFTER the initial state so launch doesn't animate. The inline
