@@ -1,0 +1,95 @@
+name: Compact operation cards portable x64
+
+on:
+  push:
+    branches:
+      - experimental/compact-operation-cards-20260922-ci
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build portable x64
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - name: Install Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.x'
+
+      - name: Restore dependencies
+        working-directory: src
+        run: dotnet restore UniGetUI.Windows.slnx
+
+      - name: Publish x64 NativeAOT
+        shell: pwsh
+        run: |
+          $Platform = 'x64'
+          $TargetFramework = (
+            dotnet msbuild src/UniGetUI.Avalonia/UniGetUI.Avalonia.csproj `
+              /nologo `
+              -getProperty:TargetFramework `
+              /p:Configuration=Release `
+              /p:Platform=$Platform `
+              /p:RuntimeIdentifier=win-$Platform |
+              Select-Object -Last 1
+          ).Trim()
+
+          if ([string]::IsNullOrWhiteSpace($TargetFramework)) {
+            throw 'Could not resolve the Avalonia target framework from MSBuild'
+          }
+
+          dotnet publish src/UniGetUI.Avalonia/UniGetUI.Avalonia.csproj `
+            /noLogo `
+            /p:Configuration=Release `
+            /p:Platform=$Platform `
+            /p:RuntimeIdentifier=win-$Platform `
+            /p:PublishProfile=Win-$Platform-NativeAot `
+            /p:UseSharedCompilation=false `
+            /p:BuildInParallel=false `
+            /m:1 `
+            -v m
+          if ($LASTEXITCODE -ne 0) { throw 'dotnet publish Avalonia failed' }
+
+          $PublishDir = "src/UniGetUI.Avalonia/bin/$Platform/Release/$TargetFramework/win-$Platform/publish"
+          if (Test-Path 'unigetui_bin') { Remove-Item 'unigetui_bin' -Recurse -Force }
+          New-Item 'unigetui_bin' -ItemType Directory | Out-Null
+          Get-ChildItem $PublishDir | Move-Item -Destination 'unigetui_bin' -Force
+
+          if (-not (Test-Path 'unigetui_bin/UniGetUI.exe')) {
+            throw 'Windows app host was not produced at unigetui_bin/UniGetUI.exe'
+          }
+
+          $MaxShippedPdbSizeBytes = 1MB
+          $PdbsToRemove = @(Get-ChildItem 'unigetui_bin' -Filter '*.pdb' -File -Recurse | Where-Object {
+            $_.Length -gt $MaxShippedPdbSizeBytes
+          })
+          if ($PdbsToRemove.Count -gt 0) {
+            $PdbsToRemove | Remove-Item -Force
+          }
+
+      - name: Generate integrity tree and package portable ZIP
+        shell: pwsh
+        run: |
+          New-Item 'output' -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+          .\scripts\refresh-integrity-tree.ps1 -Path $PWD/unigetui_bin -FailOnUnexpectedFiles
+          Compress-Archive -Path 'unigetui_bin/*' -DestinationPath 'output/UniGetUI.compact-operation-cards.x64.zip' -CompressionLevel Optimal
+          Compress-Archive -Path 'InstallerExtras/ForceUniGetUIPortable' -DestinationPath 'output/UniGetUI.compact-operation-cards.x64.zip' -Update
+
+      - name: Upload portable ZIP
+        uses: actions/upload-artifact@v7
+        with:
+          name: UniGetUI-compact-operation-cards-portable-x64
+          path: output/UniGetUI.compact-operation-cards.x64.zip
+          if-no-files-found: error
