@@ -1,6 +1,7 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="using:UniGetUI.Avalonia.Views.Controls"
+        xmlns:settings="using:UniGetUI.Avalonia.Views.Controls.Settings"
         xmlns:primitives="using:Avalonia.Controls.Primitives">
 
     <Styles.Resources>
@@ -417,7 +418,7 @@
         </Setter>
     </Style>
 
-    <Style Selector=".settings-card-control">
+    <Style Selector="settings|SettingsCard.settings-card-control">
         <Setter Property="FocusAdorner">
             <FocusAdornerTemplate>
                 <Border Margin="40,0"
