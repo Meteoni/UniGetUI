@@ -578,6 +578,7 @@
                     Grid.Column="0"
                     Grid.ColumnSpan="3"
                     ZIndex="9"
+                    CornerRadius="8"
                     Background="#60000000"
                     IsVisible="False"
                     IsHitTestVisible="True"/>
