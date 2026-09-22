@@ -1578,25 +1578,6 @@ public partial class MainWindow : Window
             ViewModel.SelectSuggestion(result);
     }
 
-    private const double OperationTitleMaxShare = 0.40;
-
-    private void OperationCardGrid_SizeChanged(object? sender, SizeChangedEventArgs e)
-    {
-        if (sender is not Grid grid || grid.ColumnDefinitions.Count < 6 || e.NewSize.Width <= 0)
-            return;
-
-        // Preserve the old WinUI Auto + * layout for normal titles. Only cap unusually long
-        // titles, and do it relative to the space shared by title and live output so the output
-        // always retains the larger share instead of relying on a fixed DIP limit.
-        double fixedWidth =
-            grid.ColumnDefinitions[0].ActualWidth
-            + grid.ColumnDefinitions[3].ActualWidth
-            + grid.ColumnDefinitions[4].ActualWidth
-            + grid.ColumnDefinitions[5].ActualWidth;
-        double flexibleWidth = Math.Max(0, e.NewSize.Width - fixedWidth);
-        grid.ColumnDefinitions[1].MaxWidth = flexibleWidth * OperationTitleMaxShare;
-    }
-
     private void OperationCard_Tapped(object? sender, TappedEventArgs e)
     {
         if (e.Source is Visual source && source.FindAncestorOfType<Button>(includeSelf: true) is not null)
