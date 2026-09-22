@@ -112,6 +112,19 @@ public abstract partial class AbstractPackagesPage : UserControl,
             _ = ShowDetailsForPackage(SelectedItem);
         };
 
+        // Keep the rounded header ends attached to the first/last *visible* real columns.
+        // Optional hidden columns and Avalonia's filler header still exist in the visual/header
+        // ordering, so nth-last-child cannot reliably identify the right edge.
+        PackageList.AttachedToVisualTree += (_, _) =>
+            Dispatcher.UIThread.Post(UpdatePackageHeaderEdgeClasses);
+        PackageList.ColumnDisplayIndexChanged += (_, _) =>
+            Dispatcher.UIThread.Post(UpdatePackageHeaderEdgeClasses);
+        foreach (var column in PackageList.Columns)
+        {
+            column.GetObservable(DataGridColumn.IsVisibleProperty)
+                .SubscribeValue(_ => Dispatcher.UIThread.Post(UpdatePackageHeaderEdgeClasses));
+        }
+
         // Native DataGrid column sorting. The default SortMemberPath path resolves the property by
         // reflection, which full-trim NativeAOT release builds strip away — so CanUserSort reports
         // false and header clicks are silently dropped (issue #5103). A strongly-typed
@@ -368,6 +381,34 @@ public abstract partial class AbstractPackagesPage : UserControl,
     // ─── Sort menu checkmarks (UI reacts to ViewModel sort changes) ───────────
     private static TextBlock? Check(bool show) =>
         show ? new TextBlock { Text = "✓", FontSize = 12 } : null;
+
+    /// <summary>
+    /// Marks the first and last visible real DataGrid headers for rounded end styling.
+    /// </summary>
+    private void UpdatePackageHeaderEdgeClasses()
+    {
+        var allHeaders = PackageList.GetVisualDescendants()
+            .OfType<DataGridColumnHeader>()
+            .Where(header => header.Name != "PART_TopLeftCornerHeader")
+            .ToList();
+
+        foreach (var header in allHeaders)
+        {
+            header.Classes.Remove("package-header-first");
+            header.Classes.Remove("package-header-last");
+        }
+
+        var visibleHeaders = allHeaders
+            .Where(header => header.IsVisible && header.IsEnabled && header.Bounds.Width > 0)
+            .OrderBy(header => header.Bounds.X)
+            .ToList();
+
+        if (visibleHeaders.Count == 0)
+            return;
+
+        visibleHeaders[0].Classes.Add("package-header-first");
+        visibleHeaders[^1].Classes.Add("package-header-last");
+    }
 
     private void SyncFiltersButtonName()
     {
