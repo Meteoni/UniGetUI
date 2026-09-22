@@ -30,7 +30,7 @@
            Avalonia's default hover paints the inner BackgroundRectangle instead, which can
            reach the viewport edge without the row's outer corner geometry. -->
       <Style Selector="DataGrid#PackageList DataGridRow:pointerover">
-         <Setter Property="Background" Value="{DynamicResource SettingsCardHoverBackground}"/>
+         <Setter Property="Background" Value="{DynamicResource SubtleFillColorSecondaryBrush}"/>
       </Style>
       <Style Selector="DataGrid#PackageList DataGridRow:pointerover /template/ Rectangle#BackgroundRectangle">
          <Setter Property="Fill" Value="Transparent"/>
