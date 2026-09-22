@@ -43,10 +43,6 @@
          <Setter Property="MinHeight" Value="44"/>
          <Setter Property="Margin" Value="0"/>
       </Style>
-      <Style Selector="DataGridColumnHeader /template/ Border#HeaderBorder">
-         <Setter Property="Margin" Value="0,6,0,6"/>
-         <Setter Property="ClipToBounds" Value="True"/>
-      </Style>
       <!-- Edge classes are assigned from the actual visible header cells. Hidden optional
            columns and Avalonia's filler header therefore cannot steal the rounded end. -->
       <Style Selector="DataGridColumnHeader.package-header-first">
@@ -76,6 +72,13 @@
          <Setter Property="MinHeight" Value="30"/>
       </Style>
       <Style Selector="RadioButton.filter-radio /template/ ContentPresenter#PART_ContentPresenter">
+         <Setter Property="TextWrapping" Value="Wrap"/>
+      </Style>
+      <Style Selector="Grid#SidePanelGrid CheckBox">
+         <Setter Property="HorizontalAlignment" Value="Stretch"/>
+         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+      </Style>
+      <Style Selector="Grid#SidePanelGrid CheckBox /template/ ContentPresenter#PART_ContentPresenter">
          <Setter Property="TextWrapping" Value="Wrap"/>
       </Style>
        <!-- The old WinUI source actions were HyperlinkButtons. Keep their border transparent
@@ -185,6 +188,92 @@
 
    <UserControl.Resources>
        <ResourceDictionary>
+          <ControlTheme x:Key="PackageColumnHeaderTheme"
+                        TargetType="DataGridColumnHeader"
+                        BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+             <Setter Property="Template">
+                <ControlTemplate>
+                   <Border x:Name="HeaderBorder"
+                           Margin="0,6,0,6"
+                           Background="{TemplateBinding Background}"
+                           BorderBrush="{TemplateBinding BorderBrush}"
+                           BorderThickness="{TemplateBinding BorderThickness}"
+                           CornerRadius="{TemplateBinding CornerRadius}"
+                           ClipToBounds="True">
+                      <Border x:Name="PART_ColumnHeaderRoot"
+                              Background="Transparent"
+                              CornerRadius="{TemplateBinding CornerRadius}"
+                              ClipToBounds="True">
+                         <Grid ColumnDefinitions="*,Auto">
+                            <Panel Margin="{TemplateBinding Padding}"
+                                   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                               <Grid>
+                                  <Grid.ColumnDefinitions>
+                                     <ColumnDefinition Width="*"/>
+                                     <ColumnDefinition Width="Auto"
+                                                       MinWidth="{DynamicResource DataGridSortIconMinWidth}"/>
+                                  </Grid.ColumnDefinitions>
+                                  <ContentPresenter x:Name="PART_ContentPresenter"
+                                                    Content="{TemplateBinding Content}"
+                                                    ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                                  <Path x:Name="SortIcon"
+                                        Grid.Column="1"
+                                        IsVisible="False"
+                                        Height="12"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Fill="{TemplateBinding Foreground}"
+                                        Stretch="Uniform"/>
+                               </Grid>
+                            </Panel>
+                            <Rectangle x:Name="VerticalSeparator"
+                                       Grid.Column="1"
+                                       Width="1"
+                                       VerticalAlignment="Stretch"
+                                       Fill="{TemplateBinding SeparatorBrush}"
+                                       IsVisible="{TemplateBinding AreSeparatorsVisible}"/>
+                            <Grid x:Name="FocusVisual"
+                                  Grid.ColumnSpan="2"
+                                  IsHitTestVisible="False"
+                                  IsVisible="False">
+                               <Rectangle x:Name="FocusVisualPrimary"
+                                          Fill="Transparent"
+                                          Stroke="{DynamicResource DataGridCellFocusVisualPrimaryBrush}"
+                                          StrokeThickness="2"/>
+                               <Rectangle x:Name="FocusVisualSecondary"
+                                          Margin="2"
+                                          Fill="Transparent"
+                                          Stroke="{DynamicResource DataGridCellFocusVisualSecondaryBrush}"
+                                          StrokeThickness="1"/>
+                            </Grid>
+                         </Grid>
+                      </Border>
+                   </Border>
+                </ControlTemplate>
+             </Setter>
+             <Style Selector="^:focus-visible /template/ Grid#FocusVisual">
+                <Setter Property="IsVisible" Value="True"/>
+             </Style>
+             <Style Selector="^:pointerover /template/ Border#PART_ColumnHeaderRoot">
+                <Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderHoveredBackgroundBrush}"/>
+             </Style>
+             <Style Selector="^:pressed /template/ Border#PART_ColumnHeaderRoot">
+                <Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderPressedBackgroundBrush}"/>
+             </Style>
+             <Style Selector="^:dragIndicator">
+                <Setter Property="Opacity" Value="0.5"/>
+             </Style>
+             <Style Selector="^:sortascending /template/ Path#SortIcon">
+                <Setter Property="IsVisible" Value="True"/>
+                <Setter Property="Data" Value="{StaticResource DataGridSortIconAscendingPath}"/>
+             </Style>
+             <Style Selector="^:sortdescending /template/ Path#SortIcon">
+                <Setter Property="IsVisible" Value="True"/>
+                <Setter Property="Data" Value="{StaticResource DataGridSortIconDescendingPath}"/>
+             </Style>
+          </ControlTheme>
+
           <!-- Match WinUI Expander interaction states inside the filter pane.
                The card/header stays visually stable; only the chevron button reacts. -->
           <SolidColorBrush x:Key="ExpanderChevronBackground" Color="Transparent"/>
@@ -365,23 +454,27 @@
             <Grid.Resources>
                 <DataTemplate x:Key="FilterPaneContentTemplate"
                               x:DataType="vm:PackagesPageViewModel">
-                    <ScrollViewer
-                              HorizontalScrollBarVisibility="Disabled"
-                              VerticalScrollBarVisibility="Auto"
-                              HorizontalContentAlignment="Stretch"
-                              VerticalContentAlignment="Top"
-                              HorizontalAlignment="Stretch"
-                              VerticalAlignment="Stretch"
-                              Padding="4,8,4,0"
-                              automation:AutomationProperties.AccessibilityView="Control"
-                              automation:AutomationProperties.Name="{t:Translate Filters}"
-                              automation:AutomationProperties.LandmarkType="{x:Static peers:AutomationLandmarkType.Search}"
-                              Background="{DynamicResource MicaPageBackground}">
-                    <Grid x:Name="SidePanelGrid"
-                          RowDefinitions="Auto,Auto,Auto,8"
-                          RowSpacing="8"
-                          HorizontalAlignment="Stretch"
-                          VerticalAlignment="Top">
+                    <ScrollViewer x:Name="FilterPaneScrollViewer"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalContentAlignment="Left"
+                                  VerticalContentAlignment="Top"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch"
+                                  Padding="0"
+                                  automation:AutomationProperties.AccessibilityView="Control"
+                                  automation:AutomationProperties.Name="{t:Translate Filters}"
+                                  automation:AutomationProperties.LandmarkType="{x:Static peers:AutomationLandmarkType.Search}"
+                                  Background="{DynamicResource MicaPageBackground}">
+                       <Border Width="{Binding #FilterPaneScrollViewer.Viewport.Width}"
+                               Padding="4,3,4,3"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top">
+                          <Grid x:Name="SidePanelGrid"
+                                RowDefinitions="Auto,Auto,Auto"
+                                RowSpacing="8"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Top">
 
                         <!-- Sources expander -->
                         <Expander Grid.Row="0"
@@ -393,10 +486,18 @@
                                   Padding="16,8,16,8"
                                   Background="{DynamicResource FilterExpanderContentBackground}">
                             <Expander.Header>
-                                <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <controls:SvgIcon Path="avares://UniGetUI/Assets/Symbols/Sources.svg" Width="16" Height="16" VerticalAlignment="Center"/>
-                                    <TextBlock Text="{t:Translate Sources}" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                </StackPanel>
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                    <controls:SvgIcon Grid.Column="0"
+                                                      Path="avares://UniGetUI/Assets/Symbols/Sources.svg"
+                                                      Width="16" Height="16"
+                                                      VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1"
+                                               Text="{t:Translate Sources}"
+                                               FontSize="14"
+                                               FontWeight="SemiBold"
+                                               VerticalAlignment="Center"
+                                               TextWrapping="Wrap"/>
+                                </Grid>
                             </Expander.Header>
                             <StackPanel Orientation="Vertical">
                                 <TextBlock x:Name="SourcesPlaceholderText"
@@ -515,10 +616,18 @@
                                   Padding="16,8,16,8"
                                   Background="{DynamicResource FilterExpanderContentBackground}">
                             <Expander.Header>
-                                <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <controls:SvgIcon Path="avares://UniGetUI/Assets/Symbols/Filter.svg" Width="16" Height="16" VerticalAlignment="Center"/>
-                                    <TextBlock Text="{t:Translate Filters}" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                </StackPanel>
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                    <controls:SvgIcon Grid.Column="0"
+                                                      Path="avares://UniGetUI/Assets/Symbols/Filter.svg"
+                                                      Width="16" Height="16"
+                                                      VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1"
+                                               Text="{t:Translate Filters}"
+                                               FontSize="14"
+                                               FontWeight="SemiBold"
+                                               VerticalAlignment="Center"
+                                               TextWrapping="Wrap"/>
+                                </Grid>
                             </Expander.Header>
                             <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical" Spacing="0">
                                 <CheckBox x:Name="InstantSearchCheckbox"
@@ -549,10 +658,18 @@
                                   Padding="16,8,16,8"
                                   Background="{DynamicResource FilterExpanderContentBackground}">
                             <Expander.Header>
-                                <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <controls:SvgIcon Path="avares://UniGetUI/Assets/Symbols/search_filled.svg" Width="16" Height="16" VerticalAlignment="Center"/>
-                                    <TextBlock Text="{t:Translate Search mode}" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                </StackPanel>
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                    <controls:SvgIcon Grid.Column="0"
+                                                      Path="avares://UniGetUI/Assets/Symbols/search_filled.svg"
+                                                      Width="16" Height="16"
+                                                      VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1"
+                                               Text="{t:Translate Search mode}"
+                                               FontSize="14"
+                                               FontWeight="SemiBold"
+                                               VerticalAlignment="Center"
+                                               TextWrapping="Wrap"/>
+                                </Grid>
                             </Expander.Header>
                             <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical" Spacing="0">
                                 <RadioButton Classes="filter-radio"
@@ -584,12 +701,8 @@
                             </StackPanel>
                         </Expander>
 
-                        <!-- Real scroll-content tail. Unlike ScrollViewer padding or negative
-                             child margins, this participates directly in Extent.Height. -->
-                        <Border Grid.Row="3" Height="8" Background="Transparent"
-                                IsHitTestVisible="False"/>
-
-                    </Grid>
+                          </Grid>
+                       </Border>
                     </ScrollViewer>
                 </DataTemplate>
             </Grid.Resources>
@@ -686,6 +799,7 @@
                     <!-- Package list (list/grid/icons views) -->
                     <Panel Grid.Row="1" x:Name="PackageListHost">
                         <DataGrid x:Name="PackageList"
+                                  ColumnHeaderTheme="{StaticResource PackageColumnHeaderTheme}"
                                   IsVisible="{Binding IsListViewMode}"
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Stretch"
