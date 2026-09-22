@@ -55,6 +55,11 @@
       <Style Selector="DataGrid#PackageList DataGridColumnHeader /template/ Border#HeaderBorder">
          <Setter Property="Margin" Value="0,6,0,6"/>
       </Style>
+      <!-- Keep DataGrid's separator visibility state for right-edge detection, but don't let
+           the stock 1-DIP separator reserve a transparent gap between adjacent headers. -->
+      <Style Selector="DataGrid#PackageList DataGridColumnHeader /template/ Rectangle#VerticalSeparator">
+         <Setter Property="Width" Value="0"/>
+      </Style>
       <Style Selector="DataGrid#PackageList DataGridColumnHeader:nth-child(1)">
          <Setter Property="CornerRadius" Value="4,0,0,4"/>
       </Style>
