@@ -112,9 +112,6 @@
                     <SolidColorBrush x:Key="SettingsCardBackground"      Color="#B3FFFFFF"/>
                     <SolidColorBrush x:Key="SettingsCardBorderBrush"     Color="#0F000000"/>
                     <SolidColorBrush x:Key="SettingsCardHoverBackground" Color="#F6F6F6"/>
-                    <!-- Same-channel alpha overlay for animated SettingsCard hover.
-                         Avoids ARGB interpolation flashes on solid/non-Mica surfaces. -->
-                    <SolidColorBrush x:Key="SettingsCardAnimatedHoverBackground" Color="#F0F0F0"/>
                     <!-- Secondary actions keep a 1-DIP edge, but use WinUI's low-contrast
                          control stroke here. The full elevation gradient reads too strongly in
                          Avalonia on these compact settings buttons. -->
@@ -322,9 +319,6 @@
                     <SolidColorBrush x:Key="SettingsCardBackground"      Color="#0DFFFFFF"/>
                     <SolidColorBrush x:Key="SettingsCardBorderBrush"     Color="#19000000"/>
                     <SolidColorBrush x:Key="SettingsCardHoverBackground" Color="#323232"/>
-                    <!-- Rest and hover stay in the translucent-white channel so BrushTransition
-                         cannot brighten through an opaque-gray midpoint. -->
-                    <SolidColorBrush x:Key="SettingsCardAnimatedHoverBackground" Color="#26FFFFFF"/>
                     <StaticResource x:Key="SecondaryActionBorderBrush" ResourceKey="ControlStrokeColorDefaultBrush"/>
                     <Thickness x:Key="SecondaryActionBorderThickness">1</Thickness>
                     <!-- WinUI dropdown controls use the same control/card fill as settings actions. -->
@@ -413,6 +407,21 @@
         <Setter Property="DefaultFocusAdorner">
             <FocusAdornerTemplate>
                 <Border BorderBrush="{DynamicResource SystemControlFocusVisualPrimaryBrush}"
+                        BorderThickness="2"
+                        CornerRadius="6">
+                    <Border BorderBrush="{DynamicResource SystemControlFocusVisualSecondaryBrush}"
+                            BorderThickness="1"
+                            CornerRadius="4"/>
+                </Border>
+            </FocusAdornerTemplate>
+        </Setter>
+    </Style>
+
+    <Style Selector=".settings-card-control">
+        <Setter Property="FocusAdorner">
+            <FocusAdornerTemplate>
+                <Border Margin="40,0"
+                        BorderBrush="{DynamicResource SystemControlFocusVisualPrimaryBrush}"
                         BorderThickness="2"
                         CornerRadius="6">
                     <Border BorderBrush="{DynamicResource SystemControlFocusVisualSecondaryBrush}"
@@ -855,7 +864,8 @@
         <Setter Property="Margin"       Value="40,0"/>
     </Style>
     <Style Selector="Border.settings-card-clickable:pointerover">
-        <Setter Property="Background"   Value="{DynamicResource SettingsCardAnimatedHoverBackground}"/>
+        <Setter Property="Background"  Value="{DynamicResource ControlFillColorSecondaryBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource ControlElevationBorderBrush}"/>
     </Style>
     <!-- Setting warning subtext (amber, both themes) -->
     <Style Selector="TextBlock.setting-warning-text">

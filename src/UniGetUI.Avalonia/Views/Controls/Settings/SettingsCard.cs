@@ -119,10 +119,8 @@ public class SettingsCard : UserControl
         set
         {
             _isClickEnabled = value;
-            // Focus the visible inner card surface so Avalonia's normal focus adorner hugs
-            // the card instead of the full-width UserControl wrapper.
-            Focusable = false;
-            _border.Focusable = value;
+            Focusable = value;
+            _border.Focusable = false;
             Cursor = value ? new Cursor(StandardCursorType.Hand) : Cursor.Default;
             _chevron.IsVisible = value;
             if (value)
@@ -235,14 +233,15 @@ public class SettingsCard : UserControl
             Child = _layoutGrid,
         };
         _border.Classes.Add("settings-card");
+        Classes.Add("settings-card-control");
 
         base.Content = _border;
 
         PointerPressed += OnPointerPressed;
         KeyDown += OnKeyDown;
         SizeChanged += (_, e) => UpdateResponsiveLayout(e.NewSize.Width);
-        // Keyboard focus is rendered by the app-wide Avalonia FocusAdorner. Do not also
-        // recolor/thicken the card border; the double outline is not WinUI-like.
+        // Keyboard focus keeps the SettingsCard itself as the focus target. A card-specific
+        // adorner style in Styles.Common only insets the visual ring to the visible card bounds.
         SyncAutomationProperties();
     }
 
@@ -387,7 +386,7 @@ public class SettingsCard : UserControl
     private void OnKeyDown(object? sender, KeyEventArgs e)
     {
         if (!_isClickEnabled) return;
-        if (e.Source != _border) return;   // only when the card surface has focus, not a child control
+        if (e.Source != this) return;   // only when the card itself has focus, not a child control
         if (e.Key is not (Key.Enter or Key.Space)) return;
 
         InvokeClick();
