@@ -100,16 +100,16 @@ public abstract partial class AbstractPackagesPage : UserControl,
         GenerateToolBar(ViewModel);
         InitializeToolbarOverflow();
 
-        // Double-click a package row → show details. Ignore interactive controls and the
-        // entire column-header visual tree: DoubleTapped bubbles through the DataGrid, so a
-        // header double-click must not act on whichever package row happens to be selected.
+        // Double-click a package row → show details. DataGrid-level gestures also receive
+        // header double-clicks, so require an actual row ancestor rather than blacklisting headers.
         PackageList.DoubleTapped += (_, e) =>
         {
-            if (e.Source is Visual source
-                && (source is CheckBox
-                    || source is DataGridColumnHeader
-                    || source.GetVisualAncestors().Any(control =>
-                        control is CheckBox or DataGridColumnHeader)))
+            if (e.Source is not Visual source)
+                return;
+
+            var ancestors = source.GetVisualAncestors().ToList();
+            if ((source is CheckBox || ancestors.Any(control => control is CheckBox))
+                || (source is not DataGridRow && !ancestors.Any(control => control is DataGridRow)))
             {
                 return;
             }
