@@ -44,7 +44,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
+      - name: Cache published native output
+        id: native-cache
+        uses: actions/cache@v6
+        with:
+          path: src/UniGetUI.Avalonia/bin/x64/Release/net10.0-windows10.0.26100.0/win-x64/publish
+          key: native-portable-win-x64-01f1c92e4459b1febd1c54d576e19ee84b0373b2
+
       - name: Publish official NativeAOT x64 profile
+        if: steps.native-cache.outputs.cache-hit != 'true'
         shell: pwsh
         run: |
           $actualCommit = (git rev-parse HEAD).Trim()
@@ -58,7 +66,7 @@ jobs:
           $framework = (dotnet msbuild src/UniGetUI.Avalonia/UniGetUI.Avalonia.csproj /nologo -getProperty:TargetFramework /p:Configuration=Release /p:Platform=x64 /p:RuntimeIdentifier=win-x64 | Select-Object -Last 1).Trim()
           $publishDir = "src/UniGetUI.Avalonia/bin/x64/Release/$framework/win-x64/publish"
           New-Item unigetui_bin -ItemType Directory -Force | Out-Null
-          Get-ChildItem $publishDir | Move-Item -Destination unigetui_bin -Force
+          Get-ChildItem $publishDir | Copy-Item -Destination unigetui_bin -Recurse -Force
           foreach ($file in @('UniGetUI.exe', 'uniget.exe', 'pinget.exe', 'Assets/Utilities/UniGetUI.PolicyElevator.exe', 'Assets/Utilities/UniGetUI Elevator.exe')) {
             if (-not (Test-Path "unigetui_bin/$file" -PathType Leaf)) { throw "Missing packaged file: $file" }
           }
@@ -86,7 +94,13 @@ jobs:
           Expand-Archive output/UniGetUI-portable-win-x64-01f1c92.zip -DestinationPath "$env:RUNNER_TEMP/portable-smoke"
           $root = "$env:RUNNER_TEMP/portable-smoke"
           if (-not (Test-Path "$root/ForceUniGetUIPortable" -PathType Leaf)) { throw 'Portable marker missing from archive' }
-          ./scripts/verify-integrity-tree.ps1 -Path $root -FailOnUnexpectedFiles
+          # The portable marker is intentionally excluded from the official integrity tree.
+          Move-Item "$root/ForceUniGetUIPortable" "$env:RUNNER_TEMP/ForceUniGetUIPortable"
+          try {
+            ./scripts/verify-integrity-tree.ps1 -Path $root -FailOnUnexpectedFiles
+          } finally {
+            Move-Item "$env:RUNNER_TEMP/ForceUniGetUIPortable" "$root/ForceUniGetUIPortable"
+          }
           $stdout = "$env:RUNNER_TEMP/portable-help.txt"
           $stderr = "$env:RUNNER_TEMP/portable-help-error.txt"
           $process = Start-Process "$root/uniget.exe" -ArgumentList '--help' -NoNewWindow -PassThru -RedirectStandardOutput $stdout -RedirectStandardError $stderr
@@ -97,6 +111,7 @@ jobs:
           if ((Get-Item $stdout).Length -eq 0) { throw 'CLI help produced no output' }
 
       - name: Upload portable x64 package
+        if: always() && hashFiles('output/*.zip') != ''
         uses: actions/upload-artifact@v4
         with:
           name: UniGetUI-portable-win-x64-01f1c92
