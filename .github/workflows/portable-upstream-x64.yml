@@ -1,0 +1,120 @@
+name: Build upstream portable x64
+run-name: Portable x64 from upstream 894a0a0
+
+on:
+  push:
+    branches:
+      - build/portable-x64-894a0a0
+    paths:
+      - .github/workflows/portable-upstream-x64.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+  NUGET_HTTP_CACHE_PATH: ${{ github.workspace }}/.nuget/http-cache
+  UseSharedCompilation: 'false'
+  BuildInParallel: 'false'
+
+jobs:
+  build:
+    name: NativeAOT portable Windows x64
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out exact upstream source
+        uses: actions/checkout@v7
+        with:
+          repository: Devolutions/UniGetUI
+          ref: 894a0a0b4877dd6f1bb93adba4e15559c2b2a6c7
+          persist-credentials: false
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v6
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('global.json', 'src/**/*.csproj', 'src/**/*.props', 'src/**/*.targets', 'src/**/*.slnx') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Cache published native output
+        id: native-cache
+        uses: actions/cache@v6
+        with:
+          path: src/UniGetUI.Avalonia/bin/x64/Release/net10.0-windows10.0.26100.0/win-x64/publish
+          key: native-portable-win-x64-894a0a0b4877dd6f1bb93adba4e15559c2b2a6c7
+
+      - name: Publish official NativeAOT x64 profile
+        if: steps.native-cache.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          $actualCommit = (git rev-parse HEAD).Trim()
+          if ($actualCommit -ne '894a0a0b4877dd6f1bb93adba4e15559c2b2a6c7') { throw "Unexpected source commit: $actualCommit" }
+          dotnet publish src/UniGetUI.Avalonia/UniGetUI.Avalonia.csproj --configuration Release --runtime win-x64 --self-contained true /p:Platform=x64 /p:PublishProfile=Win-x64-NativeAot /p:UseSharedCompilation=false /p:BuildInParallel=false /m:1 -v m
+          if ($LASTEXITCODE -ne 0) { throw "NativeAOT publish failed" }
+
+      - name: Stage and validate portable package
+        shell: pwsh
+        run: |
+          $framework = (dotnet msbuild src/UniGetUI.Avalonia/UniGetUI.Avalonia.csproj /nologo -getProperty:TargetFramework /p:Configuration=Release /p:Platform=x64 /p:RuntimeIdentifier=win-x64 | Select-Object -Last 1).Trim()
+          $publishDir = "src/UniGetUI.Avalonia/bin/x64/Release/$framework/win-x64/publish"
+          New-Item unigetui_bin -ItemType Directory -Force | Out-Null
+          Get-ChildItem $publishDir | Copy-Item -Destination unigetui_bin -Recurse -Force
+          foreach ($file in @('UniGetUI.exe', 'uniget.exe', 'pinget.exe', 'Assets/Utilities/UniGetUI.PolicyElevator.exe', 'Assets/Utilities/UniGetUI Elevator.exe')) {
+            if (-not (Test-Path "unigetui_bin/$file" -PathType Leaf)) { throw "Missing packaged file: $file" }
+          }
+          $bytes = [IO.File]::ReadAllBytes((Join-Path $PWD 'unigetui_bin/UniGetUI.exe'))
+          $peOffset = [BitConverter]::ToInt32($bytes, 0x3c)
+          if ([BitConverter]::ToUInt16($bytes, $peOffset + 4) -ne 0x8664) { throw 'App host is not AMD64' }
+          Get-ChildItem unigetui_bin -Filter *.pdb -Recurse -File | Where-Object Length -gt 1MB | Remove-Item -Force
+          ./scripts/refresh-integrity-tree.ps1 -Path "$PWD/unigetui_bin" -FailOnUnexpectedFiles
+          New-Item output -ItemType Directory -Force | Out-Null
+          Compress-Archive -Path 'unigetui_bin/*' -DestinationPath 'output/UniGetUI-portable-win-x64-894a0a0.zip' -CompressionLevel Optimal
+          Compress-Archive -Path 'InstallerExtras/ForceUniGetUIPortable' -DestinationPath 'output/UniGetUI-portable-win-x64-894a0a0.zip' -Update
+          @(
+            'Repository: https://github.com/Devolutions/UniGetUI'
+            'Source commit: 894a0a0b4877dd6f1bb93adba4e15559c2b2a6c7'
+            'Platform: Windows x64'
+            'Configuration: Release, self-contained NativeAOT'
+            'Signing: unsigned community build'
+          ) | Set-Content output/BUILD-INFO.txt
+          $zip = Get-Item 'output/UniGetUI-portable-win-x64-894a0a0.zip'
+          "$((Get-FileHash $zip -Algorithm SHA256).Hash.ToLowerInvariant())  $($zip.Name)" | Set-Content output/SHA256SUMS.txt
+
+      - name: Smoke test extracted portable archive
+        shell: pwsh
+        run: |
+          Expand-Archive output/UniGetUI-portable-win-x64-894a0a0.zip -DestinationPath "$env:RUNNER_TEMP/portable-smoke"
+          $root = "$env:RUNNER_TEMP/portable-smoke"
+          if (-not (Test-Path "$root/ForceUniGetUIPortable" -PathType Leaf)) { throw 'Portable marker missing from archive' }
+          # The portable marker is intentionally excluded from the official integrity tree.
+          Move-Item "$root/ForceUniGetUIPortable" "$env:RUNNER_TEMP/ForceUniGetUIPortable"
+          try {
+            ./scripts/verify-integrity-tree.ps1 -Path $root -FailOnUnexpectedFiles
+          } finally {
+            Move-Item "$env:RUNNER_TEMP/ForceUniGetUIPortable" "$root/ForceUniGetUIPortable"
+          }
+          $stdout = "$env:RUNNER_TEMP/portable-help.txt"
+          $stderr = "$env:RUNNER_TEMP/portable-help-error.txt"
+          $process = Start-Process "$root/uniget.exe" -ArgumentList '--help' -NoNewWindow -PassThru -RedirectStandardOutput $stdout -RedirectStandardError $stderr
+          if (-not $process.WaitForExit(60000)) { $process.Kill($true); throw 'CLI help timed out' }
+          Get-Content $stdout
+          Get-Content $stderr
+          if ($process.ExitCode -ne 0) { throw "CLI help failed: $($process.ExitCode)" }
+          if ((Get-Item $stdout).Length -eq 0) { throw 'CLI help produced no output' }
+
+      - name: Upload portable x64 package
+        if: always() && hashFiles('output/*.zip') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: UniGetUI-portable-win-x64-894a0a0
+          path: output/
+          if-no-files-found: error
+          retention-days: 30
